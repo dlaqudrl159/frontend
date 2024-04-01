@@ -119,7 +119,7 @@ const Select = (props) => {
         
         ];
 
-        //dfdfdfdf
+        
         const [selectindex, setSelectindex] = useState("0");
 
         const [initoption, setInitoption] = useState("0");
