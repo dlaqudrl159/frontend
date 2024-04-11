@@ -3,7 +3,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Layout from './layout/layout';
 import {Routes, Route} from "react-router-dom";
 import BasicMap3 from './kakaomap/BasicMap3';
-import Main3 from "./main/Main3";
 
 function App() {
   return (
@@ -12,8 +11,8 @@ function App() {
     <div className="App" style={{height:"95%"}}>
     
     <Routes>
-    <Route path ="/" element={<Main3/>}> </Route>
-    <Route path='/basicmap' element={<BasicMap3/>}></Route>
+    <Route path ="/" element={<BasicMap3/>}> </Route>
+    
 
     </Routes>
     </div>
