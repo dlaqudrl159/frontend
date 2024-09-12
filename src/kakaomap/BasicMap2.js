@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import axios from 'axios';
 import qs from "qs";
 import Select2 from '../select/Select2';
-import Category from '../category/Category';
+import Category from '../category/Category2';
 import Loading from '../modal/Loading';
 
 const { kakao } = window;
@@ -148,9 +148,12 @@ const BasicMap2 = (props) => {
             }
           }).then(response => {
             
-            //console.log(response);
+            console.log(response);
             
-          })
+          }).catch(error => {
+            console.log(error)
+                    
+        })   
         }
       }
 
