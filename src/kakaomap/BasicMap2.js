@@ -4,6 +4,7 @@ import qs from "qs";
 import Select2 from '../select/Select2';
 import Category from '../category/Category2';
 import Loading from '../modal/Loading';
+import DataModal from '../modal/SidePanel';
 
 const { kakao } = window;
 
@@ -17,6 +18,13 @@ const BasicMap2 = (props) => {
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+
+    const [modalShow , setModalShow] = useState(false);
+
+    const handleModalClose = () => setModalShow(false);
+    const handleModalShow = () => setModalShow(true);
+
+    const [selectedMarkerData, setSelectedMarkerData] = useState(null);
 
     const initMakers = [];
     
@@ -147,8 +155,9 @@ const BasicMap2 = (props) => {
               lng : a[1]
             }
           }).then(response => {
-            
-            console.log(response);
+            setSelectedMarkerData(response.data);
+            handleModalShow();
+            console.log(response.data);
             
           }).catch(error => {
             console.log(error)
@@ -190,12 +199,26 @@ const BasicMap2 = (props) => {
 
     return (
         <>       
-        {console.log("2번실행")}
-        <Category year={year} region3={region3} />
         <Loading show={show}></Loading>
-        
+        <div id="name" style={styles.container}>
+          <div id="map" style={styles.map}>
+            <Category year={year} region3={region3} />
+            
+          </div>
+        </div>
+        <DataModal 
+        show={modalShow} 
+        handleClose={handleModalClose} 
+        data={selectedMarkerData} 
+      />
         </>
     )
 
 }
+
+const styles = {
+  container: { width: "100%", height: "100%" },
+  map: { width: "100%", height: "100%", position: "relative", zIndex: 0 },
+}
+
 export default BasicMap2;

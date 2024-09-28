@@ -61,9 +61,11 @@ const Category2 = ({ year, region3 }) => {
   };
 
   return (
-    <div id="name" style={styles.container}>
-      <div id="map" style={styles.map}>
+    //<div id="name" style={styles.container}>
+     // <div id="map" style={styles.map}>
+     <div>
         <div style={styles.tabContainer}>
+           
           {tabs.map((tab) => (
             <div
               key={tab.id}
@@ -79,23 +81,26 @@ const Category2 = ({ year, region3 }) => {
           <div style={styles.searchIcon}>
             <FontAwesomeIcon icon={faSearch} size="lg" />
           </div>
+          
         </div>
-        {renderTabContent()}
+        
+       <div>
+       {renderTabContent()}
       </div>
     </div>
   );
 };
 
 const styles = {
-  container: { width: "100%", height: "100%" },
-  map: { width: "100%", height: "100%", position: "relative", zIndex: 0 },
+  //container: { width: "100%", height: "100%" },
+  //map: { width: "100%", height: "100%", position: "relative", zIndex: 0 },
   tabContainer: {
     width: "500px",
     height: "5%",
     backgroundColor: "white",
     position: "absolute",
     zIndex: 3,
-    top: "5%",
+    top: "1%",
     left: "20px",
     display: "flex",
     justifyContent: "space-between",
@@ -127,7 +132,7 @@ const styles = {
     position: "absolute",
     zIndex: 3,
     backgroundColor: "white",
-    top: "11%",
+    top: "10%",
     left: "20px",
     padding: "10px",
   },
