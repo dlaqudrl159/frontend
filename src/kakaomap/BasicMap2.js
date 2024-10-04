@@ -1,10 +1,9 @@
 import React, {useEffect, useState} from "react";
 import axios from 'axios';
 import qs from "qs";
-import Select2 from '../select/Select2';
 import Category from '../category/Category2';
 import Loading from '../modal/Loading';
-import DataModal from '../modal/SidePanel';
+import SideModal from '../modal/SidePanel';
 
 const { kakao } = window;
 
@@ -19,10 +18,10 @@ const BasicMap2 = (props) => {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-    const [modalShow , setModalShow] = useState(false);
+    const [sideModalOpen , setSideModalOpen] = useState(false);
 
-    const handleModalClose = () => setModalShow(false);
-    const handleModalShow = () => setModalShow(true);
+    const handleModalClose = () => setSideModalOpen(false);
+    const handleModalShow = () => setSideModalOpen(true);
 
     const [selectedMarkerData, setSelectedMarkerData] = useState(null);
 
@@ -206,9 +205,9 @@ const BasicMap2 = (props) => {
             
           </div>
         </div>
-        <DataModal 
-        show={modalShow} 
-        handleClose={handleModalClose} 
+        <SideModal 
+        isOpen={sideModalOpen}
+        onClose={handleModalClose}
         data={selectedMarkerData} 
       />
         </>
