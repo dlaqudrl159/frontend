@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { json } from 'react-router-dom';
 import AptTranscationHistory from './AptTranscationHistory';
 
-const SideModal = ({ isOpen, onClose, data }) => {
+const SideModal2 = ({ isOpen, onClose, data }) => {
   const modalRef = useRef();
   
   const [transactionModalOpen, setTransactionModalOpen] = useState(false);
@@ -107,4 +107,4 @@ const styles = {
   }
 };
 
-export default SideModal;
+export default SideModal2;

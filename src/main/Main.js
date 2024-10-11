@@ -1,6 +1,6 @@
 import React ,{ useEffect, useState } from "react";
 import axios from 'axios';
-import BasicMap from "../kakaomap/BasicMap2";
+import BasicMap4 from "../kakaomap/BasicMap4";
 
 const Main = (props) => {
 
@@ -22,7 +22,7 @@ const Main = (props) => {
     return(
         <>
              {console.log("1번실행")}
-             <BasicMap/>
+             <BasicMap4/>
              
         
         </>

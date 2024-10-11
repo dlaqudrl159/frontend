@@ -4,7 +4,7 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
 const Category2 = ({ year, region3 }) => {
   const [activeTab, setActiveTab] = useState(null);
-
+  console.log("Category2함수부분")
   const tabs = [
     { id: "year", label: year },
     { id: "choice", label: "지번주소" },
@@ -64,6 +64,7 @@ const Category2 = ({ year, region3 }) => {
     //<div id="name" style={styles.container}>
      // <div id="map" style={styles.map}>
      <div>
+      {console.log("Category2랜더")}
         <div style={styles.tabContainer}>
            
           {tabs.map((tab) => (

@@ -3,34 +3,30 @@ import axios from 'axios';
 import qs from "qs";
 import Category from '../category/Category2';
 import Loading from '../modal/Loading';
-import SideModal from '../modal/SidePanel';
+import SideModal2 from '../modal/SidePanel2';
 
 const { kakao } = window;
 
-const BasicMap2 = (props) => {
+const BasicMap3 = (props) => {
 
     const [year,setYear] = useState(new Date().getFullYear());
 
     const [region3 , setRegion3] = useState("소공동")
 
-    const [show, setShow] = useState(false);
-
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const [DragLoading, setDragLoading] = useState(false);
+    const DragLoadinghandleClose = () => setDragLoading(false);
+    const DragLoadinghandleShow = () => setDragLoading(true);
 
     const [sideModalOpen , setSideModalOpen] = useState(false);
-
     const handleModalClose = () => setSideModalOpen(false);
     const handleModalShow = () => setSideModalOpen(true);
 
     const [selectedMarkerData, setSelectedMarkerData] = useState(null);
-
+    const [testmarkers, settestmarkers] = useState([]);
     const initMakers = [];
-    
+    const [realmap , setRealmap] = useState();
     const createMap = () => {
 
-        console.log("3번실행")
-       
           let mapContainer = document.getElementById('map');
           let mapOption = {
               center: new kakao.maps.LatLng(37.56435977921398, 126.97757768711558), // 지도의 중심좌표
@@ -39,15 +35,16 @@ const BasicMap2 = (props) => {
           }
           // 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
           var map = new kakao.maps.Map(mapContainer, mapOption);  
-            handleShow(); 
+          setRealmap(map);
+            DragLoadinghandleShow(); 
             markerinit(initMakers);
             newfunction(map);
             
           kakao.maps.event.addListener(map, 'dragend', function() {
             
             if(map.getLevel() < 5){
-              handleShow(); 
-              markerinit(initMakers);
+              DragLoadinghandleShow();
+              //markerinit(initMakers);
               newfunction(map);
               
             }                
@@ -59,7 +56,7 @@ const BasicMap2 = (props) => {
         var geocoder = new kakao.maps.services.Geocoder();  
             var sWLatLng = mapBounds.getSouthWest();
             var neLatLng = mapBounds.getNorthEast();
-            var sWLat =  sWLatLng.getLat();
+            var sWLat = sWLatLng.getLat();
             var sWLng = sWLatLng.getLng();
             var neLat = neLatLng.getLat();
             var neLng = neLatLng.getLng();                            
@@ -98,12 +95,12 @@ const BasicMap2 = (props) => {
             setRegion3(region_3depth_name)
             //console.log(response);
             makermaking(response,map)           
-            handleClose();
+            DragLoadinghandleClose();
             
           })
           .catch(error => {
             console.log(error)
-            handleClose();         
+            DragLoadinghandleClose();         
         })                        
         }  
       }
@@ -129,15 +126,22 @@ const BasicMap2 = (props) => {
           count++;
           if(count === totalcount){
             for (var i = 0; i < markers.length; i ++) {
-              markers[i].setMap(map);
-              initMakers.push(markers[i]);
+              //markers[i].setMap(map);
+              //initMakers.push(markers[i]);
           }
-          handleClose();
+          settestmarkers(markers);
+          console.log(testmarkers);
+          DragLoadinghandleClose();
           };
         })
         
       }
-
+      useEffect(() => {
+        console.log(realmap);
+        if(realmap != null){
+          console.log(realmap.getCenter())
+        }
+      },[realmap])
 
 
       const clickListener = (map, marker) => {
@@ -156,7 +160,6 @@ const BasicMap2 = (props) => {
           }).then(response => {
             setSelectedMarkerData(response.data);
             handleModalShow();
-            console.log(response.data);
             
           }).catch(error => {
             console.log(error)
@@ -198,14 +201,16 @@ const BasicMap2 = (props) => {
 
     return (
         <>       
-        <Loading show={show}></Loading>
+        {console.log("BasicMap2랜더")}
+        {DragLoading && (<Loading show = {DragLoading}/>)} 
+
         <div id="name" style={styles.container}>
           <div id="map" style={styles.map}>
             <Category year={year} region3={region3} />
             
           </div>
         </div>
-        <SideModal 
+        <SideModal2 
         isOpen={sideModalOpen}
         onClose={handleModalClose}
         data={selectedMarkerData} 
@@ -220,4 +225,4 @@ const styles = {
   map: { width: "100%", height: "100%", position: "relative", zIndex: 0 },
 }
 
-export default BasicMap2;
+export default BasicMap3;

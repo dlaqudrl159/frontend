@@ -2,7 +2,7 @@ import React from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
 import Layout from './layout/layout';
 import {Routes, Route} from "react-router-dom";
-import BasicMap from './kakaomap/BasicMap2';
+import BasicMap4 from './kakaomap/BasicMap4';
 
 function App() {
   return (
@@ -11,7 +11,7 @@ function App() {
     <div className="App" style={{height:"95%"}}>
     
     <Routes>
-    <Route path ="/" element={<BasicMap/>}> </Route>
+    <Route path ="/" element={<BasicMap4/>}> </Route>
     
 
     </Routes>
