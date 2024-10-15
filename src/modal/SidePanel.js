@@ -3,6 +3,7 @@ import { json } from 'react-router-dom';
 import AptTranscationHistory from './AptTranscationHistory';
 
 const SideModal = ({ isOpen, onClose, data }) => {
+  console.log("SideModal 함수")
   const modalRef = useRef();
   
   const [transactionModalOpen, setTransactionModalOpen] = useState(false);
@@ -32,6 +33,7 @@ const SideModal = ({ isOpen, onClose, data }) => {
 
   return (
     <>
+    {console.log("SideModal 랜더")}
     <div style={styles.overlay}>
       <div ref={modalRef} style={styles.modal}>
         <button onClick={onClose} style={styles.closeButton}>X</button>

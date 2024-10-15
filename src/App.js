@@ -2,7 +2,7 @@ import React from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
 import Layout from './layout/layout';
 import {Routes, Route} from "react-router-dom";
-import BasicMap4 from './kakaomap/BasicMap4';
+import BasicMap4 from './kakaomap/BasicMapInit';
 
 function App() {
   return (

@@ -3,10 +3,12 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 
 const Loading4 = (props) => {
-
+    console.log("Loading4 함수")
+    if(props.show === false) return;
     return (
-        <>      
-      <Modal show={props.loadingModalShow}>
+        <>   
+      {console.log("Loading4 랜더")}     
+      <Modal show={props.show}>
         <Modal.Header closeButton>
           <Modal.Title>로딩중</Modal.Title>
         </Modal.Header>

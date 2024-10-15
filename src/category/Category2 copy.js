@@ -1,14 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
-const Category2 = () => {
+const Category2 = ({ year, region3 }) => {
   const [activeTab, setActiveTab] = useState(null);
-
-  const [region3, setRegion3] = useState(null);
-
-  const [year, setYear] = useState(null); 
-
   console.log("Category2함수부분")
   const tabs = [
     { id: "year", label: year },
@@ -16,7 +11,7 @@ const Category2 = () => {
     { id: "region", label: region3 },
     { id: "apartmentname", label: "단지명" },
   ];
-  
+
   const handleTabClick = (tabId) => {
     setActiveTab(activeTab === tabId ? null : tabId);
   };
