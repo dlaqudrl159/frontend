@@ -1,9 +1,8 @@
 import React ,{ useEffect, useState } from "react";
 import axios from 'axios';
-import BasicMap4 from "../kakaomap/BasicMap4";
+import BasicMap4 from "../kakaomap/BasicMap";
 
 const Main = (props) => {
-
 
     useEffect(() => {
         console.log("4번실행")

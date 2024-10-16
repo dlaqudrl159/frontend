@@ -1,13 +1,15 @@
-import React from "react";
+import React, {memo} from "react";
 import {Link} from "react-router-dom";
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 
-const layout = (props) => {
+const layout = memo((props) => {
+    console.log("layout 실행");
     return (
         <>
+        {console.log("layout 렌더")}
         <header style={{height:"5%"}}> 
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container style={{marginLeft:"0px"}} >
@@ -40,5 +42,5 @@ const layout = (props) => {
         </>
 
     )
-}
+})
 export default layout;
