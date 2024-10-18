@@ -64,7 +64,7 @@ const Category = ({categoryRegionState}) => {
     //<div id="name" style={styles.container}>
      // <div id="map" style={styles.map}>
      <div>
-      {console.log("Category2랜더")}
+      {console.log("Category랜더")}
         <div style={styles.tabContainer}>
            
           {tabs.map((tab) => (

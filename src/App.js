@@ -12,10 +12,9 @@ import {Link} from "react-router-dom";
 
 function App() {
   console.log("App 함수부분")
-  const [isBasicMap, setIsBasicMap] = useState(false);
 
   const [categoryRegionState , setCategoryRegionState] = useState(null);
- 
+
   const setCategoryRegion = useCallback((region) => {
     setCategoryRegionState(region);
   }, []);
