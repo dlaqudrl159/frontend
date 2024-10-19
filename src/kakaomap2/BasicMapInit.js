@@ -158,7 +158,7 @@ const BasicMap = memo(({setCategoryRegion}) => {
             markersRef.current.forEach(marker => marker.setMap(null));
             markersRef.current = [];
             newfunction(mapInstanceRef.current).then(() => {
-                IsLoadingClose();
+            IsLoadingClose();
             });
             kakao.maps.event.addListener(map, 'dragend', function() {
                 if(map.getLevel() < 5){
@@ -166,7 +166,7 @@ const BasicMap = memo(({setCategoryRegion}) => {
                     markersRef.current.forEach(marker => marker.setMap(null));
                     markersRef.current = [];
                     newfunction(mapInstanceRef.current).then(() => {
-                        IsLoadingClose();
+                    IsLoadingClose();
                     });
                 }                
             });
