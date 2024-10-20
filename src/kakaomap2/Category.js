@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState , memo} from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
-const Category = ({categoryRegionState}) => {
+const Category = memo(({categoryRegionState}) => {
   const [activeTab, setActiveTab] = useState(null);
   console.log("Category함수부분")
   const tabs = [
@@ -90,7 +90,7 @@ const Category = ({categoryRegionState}) => {
       </div>
     </div>
   );
-};
+});
 
 const styles = {
   //container: { width: "100%", height: "100%" },

@@ -1,7 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
-import Layout from './layout/layout';
-import {Routes, Route} from "react-router-dom";
 import BasicMap from './kakaomap2/BasicMapInit';
 import Category from './kakaomap2/Category';
 import Container from 'react-bootstrap/Container';
@@ -18,9 +16,9 @@ function App() {
 
   const [selectedMarkerData, setSelectedMarkerData] = useState(null);
 
-  const handleMarkerData = (data) => {
+  const handleMarkerData = useCallback((data) => {
     setSelectedMarkerData(data);
-  }
+  },[]);
 
   const setCategoryRegion = useCallback((region) => {
     setCategoryRegionState(region);
@@ -53,9 +51,9 @@ function App() {
         </Navbar.Collapse>
       </Container>
     </Navbar>
-        </header>
+    </header>
     <div className="App" style={{height:"95%"}}>
-    <BasicMap setCategoryRegion={setCategoryRegion} handleMarkerData={handleMarkerData} ></BasicMap>
+    <BasicMap setCategoryRegion={setCategoryRegion} handleMarkerData={handleMarkerData}></BasicMap>
     {categoryRegionState && <Category categoryRegionState={categoryRegionState}></Category>}
     {selectedMarkerData && <SidePanel selectedMarkerData={selectedMarkerData} setSelectedMarkerData={setSelectedMarkerData}></SidePanel>}
     </div>

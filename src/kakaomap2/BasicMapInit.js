@@ -15,7 +15,10 @@ const BasicMap = memo(({setCategoryRegion , handleMarkerData}) => {
     const startTimeRef = useRef(null);
 
     const [IsLoadingState , setIsLoadingState] = useState(true);
-    const IsLoadingShow = useCallback(() => {
+    const IsLoadingShow = useCallback(() => setIsLoadingState(true),[])
+    const IsLoadingClose = useCallback(() => setIsLoadingState(false),[])
+
+    /*const IsLoadingShow = useCallback(() => {
         setIsLoadingState(true)
         startTimeRef.current = Date.now();
     },[setIsLoadingState]);
@@ -25,12 +28,7 @@ const BasicMap = memo(({setCategoryRegion , handleMarkerData}) => {
         const endTime = Date.now();
         const timeElapsed = endTime - startTimeRef.current;
         console.log(`총 걸린 시간: ${timeElapsed}ms`);
-    },[setIsLoadingState]);
-
-    
-
-    /*const IsLoadingShow = () => setIsLoadingState(true)
-    const IsLoadingClose = () => setIsLoadingState(false)*/
+    },[setIsLoadingState]);*/
 
     const makearrcoords = useCallback((map) => {
         var mapBounds = map.getBounds();
@@ -69,16 +67,16 @@ const BasicMap = memo(({setCategoryRegion , handleMarkerData}) => {
        }
      },[])
 
-     const clickListener = useCallback((marker) => {
+     const getMarkerData = useCallback((marker) => {
         return async function() {
           var markerlatlng = marker.getTitle().split('/');
-          await axios.get('/api/latlng' , {
+          await axios.get('/api/getMarkerData' , {
             params:{
               lat : markerlatlng[0],
               lng : markerlatlng[1]
             }
           }).then(response => {
-            console.log(response);
+            //console.log(response);
             handleMarkerData(response.data);
           }).catch(error => {
             console.log(error);
@@ -94,13 +92,13 @@ const BasicMap = memo(({setCategoryRegion , handleMarkerData}) => {
                 title : NameCountDto.lat + "/" + NameCountDto.lng,
                 position : coords,
             });
-            kakao.maps.event.addListener(marker, 'click', clickListener(marker));
+            kakao.maps.event.addListener(marker, 'click', getMarkerData(marker));
             return marker;
         }); 
         // 새 마커 추가
         newMarkers.forEach(marker => marker.setMap(mapInstanceRef.current));
         markersRef.current = newMarkers;
-    }, [clickListener]);
+    }, [getMarkerData]);
 
     const get = useCallback(async (addressnameArr) => {
         try {
@@ -117,7 +115,7 @@ const BasicMap = memo(({setCategoryRegion , handleMarkerData}) => {
         }
     },[]);
     
-    const newfunction = useCallback((map) => {
+    const getMarkers = useCallback((map) => {
         return new Promise((resolve,reject) => {
             var addressnameArr = [];
             var count= 0;
@@ -158,7 +156,7 @@ const BasicMap = memo(({setCategoryRegion , handleMarkerData}) => {
             IsLoadingShow();
             markersRef.current.forEach(marker => marker.setMap(null));
             markersRef.current = [];
-            newfunction(mapInstanceRef.current).then(() => {
+            getMarkers(mapInstanceRef.current).then(() => {
             IsLoadingClose();
             });
             kakao.maps.event.addListener(map, 'dragend', function() {
@@ -166,20 +164,18 @@ const BasicMap = memo(({setCategoryRegion , handleMarkerData}) => {
                     IsLoadingShow();
                     markersRef.current.forEach(marker => marker.setMap(null));
                     markersRef.current = [];
-                    newfunction(mapInstanceRef.current).then(() => {
+                    getMarkers(mapInstanceRef.current).then(() => {
                     IsLoadingClose();
                     });
                 }                
             });
         }
-    }, [newfunction,IsLoadingShow,IsLoadingClose]);
-
-    
+    }, [getMarkers,IsLoadingShow,IsLoadingClose]);
 
     return (
     <>
     {console.log("BasicMap 렌더")}
-    {IsLoadingState && <Loading IsLoadingState={IsLoadingState}></Loading>}
+    {IsLoadingState && <Loading></Loading>}
     <div ref={mapRef} style={styles.map}></div>
     </>)
 })

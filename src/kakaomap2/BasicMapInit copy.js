@@ -103,7 +103,7 @@ const BasicMap = memo(({setCategoryRegion}) => {
 
     const get = useCallback(async (addressnameArr) => {
         try {
-            const response = await axios.get("/api/get2", {
+            const response = await axios.get("/api/getc", {
                 params: { addressnameArr: addressnameArr },
                 paramsSerializer: (params) => {
                     return qs.stringify(params, { arrayFormat: "comma" });
@@ -158,7 +158,7 @@ const BasicMap = memo(({setCategoryRegion}) => {
             markersRef.current.forEach(marker => marker.setMap(null));
             markersRef.current = [];
             newfunction(mapInstanceRef.current).then(() => {
-                IsLoadingClose();
+            IsLoadingClose();
             });
             kakao.maps.event.addListener(map, 'dragend', function() {
                 if(map.getLevel() < 5){
@@ -166,7 +166,7 @@ const BasicMap = memo(({setCategoryRegion}) => {
                     markersRef.current.forEach(marker => marker.setMap(null));
                     markersRef.current = [];
                     newfunction(mapInstanceRef.current).then(() => {
-                        IsLoadingClose();
+                    IsLoadingClose();
                     });
                 }                
             });

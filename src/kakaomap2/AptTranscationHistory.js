@@ -1,18 +1,15 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState , memo } from 'react';
 import { json } from 'react-router-dom';
-import Modal from 'react-bootstrap/Modal';
 import axios from 'axios';
 
 
-const AptTranscationHistory = ({ isOpen, onClose, apartmentData }) => {
-
-  const [displayedTransactions, setDisplayedTransactions] = useState([]);
+const AptTranscationHistory = memo(({ apartmentData }) => {
+  console.log("AptTranscationHistory 함수부분")
   const [loading,setLoading] = useState(false);
   
   useEffect(() => {
     const fetchTransactions = async () => {
-      if (isOpen) {
-        setLoading(true);
+      
         try {
          const getAptTrancsactionHistory = await axios.get('/api/getAptTrancsactionHistory',{
           params : {
@@ -28,28 +25,18 @@ const AptTranscationHistory = ({ isOpen, onClose, apartmentData }) => {
          }).finally (
           
          ) 
-          
-
-          setDisplayedTransactions(apartmentData);
         } catch (error) {
           
         } finally{
-          setLoading(false);
         }
-        
-      }else{
-        console.log("isOpenNot")
-      }
     };
 
     fetchTransactions();
-  }, [isOpen, apartmentData.id]);
-
-
-  if (!isOpen) return null;
+  }, [apartmentData]);
 
     return (
         <>
+        {console.log("AptTranscationHistory 렌더")}
         {loading ? (<p>데이터를 불러오는중</p>) : (<>
           <pre>{apartmentData.apartmentname}</pre>
           <pre>{apartmentData.bungi}</pre>
@@ -58,6 +45,6 @@ const AptTranscationHistory = ({ isOpen, onClose, apartmentData }) => {
         </>
     )
 
-}
+})
 
 export default AptTranscationHistory;
