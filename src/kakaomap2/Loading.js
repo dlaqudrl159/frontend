@@ -11,7 +11,6 @@ const Loading = (props) => {
           <Modal.Title>로딩중</Modal.Title>
         </Modal.Header>
         <Modal.Body>로딩중입니다.</Modal.Body>
-        
       </Modal>
         </>
     )

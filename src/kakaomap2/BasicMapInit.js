@@ -7,7 +7,7 @@ const { kakao } = window;
 
 const geocoder = new kakao.maps.services.Geocoder();
 
-const BasicMap = memo(({setCategoryRegion}) => {
+const BasicMap = memo(({setCategoryRegion , handleMarkerData}) => {
     console.log("BasicMap 함수부분")
     const mapRef = useRef(null);
     const mapInstanceRef = useRef(null);
@@ -69,7 +69,7 @@ const BasicMap = memo(({setCategoryRegion}) => {
        }
      },[])
 
-     const clickListener = (marker) => {
+     const clickListener = useCallback((marker) => {
         return async function() {
           var markerlatlng = marker.getTitle().split('/');
           await axios.get('/api/latlng' , {
@@ -79,12 +79,13 @@ const BasicMap = memo(({setCategoryRegion}) => {
             }
           }).then(response => {
             console.log(response);
+            handleMarkerData(response.data);
           }).catch(error => {
             console.log(error);
                     
         })   
         }
-      }
+      },[handleMarkerData])
 
      const makermaking = useCallback((NameCountDtoList) => {
         const newMarkers = NameCountDtoList.data.map((NameCountDto) => {
@@ -99,7 +100,7 @@ const BasicMap = memo(({setCategoryRegion}) => {
         // 새 마커 추가
         newMarkers.forEach(marker => marker.setMap(mapInstanceRef.current));
         markersRef.current = newMarkers;
-    }, []);
+    }, [clickListener]);
 
     const get = useCallback(async (addressnameArr) => {
         try {

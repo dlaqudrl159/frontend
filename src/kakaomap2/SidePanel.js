@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { json } from 'react-router-dom';
 import AptTranscationHistory from './AptTranscationHistory';
 
-const SidePanel = ({ isOpen, onClose, data }) => {
+const SidePanel = ({selectedMarkerData , setSelectedMarkerData}) => {
   console.log("SideModal 함수")
   const modalRef = useRef();
   
@@ -13,8 +13,7 @@ const SidePanel = ({ isOpen, onClose, data }) => {
 
     const handleClickOutside = (event) => {
       if (modalRef.current && !modalRef.current.contains(event.target)) {
-        onClose();
-        setTransactionModalOpen(false);
+        setSelectedMarkerData(null);
       }
     };
 
@@ -22,9 +21,7 @@ const SidePanel = ({ isOpen, onClose, data }) => {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [onClose]);
-
-  if (!isOpen) return null;
+  }, [setSelectedMarkerData]);
 
   const handleApartmentClick = (apartment) => {
     setSelectedApartment(apartment);
@@ -36,11 +33,11 @@ const SidePanel = ({ isOpen, onClose, data }) => {
     {console.log("SideModal 랜더")}
     <div style={styles.overlay}>
       <div ref={modalRef} style={styles.modal}>
-        <button onClick={onClose} style={styles.closeButton}>X</button>
+        <button /*onClick={onClose}*/ style={styles.closeButton}>X</button>
         <h2>목록</h2>
-        {data ? (
+        {selectedMarkerData ? (
         <div>
-          {Object.entries(data).map(([key, value]) => (
+          {Object.entries(selectedMarkerData).map(([key, value]) => (
             <div key={key}>
               {typeof value === 'object' && value !== null ? (
                 <div>
