@@ -1,18 +1,19 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState , memo } from 'react';
 import { json } from 'react-router-dom';
-import Modal from 'react-bootstrap/Modal';
 import axios from 'axios';
+import { height, width } from '@fortawesome/free-solid-svg-icons/fa0';
 
 
-const AptTranscationHistory = ({ isOpen, onClose, apartmentData }) => {
-
-  const [displayedTransactions, setDisplayedTransactions] = useState([]);
-  const [loading,setLoading] = useState(false);
+const AptTranscationHistory = memo(({ apartmentData }) => {
+  console.log("AptTranscationHistory 함수부분")
   
+  const [selectYear , setSelectYear] = useState(null);
+  
+  console.log(selectYear);
+
   useEffect(() => {
     const fetchTransactions = async () => {
-      if (isOpen) {
-        setLoading(true);
+      
         try {
          const getAptTrancsactionHistory = await axios.get('/api/getAptTrancsactionHistory',{
           params : {
@@ -23,41 +24,44 @@ const AptTranscationHistory = ({ isOpen, onClose, apartmentData }) => {
           }
          }).then(response => {
             console.log(response);
+            setSelectYear(response.data.years[0]);
          }).catch(error => {
             console.log(error);
          }).finally (
           
          ) 
-          
-
-          setDisplayedTransactions(apartmentData);
         } catch (error) {
           
         } finally{
-          setLoading(false);
         }
-        
-      }else{
-        console.log("isOpenNot")
-      }
     };
 
     fetchTransactions();
-  }, [isOpen, apartmentData.id]);
-
-
-  if (!isOpen) return null;
+  }, [apartmentData]);
 
     return (
         <>
-        {loading ? (<p>데이터를 불러오는중</p>) : (<>
-          <pre>{apartmentData.apartmentname}</pre>
-          <pre>{apartmentData.bungi}</pre>
-          <pre>{apartmentData.sigungu}</pre>
-        </>)}
+
+        {console.log("AptTranscationHistory 렌더")}
+        {!selectYear ? (<p>데이터를 불러오는중</p>) : (
+          <>
+          <div style={styles.container}>
+          
+          </div>
+        </>
+      )}
+
         </>
     )
 
+})
+
+const styles = {
+  container : {
+    backgroundColor : 'gray',
+    width : '300px',
+    height : '300px' 
+  }
 }
 
 export default AptTranscationHistory;

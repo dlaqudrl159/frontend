@@ -1,20 +1,22 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, memo, useMemo, useCallback} from 'react';
 import { json } from 'react-router-dom';
 import AptTranscationHistory from './AptTranscationHistory';
 
-const SidePanel = ({ isOpen, onClose, data }) => {
+const SidePanel = memo(({selectedMarkerData , setSelectedMarkerData}) => {
   console.log("SideModal 함수")
   const modalRef = useRef();
   
-  const [transactionModalOpen, setTransactionModalOpen] = useState(false);
   const [selectedApartment, setSelectedApartment] = useState(null);
+
+  const onClose = () => {
+    setSelectedMarkerData(null);
+  }
 
   useEffect(() => {
 
     const handleClickOutside = (event) => {
       if (modalRef.current && !modalRef.current.contains(event.target)) {
-        onClose();
-        setTransactionModalOpen(false);
+        setSelectedMarkerData(null);
       }
     };
 
@@ -22,15 +24,32 @@ const SidePanel = ({ isOpen, onClose, data }) => {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [onClose]);
+  }, [setSelectedMarkerData]);
 
-  if (!isOpen) return null;
-
-  const handleApartmentClick = (apartment) => {
+  const handleApartmentClick = useCallback((apartment) => {
+    console.log(apartment);
     setSelectedApartment(apartment);
-    setTransactionModalOpen(true);
-  };
+  },[setSelectedApartment]);
 
+  const rederData = useMemo(() => {
+
+    return Object.entries(selectedMarkerData).map(([key, value]) => (
+      <div key={key}>
+        {typeof value === 'object' && value !== null ? (
+          <div>
+          <pre onClick={() => handleApartmentClick(value)}>{value.apartmentname}</pre>
+          <pre>{value.sigungu + " " + value.bungi}</pre>
+          <pre>{value.roadname}</pre>
+          </div>
+        ) : (
+          <span>{value}</span>
+        )}
+      </div>
+    ))
+
+  },[selectedMarkerData,handleApartmentClick])
+
+  if (!selectedMarkerData) return null;
   return (
     <>
     {console.log("SideModal 랜더")}
@@ -38,38 +57,20 @@ const SidePanel = ({ isOpen, onClose, data }) => {
       <div ref={modalRef} style={styles.modal}>
         <button onClick={onClose} style={styles.closeButton}>X</button>
         <h2>목록</h2>
-        {data ? (
         <div>
-          {Object.entries(data).map(([key, value]) => (
-            <div key={key}>
-              {typeof value === 'object' && value !== null ? (
-                <div>
-                <pre onClick={() => handleApartmentClick(value)}>{value.apartmentname}</pre>
-                <pre>{value.sigungu + " " + value.bungi}</pre>
-                <pre>{value.roadname}</pre>
-                </div>
-              ) : (
-                <span>{value}</span>
-              )}
-            </div>
-          ))}
+        {rederData || <p>데이터가 없습니다.</p>}
         </div>
-      ) : (
-        <p>데이터가 없습니다.</p>
-      )}
       </div>
     </div>
     {selectedApartment && (
         <AptTranscationHistory
-          isOpen={transactionModalOpen}
-          onClose={() => setTransactionModalOpen(false)}
           apartmentData={selectedApartment}
         />
       )}
-      
+
     </>
   );
-};
+});
 
 const styles = {
   overlay: {
