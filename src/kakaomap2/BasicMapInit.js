@@ -173,8 +173,6 @@ const BasicMap = memo(({setCategoryRegion}) => {
         }
     }, [newfunction,IsLoadingShow,IsLoadingClose]);
 
-    
-
     return (
     <>
     {console.log("BasicMap 렌더")}
