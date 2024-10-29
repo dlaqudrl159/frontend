@@ -7,9 +7,9 @@ import { height, width } from '@fortawesome/free-solid-svg-icons/fa0';
 const AptTranscationHistory = memo(({ apartmentData }) => {
   console.log("AptTranscationHistory 함수부분")
   
-  const [selectYear , setSelectYear] = useState(null);
+  const [selectResponse , setSelectResponse] = useState(null);
   
-  console.log(selectYear);
+  console.log(selectResponse);
 
   useEffect(() => {
     const fetchTransactions = async () => {
@@ -24,7 +24,7 @@ const AptTranscationHistory = memo(({ apartmentData }) => {
           }
          }).then(response => {
             console.log(response);
-            setSelectYear(response.data.years[0]);
+            setSelectResponse(response.data);
          }).catch(error => {
             console.log(error);
          }).finally (
@@ -43,7 +43,7 @@ const AptTranscationHistory = memo(({ apartmentData }) => {
         <>
 
         {console.log("AptTranscationHistory 렌더")}
-        {!selectYear ? (<p>데이터를 불러오는중</p>) : (
+        {!selectResponse ? (<p>데이터를 불러오는중</p>) : (
           <>
           <div style={styles.container}>
           
