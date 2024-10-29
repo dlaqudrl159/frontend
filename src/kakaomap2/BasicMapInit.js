@@ -80,29 +80,28 @@ const BasicMap = memo(({setCategoryRegion , handleMarkerData}) => {
             handleMarkerData(response.data);
           }).catch(error => {
             console.log(error);
-                    
         })   
         }
       },[handleMarkerData])
 
      const makermaking = useCallback((NameCountDtoList) => {
         const newMarkers = NameCountDtoList.data.map((NameCountDto) => {
-            var coords = new kakao.maps.LatLng(NameCountDto.lat, NameCountDto.lng);
-            var marker = new kakao.maps.Marker({
-                title : NameCountDto.lat + "/" + NameCountDto.lng,
-                position : coords,
-            });
-            kakao.maps.event.addListener(marker, 'click', getMarkerData(marker));
-            return marker;
-        }); 
+          var coords = new kakao.maps.LatLng(NameCountDto.lat, NameCountDto.lng);
+          var marker = new kakao.maps.Marker({
+              title : NameCountDto.lat + "/" + NameCountDto.lng,
+              position : coords,
+          });
+          kakao.maps.event.addListener(marker, 'click', getMarkerData(marker));
+          return marker;
+      }); 
         // 새 마커 추가
-        newMarkers.forEach(marker => marker.setMap(mapInstanceRef.current));
-        markersRef.current = newMarkers;
+          newMarkers.forEach(marker => marker.setMap(mapInstanceRef.current));
+          markersRef.current = newMarkers;
     }, [getMarkerData]);
 
     const get = useCallback(async (addressnameArr) => {
         try {
-            const response = await axios.get("/api/get2", {
+            const response = await axios.get("/api/get", {
                 params: { addressnameArr: addressnameArr },
                 paramsSerializer: (params) => {
                     return qs.stringify(params, { arrayFormat: "comma" });
@@ -111,7 +110,7 @@ const BasicMap = memo(({setCategoryRegion , handleMarkerData}) => {
             return response;
         } catch (error) {
             console.log(error);
-            throw error;
+            //throw error;
         }
     },[]);
     

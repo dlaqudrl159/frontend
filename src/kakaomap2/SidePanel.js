@@ -15,10 +15,6 @@ const SidePanel = memo(({selectedMarkerData , setSelectedMarkerData}) => {
   useEffect(() => {
 
     const handleClickOutside = (event) => {
-      console.log(modalRef.current)
-      console.log(event)
-      console.log(event.target)
-      console.log(!modalRef.current.contains(event.target));
       if (modalRef.current && !modalRef.current.contains(event.target)) {
         setSelectedMarkerData(null);
       }
@@ -57,7 +53,6 @@ const SidePanel = memo(({selectedMarkerData , setSelectedMarkerData}) => {
   return (
     <>
     {console.log("SideModal 랜더")}
-    
     <div style={styles.overlay}>
       <div ref={modalRef} style={styles.modal}>
         <button onClick={onClose} style={styles.closeButton}>X</button>

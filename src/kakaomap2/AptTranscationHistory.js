@@ -1,12 +1,16 @@
 import React, { useEffect, useRef, useState , memo } from 'react';
 import { json } from 'react-router-dom';
 import axios from 'axios';
+import { height, width } from '@fortawesome/free-solid-svg-icons/fa0';
 
 
 const AptTranscationHistory = memo(({ apartmentData }) => {
   console.log("AptTranscationHistory 함수부분")
-  const [loading,setLoading] = useState(false);
   
+  const [selectYear , setSelectYear] = useState(null);
+  
+  console.log(selectYear);
+
   useEffect(() => {
     const fetchTransactions = async () => {
       
@@ -20,6 +24,7 @@ const AptTranscationHistory = memo(({ apartmentData }) => {
           }
          }).then(response => {
             console.log(response);
+            setSelectYear(response.data.years[0]);
          }).catch(error => {
             console.log(error);
          }).finally (
@@ -36,15 +41,27 @@ const AptTranscationHistory = memo(({ apartmentData }) => {
 
     return (
         <>
+
         {console.log("AptTranscationHistory 렌더")}
-        {loading ? (<p>데이터를 불러오는중</p>) : (<>
-          <pre>{apartmentData.apartmentname}</pre>
-          <pre>{apartmentData.bungi}</pre>
-          <pre>{apartmentData.sigungu}</pre>
-        </>)}
+        {!selectYear ? (<p>데이터를 불러오는중</p>) : (
+          <>
+          <div style={styles.container}>
+          
+          </div>
+        </>
+      )}
+
         </>
     )
 
 })
+
+const styles = {
+  container : {
+    backgroundColor : 'gray',
+    width : '300px',
+    height : '300px' 
+  }
+}
 
 export default AptTranscationHistory;
