@@ -11,7 +11,7 @@ import SidePanel from './kakaomap2/SidePanel';
 
 function App() {
   console.log("App 함수부분")
-
+ 
   const [categoryRegionState , setCategoryRegionState] = useState(null);
 
   const [selectedMarkerData, setSelectedMarkerData] = useState(null);
