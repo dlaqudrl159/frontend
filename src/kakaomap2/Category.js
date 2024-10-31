@@ -6,7 +6,6 @@ const Category = memo(({ categoryRegionState }) => {
   const [activeTab, setActiveTab] = useState(null);
   console.log("Category함수부분")
   const tabs = [
-    { id: "year", label: "2024" },
     { id: "choice", label: "지번주소" },
     { id: "region", label: categoryRegionState },
     { id: "apartmentname", label: "단지명" },
@@ -18,17 +17,6 @@ const Category = memo(({ categoryRegionState }) => {
 
   const renderTabContent = () => {
     switch (activeTab) {
-      case "year":
-        return (
-          <div style={{ ...styles.dropdown, ...styles.yearDropdown }}>
-            <h3>Select Year</h3>
-            <select>
-              <option>{"2024"}</option>
-              <option>{parseInt(2024) - 1}</option>
-              <option>{parseInt(2024) - 2}</option>
-            </select>
-          </div>
-        );
       case "choice":
         return (
           <div style={{ ...styles.dropdown, ...styles.choiceDropdown }}>
@@ -61,12 +49,9 @@ const Category = memo(({ categoryRegionState }) => {
   };
 
   return (
-    //<div id="name" style={styles.container}>
-    // <div id="map" style={styles.map}>
     <div>
       {console.log("Category랜더")}
       <div style={styles.tabContainer}>
-
         {tabs.map((tab) => (
           <div
             key={tab.id}
@@ -82,19 +67,14 @@ const Category = memo(({ categoryRegionState }) => {
         <div style={styles.searchIcon}>
           <FontAwesomeIcon icon={faSearch} size="lg" />
         </div>
-
       </div>
-
-      <div>
-        {renderTabContent()}
-      </div>
+      {renderTabContent()}
     </div>
   );
 });
 
 const styles = {
-  //container: { width: "100%", height: "100%" },
-  //map: { width: "100%", height: "100%", position: "relative", zIndex: 0 },
+
   tabContainer: {
     width: "500px",
     height: "5%",
@@ -109,13 +89,14 @@ const styles = {
   },
   tab: {
     border: "1px solid black",
-    width: "22%",
+    width: "30%",
     height: "80%",
     backgroundColor: "gray",
     textAlign: "center",
     lineHeight: '35px',
     color: "black",
     cursor: "pointer",
+    marginLeft: "1%"
   },
   activeTab: {
     backgroundColor: "lightgray",
@@ -133,13 +114,9 @@ const styles = {
     position: "absolute",
     zIndex: 3,
     backgroundColor: "white",
-    top: "10%",
+    top: "12%",  // tabContainer의 top(7%) + height(5%)
     left: "20px",
     padding: "10px",
-  },
-  yearDropdown: {
-    height: "150px",
-    backgroundColor: "#f0f0f0",
   },
   choiceDropdown: {
     height: "120px",
