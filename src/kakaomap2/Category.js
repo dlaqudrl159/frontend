@@ -1,8 +1,8 @@
-import React, { useState , memo} from "react";
+import React, { useState, memo } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
-const Category = memo(({categoryRegionState}) => {
+const Category = memo(({ categoryRegionState }) => {
   const [activeTab, setActiveTab] = useState(null);
   console.log("Category함수부분")
   const tabs = [
@@ -20,7 +20,7 @@ const Category = memo(({categoryRegionState}) => {
     switch (activeTab) {
       case "year":
         return (
-          <div style={{...styles.dropdown, ...styles.yearDropdown}}>
+          <div style={{ ...styles.dropdown, ...styles.yearDropdown }}>
             <h3>Select Year</h3>
             <select>
               <option>{"2024"}</option>
@@ -31,14 +31,14 @@ const Category = memo(({categoryRegionState}) => {
         );
       case "choice":
         return (
-          <div style={{...styles.dropdown, ...styles.choiceDropdown}}>
+          <div style={{ ...styles.dropdown, ...styles.choiceDropdown }}>
             <h3>지번주소 선택</h3>
             <input type="text" placeholder="주소 입력" />
           </div>
         );
       case "region":
         return (
-          <div style={{...styles.dropdown, ...styles.regionDropdown}}>
+          <div style={{ ...styles.dropdown, ...styles.regionDropdown }}>
             <h3>지역 선택</h3>
             <ul>
               <li>{categoryRegionState}</li>
@@ -49,7 +49,7 @@ const Category = memo(({categoryRegionState}) => {
         );
       case "apartmentname":
         return (
-          <div style={{...styles.dropdown, ...styles.apartmentDropdown}}>
+          <div style={{ ...styles.dropdown, ...styles.apartmentDropdown }}>
             <h3>단지명 검색</h3>
             <input type="text" placeholder="단지명 입력" />
             <button>검색</button>
@@ -62,31 +62,31 @@ const Category = memo(({categoryRegionState}) => {
 
   return (
     //<div id="name" style={styles.container}>
-     // <div id="map" style={styles.map}>
-     <div>
+    // <div id="map" style={styles.map}>
+    <div>
       {console.log("Category랜더")}
-        <div style={styles.tabContainer}>
-           
-          {tabs.map((tab) => (
-            <div
-              key={tab.id}
-              style={{
-                ...styles.tab,
-                ...(activeTab === tab.id ? styles.activeTab : {})
-              }}
-              onClick={() => handleTabClick(tab.id)}
-            >
-              {tab.label}
-            </div>
-          ))}
-          <div style={styles.searchIcon}>
-            <FontAwesomeIcon icon={faSearch} size="lg" />
+      <div style={styles.tabContainer}>
+
+        {tabs.map((tab) => (
+          <div
+            key={tab.id}
+            style={{
+              ...styles.tab,
+              ...(activeTab === tab.id ? styles.activeTab : {})
+            }}
+            onClick={() => handleTabClick(tab.id)}
+          >
+            {tab.label}
           </div>
-          
+        ))}
+        <div style={styles.searchIcon}>
+          <FontAwesomeIcon icon={faSearch} size="lg" />
         </div>
-        
-       <div>
-       {renderTabContent()}
+
+      </div>
+
+      <div>
+        {renderTabContent()}
       </div>
     </div>
   );
@@ -101,7 +101,7 @@ const styles = {
     backgroundColor: "white",
     position: "absolute",
     zIndex: 3,
-    top: "1%",
+    top: "7%",
     left: "20px",
     display: "flex",
     justifyContent: "space-between",

@@ -1,18 +1,18 @@
-import React, {memo} from "react";
+import React, { memo } from "react";
 
 const Loading = memo(() => {
-    console.log("Loading 함수부분")
-    return (
-        <>
-      {console.log("Loading 렌더링")}      
+  console.log("Loading 함수부분")
+  return (
+    <>
+      {console.log("Loading 렌더링")}
       <div style={styles.modalOverlay}>
-      <div style={styles.modalContent}>
-        <h2 style={styles.modalTitle}>로딩중</h2>
-        <p style={styles.modalBody}>로딩중입니다.</p>
+        <div style={styles.modalContent}>
+          <h2 style={styles.modalTitle}>로딩중</h2>
+          <p style={styles.modalBody}>로딩중입니다.</p>
+        </div>
       </div>
-    </div>
-        </>
-    )
+    </>
+  )
 })
 const styles = {
   modalOverlay: {
