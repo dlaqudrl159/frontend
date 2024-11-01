@@ -57,25 +57,25 @@ const SidePanel = memo(({ selectedMarkerData, setSelectedMarkerData }) => {
     return (
         <div style={styles.overlay}>
             <div ref={modalRef} style={styles.modal}>
+                <div style={styles.header}>
+                    <h2>[아파트] {currentApt.nameCountDto.apartmentname}</h2>
+                    <p>{currentApt.nameCountDto.sigungu} {currentApt.nameCountDto.bungi}</p>
+                    <p>{currentApt.nameCountDto.roadname}</p>
+                    <button onClick={() => { setSelectedMarkerData(null) }} style={styles.closeButton}>X</button>
+                </div>
 
-                <select
-                    value={selectedRoadIndex}
-                    onChange={handleRoadChange}
-                    style={styles.roadSelect}
-                >
-                    {selectedMarkerData.map((data, index) => (
-                        <option key={index} value={index}>
-                            {data.nameCountDto.roadname}
-                        </option>
-                    ))}
-                </select>
                 <div style={styles.content}>
-                    <div style={styles.header}>
-                        <h2>[아파트] {currentApt.nameCountDto.apartmentname}</h2>
-                        <p>{currentApt.nameCountDto.sigungu} {currentApt.nameCountDto.bungi}</p>
-                        <p>{currentApt.nameCountDto.roadname}</p>
-                        <button onClick={() => { setSelectedMarkerData(null) }} style={styles.closeButton}>X</button>
-                    </div>
+                    <select
+                        value={selectedRoadIndex}
+                        onChange={handleRoadChange}
+                        style={styles.roadSelect}
+                    >
+                        {selectedMarkerData.map((data, index) => (
+                            <option key={index} value={index}>
+                                {data.nameCountDto.roadname}
+                            </option>
+                        ))}
+                    </select>
 
                     <select
                         value={selectedYear}
@@ -144,19 +144,27 @@ const styles = {
     },
     modal: {
         backgroundColor: 'white',
-        padding: '30px',
         borderRadius: '8px',
         width: '1200px',
-        height: '90vh',
-        maxHeight: '90vh',
-        overflow: 'auto',
+        height: '95vh',
+        maxHeight: '95vh',
         position: 'relative',
+        display: 'flex',
+        flexDirection: 'column',  // 세로 방향으로 요소 배치
     },
     content: {
-        padding: '20px 0',
+        padding: '20px 30px',
+        overflow: 'auto',  // 내용이 넘칠 경우 스크롤
+        flex: 1,  // 남은 공간 모두 차지
     },
     header: {
-        marginBottom: '30px',
+        position: 'sticky',
+        top: 0,
+        padding: '20px 30px',
+        backgroundColor: 'white',  // 스크롤 시 내용이 비치지 않도록
+        borderBottom: '1px solid #ddd',
+        borderRadius: '8px 8px 0 0',
+        zIndex: 1,  // 내용 위에 보이도록
     },
     closeButton: {
         position: 'absolute',
