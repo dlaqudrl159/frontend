@@ -87,6 +87,7 @@ const BasicMap = memo(({ setCategoryRegion, handleMarkerData }) => {
   }, [getMarkerData]);
 
   const get = useCallback(async (addressnameArr) => {
+    console.log(addressnameArr);
     try {
       const response = await axios.get("/api/get", {
         params: { addressnameArr: addressnameArr },
