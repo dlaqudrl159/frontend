@@ -155,7 +155,7 @@ const BasicMap = memo(({ setCategoryRegion, handleMarkerData}) => {
       getMarkers(mapInstanceRef.current).then(() => {
         IsLoadingClose();
       }).catch(
-        IsLoadingClose()
+        //IsLoadingClose()
       );
       kakao.maps.event.addListener(map, 'dragend', function () {
         if (map.getLevel() < 5) {
@@ -165,7 +165,7 @@ const BasicMap = memo(({ setCategoryRegion, handleMarkerData}) => {
           getMarkers(mapInstanceRef.current).then(() => {
             IsLoadingClose();
           }).catch(
-            IsLoadingClose()
+            //IsLoadingClose()
           );
         }
       });

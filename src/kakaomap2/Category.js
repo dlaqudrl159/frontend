@@ -19,7 +19,8 @@ const Category = memo(({ categoryRegionState }) => {
   const [selectedSigungu, setSelectedSigungu] = useState(initSiguntu);
   const [selectDong, setSelectedDong] = useState(initDong);
   const [inputRoadName , setInputRoadName] = useState('');
-  
+  const [apartmentname , setApartMentNmae] = useState('');
+
   const tabs = useMemo(() => {
     if (searchType === 'jibun') {
       return [
@@ -55,7 +56,13 @@ const Category = memo(({ categoryRegionState }) => {
       setInputRoadName('');
     }
   }
-
+  const OnClick = () => {
+    if(searchType === 'jibun') {
+      console.log(selectedSido + selectedSigungu + selectDong + apartmentname);
+    }else {
+      console.log(selectedSido + selectedSigungu + inputRoadName + apartmentname);
+    }
+  }
   const renderTabContent = () => {
     switch (activeTab) {
       case "choice":
@@ -118,8 +125,15 @@ const Category = memo(({ categoryRegionState }) => {
         return (
           <div style={{ ...styles.dropdown, ...styles.apartmentDropdown }}>
             <h3>단지명 검색</h3>
-            <input type="text" placeholder="단지명 입력" style={styles.apartmentinput}/>
-            <button style={styles.button}>검색</button>
+            <input
+              type="text"
+              placeholder="단지명 입력"
+              style={styles.apartmentinput}
+              onChange={(e) => {
+                setApartMentNmae(e.target.value);
+              }}
+            />
+            <button style={styles.button} onClick={OnClick}>검색</button>
           </div>
         );
       default:
