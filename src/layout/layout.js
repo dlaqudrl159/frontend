@@ -35,12 +35,7 @@ const layout = memo((props) => {
       </Container>
     </Navbar>
         </header>
-        {props.children}
-    
-
-        
         </>
-
     )
 })
 export default layout;

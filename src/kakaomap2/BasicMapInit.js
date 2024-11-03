@@ -7,7 +7,10 @@ const { kakao } = window;
 
 const geocoder = new kakao.maps.services.Geocoder();
 
-const BasicMap = memo(({ setCategoryRegion, handleMarkerData }) => {
+const mapLevel = 4;
+const mapcenterlat = 37.56435977921398
+const mapcenterlng = 126.97757768711558
+const BasicMap = memo(({ setCategoryRegion, handleMarkerData}) => {
   console.log("BasicMap 함수부분")
   const mapRef = useRef(null);
   const mapInstanceRef = useRef(null);
@@ -72,24 +75,28 @@ const BasicMap = memo(({ setCategoryRegion, handleMarkerData }) => {
   }, [handleMarkerData])
 
   const makermaking = useCallback((NameCountDtoList) => {
-    const newMarkers = NameCountDtoList.data.map((NameCountDto) => {
-      var coords = new kakao.maps.LatLng(NameCountDto.lat, NameCountDto.lng);
-      var marker = new kakao.maps.Marker({
-        title: NameCountDto.lat + "/" + NameCountDto.lng,
-        position: coords,
+    if(NameCountDtoList.data){
+      const newMarkers = NameCountDtoList.data.map((NameCountDto) => {
+        var coords = new kakao.maps.LatLng(NameCountDto.lat, NameCountDto.lng);
+        var marker = new kakao.maps.Marker({
+          title: NameCountDto.lat + "/" + NameCountDto.lng,
+          position: coords,
+        });
+        kakao.maps.event.addListener(marker, 'click', getMarkerData(marker));
+        return marker;
       });
-      kakao.maps.event.addListener(marker, 'click', getMarkerData(marker));
-      return marker;
-    });
-    // 새 마커 추가
-    newMarkers.forEach(marker => marker.setMap(mapInstanceRef.current));
-    markersRef.current = newMarkers;
+      // 새 마커 추가
+      newMarkers.forEach(marker => marker.setMap(mapInstanceRef.current));
+      markersRef.current = newMarkers;
+    }else{
+      //alert("에러발생");
+    }
+    
   }, [getMarkerData]);
 
   const get = useCallback(async (addressnameArr) => {
-    console.log(addressnameArr);
     try {
-      const response = await axios.get("/api/get", {
+      const response = await axios.get("/api/getMarkers", {
         params: { addressnameArr: addressnameArr },
         paramsSerializer: (params) => {
           return qs.stringify(params, { arrayFormat: "comma" });
@@ -97,8 +104,7 @@ const BasicMap = memo(({ setCategoryRegion, handleMarkerData }) => {
       });
       return response;
     } catch (error) {
-      console.log(error);
-      //throw error;
+      return "ERROR";
     }
   }, []);
 
@@ -116,14 +122,17 @@ const BasicMap = memo(({ setCategoryRegion, handleMarkerData }) => {
             setCategoryRegion(regionArr.region_3depth_name);
           }
           count++;
-
           if (count === totalcount) {
             get(addressnameArr)
               .then(response => {
-                makermaking(response)
-                resolve();
+                if(response !== "ERROR"){
+                  makermaking(response)
+                  resolve();
+                }else {
+                  reject();
+                } 
               })
-              .catch(reject);
+              .catch(reject)
           }
         })
       })
@@ -134,8 +143,8 @@ const BasicMap = memo(({ setCategoryRegion, handleMarkerData }) => {
   useEffect(() => {
     if (!mapInstanceRef.current && mapRef.current) {
       const mapOption = {
-        center: new kakao.maps.LatLng(37.56435977921398, 126.97757768711558),
-        level: 4
+        center: new kakao.maps.LatLng(mapcenterlat, mapcenterlng),
+        level: mapLevel
       };
       const map = new kakao.maps.Map(mapRef.current, mapOption);
       mapInstanceRef.current = map;
@@ -145,7 +154,9 @@ const BasicMap = memo(({ setCategoryRegion, handleMarkerData }) => {
       markersRef.current = [];
       getMarkers(mapInstanceRef.current).then(() => {
         IsLoadingClose();
-      });
+      }).catch(
+        IsLoadingClose()
+      );
       kakao.maps.event.addListener(map, 'dragend', function () {
         if (map.getLevel() < 5) {
           IsLoadingShow();
@@ -153,7 +164,9 @@ const BasicMap = memo(({ setCategoryRegion, handleMarkerData }) => {
           markersRef.current = [];
           getMarkers(mapInstanceRef.current).then(() => {
             IsLoadingClose();
-          });
+          }).catch(
+            IsLoadingClose()
+          );
         }
       });
     }
