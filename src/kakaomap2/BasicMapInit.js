@@ -10,7 +10,7 @@ const geocoder = new kakao.maps.services.Geocoder();
 const mapLevel = 4;
 const mapcenterlat = 37.56435977921398
 const mapcenterlng = 126.97757768711558
-const BasicMap = memo(({ setCategoryRegion, handleMarkerData}) => {
+const BasicMap = memo(({ setCategoryRegion, handleMarkerData }) => {
   console.log("BasicMap 함수부분")
   const mapRef = useRef(null);
   const mapInstanceRef = useRef(null);
@@ -41,19 +41,31 @@ const BasicMap = memo(({ setCategoryRegion, handleMarkerData}) => {
     if (status === kakao.maps.services.Status.OK) {
       for (var i = 0; i < result.length; i++) {
         // 행정동의 region_type 값은 'H' 이므로
+        console.log(result[i]);
+        var arr;
         if (result[i].region_type === 'H') {
-          //console.log(result[i]);
-          var arr = {
+          console.log(result[i]);
+           arr = {
             addressname: result[i].address_name,
             region_1depth_name: result[i].region_1depth_name,
             region_2depth_name: result[i].region_2depth_name,
             region_3depth_name: result[i].region_3depth_name
           };
+          console.log(arr);
+          return arr;
+        } else {
+           arr = {
+            addressname: '',
+            region_1depth_name: '',
+            region_2depth_name: '',
+            region_3depth_name: ''
+          };
           return arr;
         }
       }
     } else {
-      console.log(status);
+      console.error('지오코딩 에러:', status);
+      return null;
     }
   }, [])
 
@@ -75,7 +87,7 @@ const BasicMap = memo(({ setCategoryRegion, handleMarkerData}) => {
   }, [handleMarkerData])
 
   const makermaking = useCallback((NameCountDtoList) => {
-    if(NameCountDtoList.data){
+    if (NameCountDtoList.data) {
       const newMarkers = NameCountDtoList.data.map((NameCountDto) => {
         var coords = new kakao.maps.LatLng(NameCountDto.lat, NameCountDto.lng);
         var marker = new kakao.maps.Marker({
@@ -88,10 +100,10 @@ const BasicMap = memo(({ setCategoryRegion, handleMarkerData}) => {
       // 새 마커 추가
       newMarkers.forEach(marker => marker.setMap(mapInstanceRef.current));
       markersRef.current = newMarkers;
-    }else{
+    } else {
       //alert("에러발생");
     }
-    
+
   }, [getMarkerData]);
 
   const get = useCallback(async (addressnameArr) => {
@@ -117,6 +129,16 @@ const BasicMap = memo(({ setCategoryRegion, handleMarkerData}) => {
       makearrcoords(map).forEach(coords => {
         geocoder.coord2RegionCode(coords.getLng(), coords.getLat(), function (result, status) {
           var regionArr = displayCenterInfo(result, status);
+          console.log(regionArr);
+          if(!regionArr){
+            if(count === 0){
+              setCategoryRegion(regionArr.region_3depth_name);
+            }
+            count++;
+            if (count === totalcount) resolve();
+                return;
+          }
+
           addressnameArr.push(regionArr.addressname);
           if (count === 0) {
             setCategoryRegion(regionArr.region_3depth_name);
@@ -125,14 +147,17 @@ const BasicMap = memo(({ setCategoryRegion, handleMarkerData}) => {
           if (count === totalcount) {
             get(addressnameArr)
               .then(response => {
-                if(response !== "ERROR"){
+                if (response !== "ERROR") {
                   makermaking(response)
-                  resolve();
-                }else {
-                  reject();
-                } 
+                } else {
+                  console.error('마커 데이터 조회 실패');
+                }
+                resolve();
               })
-              .catch(reject)
+              .catch(error => {
+                console.error('마커 데이터 처리 중 오류:', error);
+                resolve();
+              })
           }
         })
       })
@@ -154,9 +179,7 @@ const BasicMap = memo(({ setCategoryRegion, handleMarkerData}) => {
       markersRef.current = [];
       getMarkers(mapInstanceRef.current).then(() => {
         IsLoadingClose();
-      }).catch(
-        //IsLoadingClose()
-      );
+      })
       kakao.maps.event.addListener(map, 'dragend', function () {
         if (map.getLevel() < 5) {
           IsLoadingShow();
@@ -164,9 +187,7 @@ const BasicMap = memo(({ setCategoryRegion, handleMarkerData}) => {
           markersRef.current = [];
           getMarkers(mapInstanceRef.current).then(() => {
             IsLoadingClose();
-          }).catch(
-            //IsLoadingClose()
-          );
+          })
         }
       });
     }

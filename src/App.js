@@ -2,11 +2,6 @@ import React, { useState, useCallback } from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
 import BasicMap from './kakaomap2/BasicMapInit';
 import Category from './kakaomap2/Category';
-import Container from 'react-bootstrap/Container';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
-import { Link } from "react-router-dom";
 import SidePanel from './kakaomap2/SidePanel';
 import Layout from './layout/layout';
 
