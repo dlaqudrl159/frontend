@@ -41,7 +41,6 @@ const BasicMap = memo(({ setCategoryRegion, handleMarkerData }) => {
     if (status === kakao.maps.services.Status.OK) {
       for (var i = 0; i < result.length; i++) {
         // 행정동의 region_type 값은 'H' 이므로
-        console.log(result[i]);
         var arr;
         if (result[i].region_type === 'H') {
           console.log(result[i]);
@@ -51,17 +50,8 @@ const BasicMap = memo(({ setCategoryRegion, handleMarkerData }) => {
             region_2depth_name: result[i].region_2depth_name,
             region_3depth_name: result[i].region_3depth_name
           };
-          console.log(arr);
           return arr;
-        } else {
-           arr = {
-            addressname: '',
-            region_1depth_name: '',
-            region_2depth_name: '',
-            region_3depth_name: ''
-          };
-          return arr;
-        }
+        } 
       }
     } else {
       console.error('지오코딩 에러:', status);
@@ -129,15 +119,6 @@ const BasicMap = memo(({ setCategoryRegion, handleMarkerData }) => {
       makearrcoords(map).forEach(coords => {
         geocoder.coord2RegionCode(coords.getLng(), coords.getLat(), function (result, status) {
           var regionArr = displayCenterInfo(result, status);
-          console.log(regionArr);
-          if(!regionArr){
-            if(count === 0){
-              setCategoryRegion(regionArr.region_3depth_name);
-            }
-            count++;
-            if (count === totalcount) resolve();
-                return;
-          }
 
           addressnameArr.push(regionArr.addressname);
           if (count === 0) {
