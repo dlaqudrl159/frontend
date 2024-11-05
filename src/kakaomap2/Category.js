@@ -1,9 +1,11 @@
-import React, { useState, memo, useMemo } from "react";
+import React, { useState, memo, useMemo, useCallback } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import Sido from "./Sido";
 import Sigungu from "./Sigungu";
 import Dong from "./Dong";
+import axios from "axios";
+import { Button } from "react-bootstrap";
 
 const initSido = '서울특별시';
 const initSiguntu = '강남구';
@@ -18,8 +20,8 @@ const Category = memo(({ categoryRegionState }) => {
   const [selectedSido, setSelectedSido] = useState(initSido);
   const [selectedSigungu, setSelectedSigungu] = useState(initSiguntu);
   const [selectDong, setSelectedDong] = useState(initDong);
-  const [inputRoadName , setInputRoadName] = useState('');
-  const [apartmentname , setApartMentNmae] = useState('');
+  const [inputRoadName, setInputRoadName] = useState('');
+  const [apartmentname, setApartMentNmae] = useState('');
 
   const tabs = useMemo(() => {
     if (searchType === 'jibun') {
@@ -42,27 +44,77 @@ const Category = memo(({ categoryRegionState }) => {
   };
 
   const handleSelectState = () => {
-    if(searchType === 'road') {
+    if (searchType === 'road') {
       setSearchType('jibun')
       setSelectedSido(initSido)
       setSelectedSigungu(initSiguntu)
       setSelectedDong(initDong)
-      setInputRoadName('');
-    }else {
+      setInputRoadName('')
+      setApartMentNmae('')
+    } else {
       setSearchType('road')
       setSelectedSido(initSido)
       setSelectedSigungu(initSiguntu)
       setSelectedDong(initDong)
-      setInputRoadName('');
+      setInputRoadName('')
+      setApartMentNmae('')
     }
   }
+
+  const getCategoryClickData = useCallback(async (ex1, ex2, ex3, ex4) => {
+    const response = await axios.get('/api/getCategoryClickData', {
+      params: {
+        eex1: ex1,
+        eex2: ex2,
+        eex3: ex3,
+        eex4: ex4
+      }
+    }).then(response => {
+      console.log(response);
+    }).catch(error => {
+
+    })
+
+
+  }, [])
+
   const OnClick = () => {
-    if(searchType === 'jibun') {
-      console.log(selectedSido + selectedSigungu + selectDong + apartmentname);
-    }else {
-      console.log(selectedSido + selectedSigungu + inputRoadName + apartmentname);
+    if (searchType === 'jibun') {
+      if (apartmentname === '') {
+        alert('단지명을 입력해주십시요');
+        return;
+      }
+      getCategoryClickData(selectedSido, selectedSigungu, selectDong, apartmentname)
+    } else {
+      if (inputRoadName === '') {
+        alert('도로명을 입력해주십시요');
+        return;
+      } else if (apartmentname === '') {
+        alert('단지명을 입력해주십시요');
+        return;
+      }
+      getCategoryClickData(selectedSido, selectedSigungu, inputRoadName, apartmentname)
     }
   }
+
+  const getRoadNameList = useCallback(async() => {
+    if(inputRoadName === '') {
+      alert('도로명을 입력해주세요');
+      return
+    }
+    const response = await axios.get('/api/getRoadNameList', {
+      params: {
+        ex1 : selectedSido,
+        ex2 : selectedSigungu,
+        ex3 : inputRoadName
+      }
+    }).then(response => {
+      console.log(response);
+    }).catch(error => {
+
+    })
+  },[])
+
   const renderTabContent = () => {
     switch (activeTab) {
       case "choice":
@@ -111,13 +163,15 @@ const Category = memo(({ categoryRegionState }) => {
                 <Sigungu selectedSido={selectedSido} selectedSigungu={selectedSigungu} setSelectedSigungu={setSelectedSigungu} setSelectedDong={setSelectedDong}></Sigungu>
               </div>
               <input
+                value={inputRoadName}
                 type="text"
                 placeholder="도로명을 입력하세요"
                 style={styles.input}
                 onChange={(e) => {
-                  setInputRoadName(e.target.value);  
+                  setInputRoadName(e.target.value);
                 }}
               />
+              <button style={styles.button} onClick={getRoadNameList}>검색</button>
             </div>
           );
         }
@@ -126,6 +180,7 @@ const Category = memo(({ categoryRegionState }) => {
           <div style={{ ...styles.dropdown, ...styles.apartmentDropdown }}>
             <h3>단지명 검색</h3>
             <input
+              value={apartmentname}
               type="text"
               placeholder="단지명 입력"
               style={styles.apartmentinput}
@@ -243,7 +298,7 @@ const styles = {
     border: '1px solid #0056b3',
   },
   input: {
-    width: '100%',
+    width: '80%',
     padding: '8px',
     borderRadius: '4px',
     border: '1px solid #ccc',
