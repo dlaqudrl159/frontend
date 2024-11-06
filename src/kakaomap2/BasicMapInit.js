@@ -73,12 +73,12 @@ const BasicMap = memo(({ setCategoryRegion, handleMarkerData }) => {
     }
   }, [handleMarkerData])
 
-  const makermaking = useCallback((NameCountDtoList) => {
-    if (NameCountDtoList.data) {
-      const newMarkers = NameCountDtoList.data.map((NameCountDto) => {
-        var coords = new kakao.maps.LatLng(NameCountDto.lat, NameCountDto.lng);
+  const makermaking = useCallback((LatLngDtoList) => {
+    if (LatLngDtoList.data) {
+      const newMarkers = LatLngDtoList.data.map((LatLngDto) => {
+        var coords = new kakao.maps.LatLng(LatLngDto.lat, LatLngDto.lng);
         var marker = new kakao.maps.Marker({
-          title: NameCountDto.lat + "/" + NameCountDto.lng,
+          title: LatLngDto.lat + "/" + LatLngDto.lng,
           position: coords,
         });
         kakao.maps.event.addListener(marker, 'click', getMarkerData(marker));

@@ -4,6 +4,7 @@ const SidePanel = memo(({ selectedMarkerData, setSelectedMarkerData }) => {
     const modalRef = useRef();
 
     const [selectedRoadIndex, setSelectedRoadIndex] = useState(0);  // 기본값 0으로 첫 번째 데이터 선택
+    console.log(selectedMarkerData);
     const [selectedYear, setSelectedYear] = useState(
         selectedMarkerData[0].years[0].toString()
     );

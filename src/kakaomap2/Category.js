@@ -80,19 +80,19 @@ const Category = memo(({ categoryRegionState }) => {
 
   const OnClick = () => {
     if (searchType === 'jibun') {
-      if (apartmentname === '') {
+      /*if (apartmentname === '') {
         alert('단지명을 입력해주십시요');
         return;
-      }
+      }*/
       getCategoryClickData(selectedSido, selectedSigungu, selectDong, apartmentname)
     } else {
       if (inputRoadName === '') {
         alert('도로명을 입력해주십시요');
         return;
-      } else if (apartmentname === '') {
+      } /*else if (apartmentname === '') {
         alert('단지명을 입력해주십시요');
         return;
-      }
+      }*/
       getCategoryClickData(selectedSido, selectedSigungu, inputRoadName, apartmentname)
     }
   }
