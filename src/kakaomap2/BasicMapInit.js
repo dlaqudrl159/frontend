@@ -15,7 +15,7 @@ const BasicMap = memo(({ setCategoryRegion, handleMarkerData }) => {
   const mapRef = useRef(null);
   const mapInstanceRef = useRef(null);
   const markersRef = useRef([]);
-
+  const overlayRef = useRef(null);
   const [IsLoadingState, setIsLoadingState] = useState(true);
   const IsLoadingShow = useCallback(() => setIsLoadingState(true), [])
   const IsLoadingClose = useCallback(() => setIsLoadingState(false), [])
@@ -49,7 +49,7 @@ const BasicMap = memo(({ setCategoryRegion, handleMarkerData }) => {
             region_3depth_name: result[i].region_3depth_name
           };
           return arr;
-        } 
+        }
       }
     } else {
       console.error('지오코딩 에러:', status);
@@ -57,13 +57,15 @@ const BasicMap = memo(({ setCategoryRegion, handleMarkerData }) => {
     }
   }, [])
 
-  const getMarkerData = useCallback((marker) => {
+  const getMarkerData = useCallback((marker, apartmentname) => {
+    console.log(marker, apartmentname)
     return async function () {
-      var markerlatlng = marker.getTitle().split('/');
+      var markerData = marker.markerData;
       await axios.get('/api/getMarkerData', {
         params: {
-          lat: markerlatlng[0],
-          lng: markerlatlng[1]
+          apartmentname: apartmentname,
+          lat: markerData.lat,
+          lng: markerData.lng
         }
       }).then(response => {
         handleMarkerData(response.data);
@@ -73,15 +75,89 @@ const BasicMap = memo(({ setCategoryRegion, handleMarkerData }) => {
     }
   }, [handleMarkerData])
 
+  const showInfoWindow = useCallback((marker, items, map) => {
+    // 기존 InfoWindow가 있다면 닫기
+    if (overlayRef.current) {
+      overlayRef.current.close();
+    }
+  
+    const content = `
+      <div style="padding:15px;min-width:200px;">
+        <div style="font-weight:bold;margin-bottom:10px;">위치 선택</div>
+        ${items.map((item, index) => 
+          `<div class="info-item" style="padding:8px;cursor:pointer;" 
+            onclick="window.selectApartment('${item.apartmentname}')">
+            ${item.apartmentname}
+          </div>`
+        ).join('')}
+      </div>
+    `;
+  
+    // 전역 함수로 등록
+    window.selectApartment = function(apartmentname) {
+      getMarkerData(marker, apartmentname)();
+      overlayRef.current.close();
+    };
+  
+    const infowindow = new kakao.maps.InfoWindow({
+      content: content,
+      removable: true
+    });
+  
+    infowindow.open(map, marker);
+    overlayRef.current = infowindow;
+  }, [getMarkerData]);
+
   const makermaking = useCallback((LatLngDtoList) => {
     if (LatLngDtoList.data) {
-      const newMarkers = LatLngDtoList.data.map((LatLngDto) => {
-        var coords = new kakao.maps.LatLng(LatLngDto.lat, LatLngDto.lng);
-        var marker = new kakao.maps.Marker({
-          title: LatLngDto.lat + "/" + LatLngDto.lng,
-          position: coords,
+
+      const groupedData = LatLngDtoList.data.reduce((acc, item) => {
+        const key = `${item.lat},${item.lng}`;
+        if (!acc[key]) {
+          acc[key] = [];
+        }
+        acc[key].push(item);
+        return acc;
+      }, {});
+      
+      const newMarkers = Object.entries(groupedData).map(([coordKey, items]) => {
+        const [lat, lng] = coordKey.split(',');
+        const coords = new kakao.maps.LatLng(lat, lng);
+        var marker;
+        if (items.length > 1) {
+          marker = new kakao.maps.Marker({
+            title: items.length > 1 ? `${items[0].apartmentname} 외 ${items.length - 1}곳` : items[0].name,
+            position: coords,
+          });
+          marker.markerData = {
+            lat: lat,
+            lng: lng
+          };
+        } else {
+          marker = new kakao.maps.Marker({
+            title: items[0].apartmentname,
+            position: coords,
+          });
+          marker.markerData = {
+            lat: lat,
+            lng: lng
+          };
+        }
+
+
+        // 마커 클릭 이벤트 수정
+        kakao.maps.event.addListener(marker, 'click', async function () {
+          if (items.length > 1) {
+            // 여러 데이터가 있는 경우 오버레이 표시
+            console.log("showOverlay")
+            showInfoWindow(marker, items, mapInstanceRef.current);
+          } else {
+            // 단일 데이터인 경우 기존처럼 처리
+            console.log("getMarkerData")
+            getMarkerData(marker, marker.getTitle())();
+          }
         });
-        kakao.maps.event.addListener(marker, 'click', getMarkerData(marker));
+
         return marker;
       });
       // 새 마커 추가
@@ -91,7 +167,7 @@ const BasicMap = memo(({ setCategoryRegion, handleMarkerData }) => {
       //alert("에러발생");
     }
 
-  }, [getMarkerData]);
+  }, [getMarkerData, showInfoWindow]);
 
   const get = useCallback(async (addressnameArr) => {
     try {

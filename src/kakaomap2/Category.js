@@ -98,6 +98,7 @@ const Category = memo(({ categoryRegionState }) => {
   }
 
   const getRoadNameList = useCallback(async() => {
+    console.log(inputRoadName)
     if(inputRoadName === '') {
       alert('도로명을 입력해주세요');
       return
@@ -113,7 +114,7 @@ const Category = memo(({ categoryRegionState }) => {
     }).catch(error => {
 
     })
-  },[])
+  },[inputRoadName,selectedSido,selectedSigungu])
 
   const renderTabContent = () => {
     switch (activeTab) {
