@@ -58,16 +58,18 @@ const BasicMap = memo(({ setCategoryRegion, handleMarkerData }) => {
   }, [])
 
   const getMarkerData = useCallback((marker, apartmentname) => {
-    console.log(marker, apartmentname)
     return async function () {
       var markerData = marker.markerData;
-      await axios.get('/api/getMarkerData', {
+      await axios.get('/api/getMarkerData2', {
         params: {
+          sigungu: markerData.sigungu,
+          bungi: markerData.bungi,
           apartmentname: apartmentname,
           lat: markerData.lat,
           lng: markerData.lng
         }
       }).then(response => {
+        console.log(response);
         handleMarkerData(response.data);
       }).catch(error => {
         console.log(error);
@@ -126,12 +128,14 @@ const BasicMap = memo(({ setCategoryRegion, handleMarkerData }) => {
         var marker;
         if (items.length > 1) {
           marker = new kakao.maps.Marker({
-            title: items.length > 1 ? `${items[0].apartmentname} 외 ${items.length - 1}곳` : items[0].name,
+            title: items.length > 1 ? `${items[0].apartmentname} 외 ${items.length - 1}곳` : items[0].apartmentname,
             position: coords,
           });
           marker.markerData = {
             lat: lat,
-            lng: lng
+            lng: lng,
+            sigungu: items[0].sigungu,
+            bungi: items[0].bungi
           };
         } else {
           marker = new kakao.maps.Marker({
@@ -140,7 +144,9 @@ const BasicMap = memo(({ setCategoryRegion, handleMarkerData }) => {
           });
           marker.markerData = {
             lat: lat,
-            lng: lng
+            lng: lng,
+            sigungu: items[0].sigungu,
+            bungi: items[0].bungi
           };
         }
 
