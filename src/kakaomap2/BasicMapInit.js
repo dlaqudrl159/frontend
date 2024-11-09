@@ -60,16 +60,15 @@ const BasicMap = memo(({ setCategoryRegion, handleMarkerData }) => {
   const getMarkerData = useCallback((marker, apartmentname) => {
     return async function () {
       var markerData = marker.markerData;
-      await axios.get('/api/getMarkerData2', {
+      await axios.get('/api/getMarkerData', {
         params: {
-          sigungu: markerData.sigungu,
-          bungi: markerData.bungi,
-          apartmentname: apartmentname,
-          lat: markerData.lat,
-          lng: markerData.lng
+          SIGUNGU: markerData.sigungu,
+          BUNGI: markerData.bungi,
+          APARTMENTNAME: apartmentname,
+          LAT: markerData.lat,
+          LNG: markerData.lng
         }
       }).then(response => {
-        console.log(response);
         handleMarkerData(response.data);
       }).catch(error => {
         console.log(error);
@@ -84,10 +83,10 @@ const BasicMap = memo(({ setCategoryRegion, handleMarkerData }) => {
     }
   
     const content = `
-      <div style="padding:15px;min-width:200px;">
+      <div style="padding:15px;min-width:300px;">
         <div style="font-weight:bold;margin-bottom:10px;">위치 선택</div>
         ${items.map((item, index) => 
-          `<div class="info-item" style="padding:8px;cursor:pointer;" 
+          `<div class="info-item" style="padding:8px;cursor:pointer;font-size:15px" 
             onclick="window.selectApartment('${item.apartmentname}')">
             ${item.apartmentname}
           </div>`

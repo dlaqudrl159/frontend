@@ -4,7 +4,7 @@ const SidePanel = memo(({ selectedMarkerData, setSelectedMarkerData }) => {
     const modalRef = useRef();
 
     const [selectedRoadIndex, setSelectedRoadIndex] = useState(0);  // 기본값 0으로 첫 번째 데이터 선택
-    console.log(selectedMarkerData);
+
     const [selectedYear, setSelectedYear] = useState(
         selectedMarkerData[0].years[0].toString()
     );
@@ -16,28 +16,33 @@ const SidePanel = memo(({ selectedMarkerData, setSelectedMarkerData }) => {
     };
 
     const currentApt = selectedMarkerData[selectedRoadIndex];
-
+    console.log(currentApt);
     const groupedByMonth = useMemo(() => {
-        const filteredData = currentApt.apiDtoList
-            .filter(item => item.year.toString() === selectedYear)
-            .sort((a, b) => {
-                // dealyearmonth 기준으로 내림차순 정렬 (예: 202412 -> 202401)
-                return b.dealyearmonth - a.dealyearmonth;
+
+        if (currentApt.aptTransactionDtoList !== null) {
+            const filteredData = currentApt.aptTransactionDtoList
+                .filter(item => item.year.toString() === selectedYear)
+                .sort((a, b) => {
+                    // dealyearmonth 기준으로 내림차순 정렬 (예: 202412 -> 202401)
+                    return b.dealyearmonth - a.dealyearmonth;
+                });
+
+            // 월별로 그룹화
+            const groups = {};
+            filteredData.forEach(item => {
+                const month = item.dealyearmonth.substring(4, 6);
+                if (!groups[month]) {
+                    groups[month] = [];
+                }
+                groups[month].push(item);
             });
 
-        // 월별로 그룹화
-        const groups = {};
-        filteredData.forEach(item => {
-            const month = item.dealyearmonth.substring(4, 6);
-            if (!groups[month]) {
-                groups[month] = [];
-            }
-            groups[month].push(item);
-        });
+            return groups;
+        }
 
-        return groups;
+        return {};
+
     }, [currentApt, selectedYear]);
-
 
     useEffect(() => {
 
@@ -59,9 +64,9 @@ const SidePanel = memo(({ selectedMarkerData, setSelectedMarkerData }) => {
         <div style={styles.overlay}>
             <div ref={modalRef} style={styles.modal}>
                 <div style={styles.header}>
-                    <h2>[아파트] {currentApt.nameCountDto.apartmentname}</h2>
-                    <p>{currentApt.nameCountDto.sigungu} {currentApt.nameCountDto.bungi}</p>
-                    <p>{currentApt.nameCountDto.roadname}</p>
+                    <h2>[아파트] {currentApt.aptLatLngDto.apartmentname}</h2>
+                    <p>{currentApt.aptLatLngDto.sigungu} {currentApt.aptLatLngDto.bungi}</p>
+                    <p>{currentApt.aptLatLngDto.roadname}</p>
                     <button onClick={() => { setSelectedMarkerData(null) }} style={styles.closeButton}>X</button>
                 </div>
 
@@ -73,7 +78,7 @@ const SidePanel = memo(({ selectedMarkerData, setSelectedMarkerData }) => {
                     >
                         {selectedMarkerData.map((data, index) => (
                             <option key={index} value={index}>
-                                {data.nameCountDto.roadname}
+                                {data.aptLatLngDto.roadname}
                             </option>
                         ))}
                     </select>
