@@ -16,7 +16,7 @@ const SidePanel = memo(({ selectedMarkerData, setSelectedMarkerData }) => {
     };
 
     const currentApt = selectedMarkerData[selectedRoadIndex];
-    console.log(currentApt);
+    
     const groupedByMonth = useMemo(() => {
 
         if (currentApt.aptTransactionDtoList !== null) {

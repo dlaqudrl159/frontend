@@ -16,6 +16,7 @@ const BasicMap = memo(({ setCategoryRegion, handleMarkerData }) => {
   const mapInstanceRef = useRef(null);
   const markersRef = useRef([]);
   const overlayRef = useRef(null);
+
   const [IsLoadingState, setIsLoadingState] = useState(true);
   const IsLoadingShow = useCallback(() => setIsLoadingState(true), [])
   const IsLoadingClose = useCallback(() => setIsLoadingState(false), [])
@@ -125,7 +126,7 @@ const BasicMap = memo(({ setCategoryRegion, handleMarkerData }) => {
         const [lat, lng] = coordKey.split(',');
         const coords = new kakao.maps.LatLng(lat, lng);
         var marker;
-        if (items.length > 1) {
+        
           marker = new kakao.maps.Marker({
             title: items.length > 1 ? `${items[0].apartmentname} 외 ${items.length - 1}곳` : items[0].apartmentname,
             position: coords,
@@ -136,29 +137,14 @@ const BasicMap = memo(({ setCategoryRegion, handleMarkerData }) => {
             sigungu: items[0].sigungu,
             bungi: items[0].bungi
           };
-        } else {
-          marker = new kakao.maps.Marker({
-            title: items[0].apartmentname,
-            position: coords,
-          });
-          marker.markerData = {
-            lat: lat,
-            lng: lng,
-            sigungu: items[0].sigungu,
-            bungi: items[0].bungi
-          };
-        }
-
-
+        
         // 마커 클릭 이벤트 수정
         kakao.maps.event.addListener(marker, 'click', async function () {
           if (items.length > 1) {
             // 여러 데이터가 있는 경우 오버레이 표시
-            console.log("showOverlay")
             showInfoWindow(marker, items, mapInstanceRef.current);
           } else {
             // 단일 데이터인 경우 기존처럼 처리
-            console.log("getMarkerData")
             getMarkerData(marker, marker.getTitle())();
           }
         });

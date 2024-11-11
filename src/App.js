@@ -11,7 +11,7 @@ function App() {
   const [categoryRegionState, setCategoryRegionState] = useState(null);
 
   const [selectedMarkerData, setSelectedMarkerData] = useState(null);
-
+  
   const handleMarkerData = useCallback((data) => {
     setSelectedMarkerData(data);
   }, []);
