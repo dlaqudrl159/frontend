@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState, memo, useMemo } from 'react';
 
 const SidePanel = memo(({ selectedMarkerData, setSelectedMarkerData }) => {
     const modalRef = useRef();
-
+    console.log(selectedMarkerData)
     const [selectedRoadIndex, setSelectedRoadIndex] = useState(0);  // 기본값 0으로 첫 번째 데이터 선택
 
     const [selectedYear, setSelectedYear] = useState(
