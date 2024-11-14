@@ -1,13 +1,27 @@
-import React, { useState, memo, useMemo} from "react";
+import React, { useState, memo, useMemo, useCallback } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import Sido from "./Sido";
+import Sigungu from "./Sigungu";
+import Dong from "./Dong";
+import axios from "axios";
+import { Button } from "react-bootstrap";
+
+const initSido = '서울특별시';
+const initSiguntu = '강남구';
+const initDong = '개포동';
 
 const Category = memo(({ categoryRegionState }) => {
   console.log("Category함수부분")
   const [activeTab, setActiveTab] = useState(null);
+
   const [searchType, setSearchType] = useState('jibun'); // 'jibun' 또는 'road'
-  const [selectedSido, setSelectedSido] = useState('');
-  const [selectedSigungu, setSelectedSigungu] = useState('');
+
+  const [selectedSido, setSelectedSido] = useState(initSido);
+  const [selectedSigungu, setSelectedSigungu] = useState(initSiguntu);
+  const [selectDong, setSelectedDong] = useState(initDong);
+  const [inputRoadName, setInputRoadName] = useState('');
+  const [apartmentname, setApartMentNmae] = useState('');
 
   const tabs = useMemo(() => {
     if (searchType === 'jibun') {
@@ -29,98 +43,153 @@ const Category = memo(({ categoryRegionState }) => {
     setActiveTab(activeTab === tabId ? null : tabId);
   };
 
+  const handleSelectState = () => {
+    if (searchType === 'road') {
+      setSearchType('jibun')
+      setSelectedSido(initSido)
+      setSelectedSigungu(initSiguntu)
+      setSelectedDong(initDong)
+      setInputRoadName('')
+      setApartMentNmae('')
+    } else {
+      setSearchType('road')
+      setSelectedSido(initSido)
+      setSelectedSigungu(initSiguntu)
+      setSelectedDong(initDong)
+      setInputRoadName('')
+      setApartMentNmae('')
+    }
+  }
+
+  const getCategoryClickData = useCallback(async (ex1, ex2, ex3, ex4) => {
+    const response = await axios.get('/api/getCategoryClickData', {
+      params: {
+        eex1: ex1,
+        eex2: ex2,
+        eex3: ex3,
+        eex4: ex4
+      }
+    }).then(response => {
+      console.log(response);
+    }).catch(error => {
+
+    })
+
+
+  }, [])
+
+  const OnClick = () => {
+    if (searchType === 'jibun') {
+      /*if (apartmentname === '') {
+        alert('단지명을 입력해주십시요');
+        return;
+      }*/
+      getCategoryClickData(selectedSido, selectedSigungu, selectDong, apartmentname)
+    } else {
+      if (inputRoadName === '') {
+        alert('도로명을 입력해주십시요');
+        return;
+      } /*else if (apartmentname === '') {
+        alert('단지명을 입력해주십시요');
+        return;
+      }*/
+      getCategoryClickData(selectedSido, selectedSigungu, inputRoadName, apartmentname)
+    }
+  }
+
+  const getRoadNameList = useCallback(async() => {
+    console.log(inputRoadName)
+    if(inputRoadName === '') {
+      alert('도로명을 입력해주세요');
+      return
+    }
+    const response = await axios.get('/api/getRoadNameList', {
+      params: {
+        ex1 : selectedSido,
+        ex2 : selectedSigungu,
+        ex3 : inputRoadName
+      }
+    }).then(response => {
+      console.log(response);
+    }).catch(error => {
+
+    })
+  },[inputRoadName,selectedSido,selectedSigungu])
+
   const renderTabContent = () => {
     switch (activeTab) {
       case "choice":
         return (
           <div style={{ ...styles.dropdown, ...styles.choiceDropdown }}>
             <div style={styles.searchTypeContainer}>
-              <div 
+              <div
                 style={{
                   ...styles.searchTypeButton,
                   ...(searchType === 'jibun' ? styles.activeSearchType : {})
                 }}
-                onClick={() => setSearchType('jibun')}
+                onClick={() => handleSelectState()}
               >
                 지번으로 검색
               </div>
-              <div 
+              <div
                 style={{
                   ...styles.searchTypeButton,
                   ...(searchType === 'road' ? styles.activeSearchType : {})
                 }}
-                onClick={() => setSearchType('road')}
+                onClick={() => handleSelectState()}
               >
                 도로명으로 검색
               </div>
             </div>
           </div>
         );
-        case "region":
-          if (searchType === 'jibun') {
-            return (
-              <div style={{ ...styles.dropdown, ...styles.regionDropdown }}>
-                <div style={styles.selectContainer}>
-                  <select 
-                    value={selectedSido} 
-                    onChange={(e) => setSelectedSido(e.target.value)}
-                    style={styles.select}
-                  >
-                    <option value="">시/도 선택</option>
-                    {/* 시/도 옵션들 */}
-                  </select>
-                  <select 
-                    value={selectedSigungu} 
-                    onChange={(e) => setSelectedSigungu(e.target.value)}
-                    style={styles.select}
-                  >
-                    <option value="">시/군/구 선택</option>
-                    {/* 시/군/구 옵션들 */}
-                  </select>
-                </div>
-                <div style={styles.currentRegion}>
-                  {categoryRegionState}
-                </div>
-                <div style={styles.dongList}>
-                  {/* 해당 구의 읍면동 리스트 */}
-                </div>
+      case "region":
+        if (searchType === 'jibun') {
+          return (
+            <div style={{ ...styles.dropdown, ...styles.regionDropdown }}>
+              <div style={styles.selectContainer}>
+                <Sido selectedSido={selectedSido} setSelectedSido={setSelectedSido} setSelectedSigungu={setSelectedSigungu} setSelectedDong={setSelectedDong}></Sido>
+                <Sigungu selectedSido={selectedSido} selectedSigungu={selectedSigungu} setSelectedSigungu={setSelectedSigungu} setSelectedDong={setSelectedDong}></Sigungu>
               </div>
-            );
-          } else {
-            return (
-              <div style={{ ...styles.dropdown, ...styles.regionDropdown }}>
-                <div style={styles.selectContainer}>
-                  <select 
-                    value={selectedSido} 
-                    onChange={(e) => setSelectedSido(e.target.value)}
-                    style={styles.select}
-                  >
-                    <option value="">시/도 선택</option>
-                    {/* 시/도 옵션들 */}
-                  </select>
-                  <select 
-                    value={selectedSigungu} 
-                    onChange={(e) => setSelectedSigungu(e.target.value)}
-                    style={styles.select}
-                  >
-                    <option value="">시/군/구 선택</option>
-                    {/* 시/군/구 옵션들 */}
-                  </select>
-                </div>
-                <input 
-                  type="text" 
-                  placeholder="도로명을 입력하세요" 
-                  style={styles.input}
-                />
+              <div style={styles.dongList}>
+                <Dong selectDong={selectDong} setSelectedDong={setSelectedDong} selectedSido={selectedSido} selectedSigungu={selectedSigungu}></Dong>
               </div>
-            );
-          }
+            </div>
+          )
+        } else {
+          return (
+            <div style={{ ...styles.dropdown, ...styles.regionDropdown }}>
+              <div style={styles.selectContainer}>
+                <Sido selectedSido={selectedSido} setSelectedSido={setSelectedSido} setSelectedSigungu={setSelectedSigungu} setSelectedDong={setSelectedDong}></Sido>
+                <Sigungu selectedSido={selectedSido} selectedSigungu={selectedSigungu} setSelectedSigungu={setSelectedSigungu} setSelectedDong={setSelectedDong}></Sigungu>
+              </div>
+              <input
+                value={inputRoadName}
+                type="text"
+                placeholder="도로명을 입력하세요"
+                style={styles.input}
+                onChange={(e) => {
+                  setInputRoadName(e.target.value);
+                }}
+              />
+              <button style={styles.button} onClick={getRoadNameList}>검색</button>
+            </div>
+          );
+        }
       case "apartmentname":
         return (
           <div style={{ ...styles.dropdown, ...styles.apartmentDropdown }}>
             <h3>단지명 검색</h3>
-            <input type="text" placeholder="단지명 입력" />
-            <button>검색</button>
+            <input
+              value={apartmentname}
+              type="text"
+              placeholder="단지명 입력"
+              style={styles.apartmentinput}
+              onChange={(e) => {
+                setApartMentNmae(e.target.value);
+              }}
+            />
+            <button style={styles.button} onClick={OnClick}>검색</button>
           </div>
         );
       default:
@@ -203,11 +272,11 @@ const styles = {
     backgroundColor: "#ffffff",
   },
   regionDropdown: {
-    height: "200px",
+    height: "150px",
     backgroundColor: "#ffffff",
   },
   apartmentDropdown: {
-    height: "180px",
+    height: "150px",
     backgroundColor: "#ffffff",
   },
   searchTypeContainer: {
@@ -230,27 +299,26 @@ const styles = {
     border: '1px solid #0056b3',
   },
   input: {
-    width: '100%',
+    width: '80%',
     padding: '8px',
     borderRadius: '4px',
     border: '1px solid #ccc',
+  },
+  apartmentinput: {
+    width: '80%',
+    padding: '8px',
+    borderRadius: '4px',
+    border: '1px solid #ccc',
+  },
+  button: {
+    border: '1px solid #ccc',
+    marginLeft: '5px',
+    width: "10%",
+    height: "30%"
   },
   selectContainer: {
     display: 'flex',
     gap: '10px',
-    marginBottom: '15px',
-  },
-  select: {
-    flex: 1,
-    padding: '8px',
-    borderRadius: '4px',
-    border: '1px solid #ccc',
-  },
-  currentRegion: {
-    padding: '10px',
-    backgroundColor: '#f8f9fa',
-    border: '1px solid #dee2e6',
-    borderRadius: '4px',
     marginBottom: '15px',
   },
   dongList: {

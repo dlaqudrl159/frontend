@@ -7,11 +7,16 @@ const { kakao } = window;
 
 const geocoder = new kakao.maps.services.Geocoder();
 
+const mapLevel = 4;
+const mapcenterlat = 37.56435977921398
+const mapcenterlng = 126.97757768711558
 const BasicMap = memo(({ setCategoryRegion, handleMarkerData }) => {
   console.log("BasicMap 함수부분")
   const mapRef = useRef(null);
   const mapInstanceRef = useRef(null);
   const markersRef = useRef([]);
+  const overlayRef = useRef(null);
+  const clustererRef = useRef(null);
 
   const [IsLoadingState, setIsLoadingState] = useState(true);
   const IsLoadingShow = useCallback(() => setIsLoadingState(true), [])
@@ -39,7 +44,6 @@ const BasicMap = memo(({ setCategoryRegion, handleMarkerData }) => {
       for (var i = 0; i < result.length; i++) {
         // 행정동의 region_type 값은 'H' 이므로
         if (result[i].region_type === 'H') {
-          //console.log(result[i]);
           var arr = {
             addressname: result[i].address_name,
             region_1depth_name: result[i].region_1depth_name,
@@ -50,20 +54,23 @@ const BasicMap = memo(({ setCategoryRegion, handleMarkerData }) => {
         }
       }
     } else {
-      console.log(status);
+      console.error('지오코딩 에러:', status);
+      return null;
     }
   }, [])
 
-  const getMarkerData = useCallback((marker) => {
+  const getMarkerData = useCallback((marker, apartmentname) => {
     return async function () {
-      var markerlatlng = marker.getTitle().split('/');
+      var markerData = marker.markerData;
       await axios.get('/api/getMarkerData', {
         params: {
-          lat: markerlatlng[0],
-          lng: markerlatlng[1]
+          SIGUNGU: markerData.sigungu,
+          BUNGI: markerData.bungi,
+          APARTMENTNAME: apartmentname,
+          LAT: markerData.lat,
+          LNG: markerData.lng
         }
       }).then(response => {
-        //console.log(response);
         handleMarkerData(response.data);
       }).catch(error => {
         console.log(error);
@@ -71,25 +78,95 @@ const BasicMap = memo(({ setCategoryRegion, handleMarkerData }) => {
     }
   }, [handleMarkerData])
 
-  const makermaking = useCallback((NameCountDtoList) => {
-    const newMarkers = NameCountDtoList.data.map((NameCountDto) => {
-      var coords = new kakao.maps.LatLng(NameCountDto.lat, NameCountDto.lng);
-      var marker = new kakao.maps.Marker({
-        title: NameCountDto.lat + "/" + NameCountDto.lng,
-        position: coords,
-      });
-      kakao.maps.event.addListener(marker, 'click', getMarkerData(marker));
-      return marker;
+  const showInfoWindow = useCallback((marker, items, map) => {
+    // 기존 InfoWindow가 있다면 닫기
+    if (overlayRef.current) {
+      overlayRef.current.close();
+    }
+
+    const content = `
+      <div style="padding:15px;min-width:300px;">
+        <div style="font-weight:bold;margin-bottom:10px;">위치 선택</div>
+        ${items.map((item, index) =>
+      `<div class="info-item" style="padding:8px;cursor:pointer;font-size:15px" 
+            onclick="window.selectApartment('${item.apartmentname}')">
+            ${item.apartmentname}
+          </div>`
+    ).join('')}
+      </div>
+    `;
+
+    // 전역 함수로 등록
+    window.selectApartment = function (apartmentname) {
+      getMarkerData(marker, apartmentname)();
+      overlayRef.current.close();
+    };
+
+    const infowindow = new kakao.maps.InfoWindow({
+      content: content,
+      removable: true
     });
-    // 새 마커 추가
-    newMarkers.forEach(marker => marker.setMap(mapInstanceRef.current));
-    markersRef.current = newMarkers;
+
+    infowindow.open(map, marker);
+    overlayRef.current = infowindow;
   }, [getMarkerData]);
 
+  const makermaking = useCallback((LatLngDtoList) => {
+    if (LatLngDtoList.data) {
+
+      const groupedData = LatLngDtoList.data.reduce((acc, item) => {
+        const key = `${item.lat},${item.lng}`;
+        if (!acc[key]) {
+          acc[key] = [];
+        }
+        acc[key].push(item);
+        return acc;
+      }, {});
+
+      const newMarkers = Object.entries(groupedData).map(([coordKey, items]) => {
+        const [lat, lng] = coordKey.split(',');
+        const coords = new kakao.maps.LatLng(lat, lng);
+        var marker;
+
+        marker = new kakao.maps.Marker({
+          title: items.length > 1 ? `${items[0].apartmentname} 외 ${items.length - 1}곳` : items[0].apartmentname,
+          position: coords,
+        });
+        marker.markerData = {
+          lat: lat,
+          lng: lng,
+          sigungu: items[0].sigungu,
+          bungi: items[0].bungi
+        };
+
+        // 마커 클릭 이벤트 수정
+        kakao.maps.event.addListener(marker, 'click', async function () {
+          if (items.length > 1) {
+            // 여러 데이터가 있는 경우 오버레이 표시
+            showInfoWindow(marker, items, mapInstanceRef.current);
+          } else {
+            // 단일 데이터인 경우 기존처럼 처리
+            getMarkerData(marker, marker.getTitle())();
+          }
+        });
+
+        return marker;
+      });
+      //markersRef.current = newMarkers;
+      clustererRef.current.addMarkers(newMarkers);
+
+      // 새 마커 추가
+      //newMarkers.forEach(marker => marker.setMap(mapInstanceRef.current));
+      //markersRef.current = newMarkers;
+    } else {
+      //alert("에러발생");
+    }
+
+  }, [getMarkerData, showInfoWindow]);
+
   const get = useCallback(async (addressnameArr) => {
-    console.log(addressnameArr);
     try {
-      const response = await axios.get("/api/get", {
+      const response = await axios.get("/api/getMarkers", {
         params: { addressnameArr: addressnameArr },
         paramsSerializer: (params) => {
           return qs.stringify(params, { arrayFormat: "comma" });
@@ -97,8 +174,7 @@ const BasicMap = memo(({ setCategoryRegion, handleMarkerData }) => {
       });
       return response;
     } catch (error) {
-      console.log(error);
-      //throw error;
+      return "ERROR";
     }
   }, []);
 
@@ -111,19 +187,26 @@ const BasicMap = memo(({ setCategoryRegion, handleMarkerData }) => {
       makearrcoords(map).forEach(coords => {
         geocoder.coord2RegionCode(coords.getLng(), coords.getLat(), function (result, status) {
           var regionArr = displayCenterInfo(result, status);
+
           addressnameArr.push(regionArr.addressname);
           if (count === 0) {
             setCategoryRegion(regionArr.region_3depth_name);
           }
           count++;
-
           if (count === totalcount) {
             get(addressnameArr)
               .then(response => {
-                makermaking(response)
+                if (response !== "ERROR") {
+                  makermaking(response)
+                } else {
+                  console.error('마커 데이터 조회 실패');
+                }
                 resolve();
               })
-              .catch(reject);
+              .catch(error => {
+                console.error('마커 데이터 처리 중 오류:', error);
+                resolve();
+              })
           }
         })
       })
@@ -134,26 +217,39 @@ const BasicMap = memo(({ setCategoryRegion, handleMarkerData }) => {
   useEffect(() => {
     if (!mapInstanceRef.current && mapRef.current) {
       const mapOption = {
-        center: new kakao.maps.LatLng(37.56435977921398, 126.97757768711558),
-        level: 4
+        center: new kakao.maps.LatLng(mapcenterlat, mapcenterlng),
+        level: mapLevel
       };
       const map = new kakao.maps.Map(mapRef.current, mapOption);
       mapInstanceRef.current = map;
 
+      const clusterer = new kakao.maps.MarkerClusterer({
+        map: map, // 마커들을 클러스터로 관리하고 표시할 지도 객체 
+        averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정 
+        minLevel: 4, // 클러스터 할 최소 지도 레벨 
+        MinClusterSize: 10,
+        calculator: [50, 100],
+        gridSize: 120,
+        disableClickZoom: true
+      });
+      clustererRef.current = clusterer;
+
       IsLoadingShow();
-      markersRef.current.forEach(marker => marker.setMap(null));
-      markersRef.current = [];
+      clustererRef.current.clear();
+      //markersRef.current.forEach(marker => marker.setMap(null));
+      //markersRef.current = [];
       getMarkers(mapInstanceRef.current).then(() => {
         IsLoadingClose();
-      });
+      })
       kakao.maps.event.addListener(map, 'dragend', function () {
         if (map.getLevel() < 5) {
           IsLoadingShow();
-          markersRef.current.forEach(marker => marker.setMap(null));
-          markersRef.current = [];
+          clustererRef.current.clear();
+          //markersRef.current.forEach(marker => marker.setMap(null));
+          //markersRef.current = [];
           getMarkers(mapInstanceRef.current).then(() => {
             IsLoadingClose();
-          });
+          })
         }
       });
     }
