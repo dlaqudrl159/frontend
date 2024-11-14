@@ -16,6 +16,7 @@ const BasicMap = memo(({ setCategoryRegion, handleMarkerData }) => {
   const mapInstanceRef = useRef(null);
   const markersRef = useRef([]);
   const overlayRef = useRef(null);
+  const clustererRef = useRef(null);
 
   const [IsLoadingState, setIsLoadingState] = useState(true);
   const IsLoadingShow = useCallback(() => setIsLoadingState(true), [])
@@ -82,30 +83,30 @@ const BasicMap = memo(({ setCategoryRegion, handleMarkerData }) => {
     if (overlayRef.current) {
       overlayRef.current.close();
     }
-  
+
     const content = `
       <div style="padding:15px;min-width:300px;">
         <div style="font-weight:bold;margin-bottom:10px;">위치 선택</div>
-        ${items.map((item, index) => 
-          `<div class="info-item" style="padding:8px;cursor:pointer;font-size:15px" 
+        ${items.map((item, index) =>
+      `<div class="info-item" style="padding:8px;cursor:pointer;font-size:15px" 
             onclick="window.selectApartment('${item.apartmentname}')">
             ${item.apartmentname}
           </div>`
-        ).join('')}
+    ).join('')}
       </div>
     `;
-  
+
     // 전역 함수로 등록
-    window.selectApartment = function(apartmentname) {
+    window.selectApartment = function (apartmentname) {
       getMarkerData(marker, apartmentname)();
       overlayRef.current.close();
     };
-  
+
     const infowindow = new kakao.maps.InfoWindow({
       content: content,
       removable: true
     });
-  
+
     infowindow.open(map, marker);
     overlayRef.current = infowindow;
   }, [getMarkerData]);
@@ -121,23 +122,23 @@ const BasicMap = memo(({ setCategoryRegion, handleMarkerData }) => {
         acc[key].push(item);
         return acc;
       }, {});
-      
+
       const newMarkers = Object.entries(groupedData).map(([coordKey, items]) => {
         const [lat, lng] = coordKey.split(',');
         const coords = new kakao.maps.LatLng(lat, lng);
         var marker;
-        
-          marker = new kakao.maps.Marker({
-            title: items.length > 1 ? `${items[0].apartmentname} 외 ${items.length - 1}곳` : items[0].apartmentname,
-            position: coords,
-          });
-          marker.markerData = {
-            lat: lat,
-            lng: lng,
-            sigungu: items[0].sigungu,
-            bungi: items[0].bungi
-          };
-        
+
+        marker = new kakao.maps.Marker({
+          title: items.length > 1 ? `${items[0].apartmentname} 외 ${items.length - 1}곳` : items[0].apartmentname,
+          position: coords,
+        });
+        marker.markerData = {
+          lat: lat,
+          lng: lng,
+          sigungu: items[0].sigungu,
+          bungi: items[0].bungi
+        };
+
         // 마커 클릭 이벤트 수정
         kakao.maps.event.addListener(marker, 'click', async function () {
           if (items.length > 1) {
@@ -151,9 +152,12 @@ const BasicMap = memo(({ setCategoryRegion, handleMarkerData }) => {
 
         return marker;
       });
+      //markersRef.current = newMarkers;
+      clustererRef.current.addMarkers(newMarkers);
+
       // 새 마커 추가
-      newMarkers.forEach(marker => marker.setMap(mapInstanceRef.current));
-      markersRef.current = newMarkers;
+      //newMarkers.forEach(marker => marker.setMap(mapInstanceRef.current));
+      //markersRef.current = newMarkers;
     } else {
       //alert("에러발생");
     }
@@ -219,17 +223,30 @@ const BasicMap = memo(({ setCategoryRegion, handleMarkerData }) => {
       const map = new kakao.maps.Map(mapRef.current, mapOption);
       mapInstanceRef.current = map;
 
+      const clusterer = new kakao.maps.MarkerClusterer({
+        map: map, // 마커들을 클러스터로 관리하고 표시할 지도 객체 
+        averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정 
+        minLevel: 4, // 클러스터 할 최소 지도 레벨 
+        MinClusterSize: 10,
+        calculator: [50, 100],
+        gridSize: 120,
+        disableClickZoom: true
+      });
+      clustererRef.current = clusterer;
+
       IsLoadingShow();
-      markersRef.current.forEach(marker => marker.setMap(null));
-      markersRef.current = [];
+      clustererRef.current.clear();
+      //markersRef.current.forEach(marker => marker.setMap(null));
+      //markersRef.current = [];
       getMarkers(mapInstanceRef.current).then(() => {
         IsLoadingClose();
       })
       kakao.maps.event.addListener(map, 'dragend', function () {
         if (map.getLevel() < 5) {
           IsLoadingShow();
-          markersRef.current.forEach(marker => marker.setMap(null));
-          markersRef.current = [];
+          clustererRef.current.clear();
+          //markersRef.current.forEach(marker => marker.setMap(null));
+          //markersRef.current = [];
           getMarkers(mapInstanceRef.current).then(() => {
             IsLoadingClose();
           })
