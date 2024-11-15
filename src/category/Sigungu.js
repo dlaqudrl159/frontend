@@ -1,6 +1,6 @@
 import React, { memo, useMemo } from "react";
-import AddressSigungu from "./AddressSigungu.json";
-import AddressDong from "./AddressDong.json";
+import AddressSigungu from "./categoryJson/AddressSigungu.json";
+import AddressDong from "./categoryJson/AddressDong.json";
 const Sigungu = memo(({ selectedSido, selectedSigungu, setSelectedSigungu, setSelectedDong}) => {
 
   const sigunguList = useMemo(() => {

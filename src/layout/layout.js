@@ -5,7 +5,7 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 
-const layout = memo((props) => {
+const Layout = memo((props) => {
   console.log("layout 실행");
   return (
     <>
@@ -38,4 +38,4 @@ const layout = memo((props) => {
     </>
   )
 })
-export default layout;
+export default Layout;

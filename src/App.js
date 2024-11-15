@@ -1,9 +1,9 @@
 import React, { useState, useCallback } from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
-import BasicMap from './kakaomap2/BasicMapInit';
-import Category from './kakaomap2/Category';
-import SidePanel from './kakaomap2/SidePanel';
-import Layout from './layout/layout';
+import KakaoMap from './kakaomap/KakaoMap';
+import Category from './category/Category';
+import AptTranscationHistory from './aptTranscationHistory/AptTranscationHistory';
+import Layout from './layout/Layout';
 
 function App() {
   console.log("App 함수부분")
@@ -25,9 +25,9 @@ function App() {
       {console.log("App 렌더링")}
       <Layout />
       <div className="App" style={{ height: "95%" }}>
-        <BasicMap setCategoryRegion={setCategoryRegion} handleMarkerData={handleMarkerData} />
+        <KakaoMap setCategoryRegion={setCategoryRegion} handleMarkerData={handleMarkerData} />
         {categoryRegionState && <Category categoryRegionState={categoryRegionState} />}
-        {selectedMarkerData && <SidePanel selectedMarkerData={selectedMarkerData} setSelectedMarkerData={setSelectedMarkerData} />}
+        {selectedMarkerData && <AptTranscationHistory selectedMarkerData={selectedMarkerData} setSelectedMarkerData={setSelectedMarkerData} />}
       </div>
 
 
