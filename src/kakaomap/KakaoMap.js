@@ -18,11 +18,7 @@ const KakaoMap = memo(({ setCategoryRegion, handleMarkerData }) => {
   const overlayRef = useRef(null);
   const clustererRef = useRef(null);
 
-  const { IsLoadingState, IsLoadingShow, IsLoadingClose} = useLoading();
-
-  /*const [IsLoadingState, setIsLoadingState] = useState(true);
-  const IsLoadingShow = useCallback(() => setIsLoadingState(true), [])
-  const IsLoadingClose = useCallback(() => setIsLoadingState(false), [])*/
+  const { IsLoadingState, IsLoadingShow, IsLoadingClose } = useLoading();
 
   const makearrcoords = useCallback((map) => {
     var mapBounds = map.getBounds();
@@ -42,23 +38,22 @@ const KakaoMap = memo(({ setCategoryRegion, handleMarkerData }) => {
   }, [])
 
   const displayCenterInfo = useCallback((result, status) => {
-    if (status === kakao.maps.services.Status.OK) {
-      for (var i = 0; i < result.length; i++) {
-        // 행정동의 region_type 값은 'H' 이므로
-        if (result[i].region_type === 'H') {
-          var arr = {
-            addressname: result[i].address_name,
-            region_1depth_name: result[i].region_1depth_name,
-            region_2depth_name: result[i].region_2depth_name,
-            region_3depth_name: result[i].region_3depth_name
-          };
-          return arr;
-        }
+
+    if (status !== kakao.maps.services.Status.OK) { console.error('지오코딩 에러:', status); return null };
+
+    for (var i = 0; i < result.length; i++) {
+      // 행정동의 region_type 값은 'H' 이므로
+      if (result[i].region_type === 'H') {
+        var arr = {
+          addressname: result[i].address_name,
+          region_1depth_name: result[i].region_1depth_name,
+          region_2depth_name: result[i].region_2depth_name,
+          region_3depth_name: result[i].region_3depth_name
+        };
+        return arr;
       }
-    } else {
-      console.error('지오코딩 에러:', status);
-      return null;
     }
+
   }, [])
 
   const getMarkerData = useCallback((marker, apartmentname) => {
@@ -89,7 +84,7 @@ const KakaoMap = memo(({ setCategoryRegion, handleMarkerData }) => {
     const content = document.createElement('div');
     content.style.padding = '15px';
     content.style.minWidth = '300px';
-    
+
     const title = document.createElement('div');
     title.style.fontWeight = 'bold';
     title.style.marginBottom = '10px';
@@ -135,7 +130,7 @@ const KakaoMap = memo(({ setCategoryRegion, handleMarkerData }) => {
         return acc;
       }, {});
 
-//<a href="https://www.flaticon.com/kr/free-icons/" title="채점자 아이콘">채점자 아이콘 제작자: Pixel perfect - Flaticon</a>
+      //<a href="https://www.flaticon.com/kr/free-icons/" title="채점자 아이콘">채점자 아이콘 제작자: Pixel perfect - Flaticon</a>
       const icon = new kakao.maps.MarkerImage(
         '/marker2.png', // 집 모양 아이콘
         new kakao.maps.Size(40, 40), // 마커 크기
@@ -145,7 +140,6 @@ const KakaoMap = memo(({ setCategoryRegion, handleMarkerData }) => {
           shape: "rectangle"
         }
       );
-
 
       const newMarkers = Object.entries(groupedData).map(([coordKey, items]) => {
         const [lat, lng] = coordKey.split(',');
