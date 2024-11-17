@@ -64,9 +64,9 @@ const AptTranscationHistory = memo(({ selectedMarkerData, setSelectedMarkerData 
         <div style={styles.overlay}>
             <div ref={modalRef} style={styles.modal}>
                 <div style={styles.header}>
-                    <h2>[아파트] {currentApt.aptLatLngDto.apartmentname}</h2>
-                    <p>{currentApt.aptLatLngDto.sigungu} {currentApt.aptLatLngDto.bungi}</p>
-                    <p>{currentApt.aptLatLngDto.roadname}</p>
+                    <h2>[아파트] {currentApt.aptCoordsDto.apartmentname}</h2>
+                    <p>{currentApt.aptCoordsDto.sigungu} {currentApt.aptCoordsDto.bungi}</p>
+                    <p>{currentApt.aptCoordsDto.roadname}</p>
                     <button onClick={() => { setSelectedMarkerData(null) }} style={styles.closeButton}>X</button>
                 </div>
 
@@ -78,7 +78,7 @@ const AptTranscationHistory = memo(({ selectedMarkerData, setSelectedMarkerData 
                     >
                         {selectedMarkerData.map((data, index) => (
                             <option key={index} value={index}>
-                                {data.aptLatLngDto.roadname}
+                                {data.aptCoordsDto.roadname}
                             </option>
                         ))}
                     </select>

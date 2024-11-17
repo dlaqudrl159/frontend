@@ -23,7 +23,6 @@ const Region = memo(({ searchType,
 
     }
 
-
     return (
         <>
             {renderRegion()}

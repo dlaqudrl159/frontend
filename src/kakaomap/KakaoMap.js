@@ -130,7 +130,7 @@ const KakaoMap = memo(({ setCategoryRegion, handleMarkerData }) => {
         return acc;
       }, {});
 
-      //<a href="https://www.flaticon.com/kr/free-icons/" title="채점자 아이콘">채점자 아이콘 제작자: Pixel perfect - Flaticon</a>
+      //"https://www.flaticon.com/kr/free-icons/" title="채점자 아이콘">채점자 아이콘 제작자: Pixel perfect - Flaticon
       const icon = new kakao.maps.MarkerImage(
         '/marker2.png', // 집 모양 아이콘
         new kakao.maps.Size(40, 40), // 마커 크기
@@ -160,13 +160,7 @@ const KakaoMap = memo(({ setCategoryRegion, handleMarkerData }) => {
 
         // 마커 클릭 이벤트 수정
         kakao.maps.event.addListener(marker, 'click', async function () {
-          if (items.length > 1) {
-            // 여러 데이터가 있는 경우 오버레이 표시
-            showInfoWindow(marker, items, mapInstanceRef.current);
-          } else {
-            // 단일 데이터인 경우 기존처럼 처리
-            getMarkerData(marker, marker.getTitle())();
-          }
+          items.length > 1 ? showInfoWindow(marker, items, mapInstanceRef.current) : getMarkerData(marker, marker.getTitle())();
         });
 
         return marker;
