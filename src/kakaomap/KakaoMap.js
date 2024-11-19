@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, memo, useCallback, useState } from "react";
 import axios from 'axios';
 import qs from "qs";
-import Loading from "./Loading";
+import Loading from "./loading/Loading";
+import useLoading from "./useLoading";
 
 const { kakao } = window;
 
@@ -10,17 +11,14 @@ const geocoder = new kakao.maps.services.Geocoder();
 const mapLevel = 4;
 const mapcenterlat = 37.56435977921398
 const mapcenterlng = 126.97757768711558
-const BasicMap = memo(({ setCategoryRegion, handleMarkerData }) => {
+const KakaoMap = memo(({ setCategoryRegion, handleMarkerData }) => {
   console.log("BasicMap 함수부분")
   const mapRef = useRef(null);
   const mapInstanceRef = useRef(null);
-  const markersRef = useRef([]);
   const overlayRef = useRef(null);
   const clustererRef = useRef(null);
 
-  const [IsLoadingState, setIsLoadingState] = useState(true);
-  const IsLoadingShow = useCallback(() => setIsLoadingState(true), [])
-  const IsLoadingClose = useCallback(() => setIsLoadingState(false), [])
+  const { IsLoadingState, IsLoadingShow, IsLoadingClose } = useLoading();
 
   const makearrcoords = useCallback((map) => {
     var mapBounds = map.getBounds();
@@ -40,23 +38,22 @@ const BasicMap = memo(({ setCategoryRegion, handleMarkerData }) => {
   }, [])
 
   const displayCenterInfo = useCallback((result, status) => {
-    if (status === kakao.maps.services.Status.OK) {
-      for (var i = 0; i < result.length; i++) {
-        // 행정동의 region_type 값은 'H' 이므로
-        if (result[i].region_type === 'H') {
-          var arr = {
-            addressname: result[i].address_name,
-            region_1depth_name: result[i].region_1depth_name,
-            region_2depth_name: result[i].region_2depth_name,
-            region_3depth_name: result[i].region_3depth_name
-          };
-          return arr;
-        }
+
+    if (status !== kakao.maps.services.Status.OK) { console.error('지오코딩 에러:', status); return null };
+
+    for (var i = 0; i < result.length; i++) {
+      // 행정동의 region_type 값은 'H' 이므로
+      if (result[i].region_type === 'H') {
+        var arr = {
+          addressname: result[i].address_name,
+          region_1depth_name: result[i].region_1depth_name,
+          region_2depth_name: result[i].region_2depth_name,
+          region_3depth_name: result[i].region_3depth_name
+        };
+        return arr;
       }
-    } else {
-      console.error('지오코딩 에러:', status);
-      return null;
     }
+
   }, [])
 
   const getMarkerData = useCallback((marker, apartmentname) => {
@@ -84,18 +81,28 @@ const BasicMap = memo(({ setCategoryRegion, handleMarkerData }) => {
       overlayRef.current.close();
     }
 
-    const content = `
-      <div style="padding:15px;min-width:300px;">
-        <div style="font-weight:bold;margin-bottom:10px;">위치 선택</div>
-        ${items.map((item, index) =>
-      `<div class="info-item" style="padding:8px;cursor:pointer;font-size:15px" 
-            onclick="window.selectApartment('${item.apartmentname}')">
-            ${item.apartmentname}
-          </div>`
-    ).join('')}
-      </div>
-    `;
+    const content = document.createElement('div');
+    content.style.padding = '15px';
+    content.style.minWidth = '300px';
 
+    const title = document.createElement('div');
+    title.style.fontWeight = 'bold';
+    title.style.marginBottom = '10px';
+    title.textContent = '위치 선택';
+    content.appendChild(title);
+
+    items.forEach(item => {
+      const itemDiv = document.createElement('div');
+      itemDiv.className = 'info-item';
+      itemDiv.style.padding = '8px';
+      itemDiv.style.cursor = 'pointer';
+      itemDiv.style.fontSize = '15px';
+      itemDiv.textContent = item.apartmentname;
+      itemDiv.onclick = () => {
+        window.selectApartment(item.apartmentname);
+      };
+      content.appendChild(itemDiv);
+    });
     // 전역 함수로 등록
     window.selectApartment = function (apartmentname) {
       getMarkerData(marker, apartmentname)();
@@ -123,6 +130,17 @@ const BasicMap = memo(({ setCategoryRegion, handleMarkerData }) => {
         return acc;
       }, {});
 
+      //"https://www.flaticon.com/kr/free-icons/" title="채점자 아이콘">채점자 아이콘 제작자: Pixel perfect - Flaticon
+      const icon = new kakao.maps.MarkerImage(
+        '/marker2.png', // 집 모양 아이콘
+        new kakao.maps.Size(40, 40), // 마커 크기
+        {
+          offset: new kakao.maps.Point(20, 40), // 마커 중심점
+          alt: "부동산 마커",
+          shape: "rectangle"
+        }
+      );
+
       const newMarkers = Object.entries(groupedData).map(([coordKey, items]) => {
         const [lat, lng] = coordKey.split(',');
         const coords = new kakao.maps.LatLng(lat, lng);
@@ -131,6 +149,7 @@ const BasicMap = memo(({ setCategoryRegion, handleMarkerData }) => {
         marker = new kakao.maps.Marker({
           title: items.length > 1 ? `${items[0].apartmentname} 외 ${items.length - 1}곳` : items[0].apartmentname,
           position: coords,
+          image: icon
         });
         marker.markerData = {
           lat: lat,
@@ -141,25 +160,16 @@ const BasicMap = memo(({ setCategoryRegion, handleMarkerData }) => {
 
         // 마커 클릭 이벤트 수정
         kakao.maps.event.addListener(marker, 'click', async function () {
-          if (items.length > 1) {
-            // 여러 데이터가 있는 경우 오버레이 표시
-            showInfoWindow(marker, items, mapInstanceRef.current);
-          } else {
-            // 단일 데이터인 경우 기존처럼 처리
-            getMarkerData(marker, marker.getTitle())();
-          }
+          items.length > 1 ? showInfoWindow(marker, items, mapInstanceRef.current) : getMarkerData(marker, marker.getTitle())();
         });
 
         return marker;
       });
-      //markersRef.current = newMarkers;
+
       clustererRef.current.addMarkers(newMarkers);
 
-      // 새 마커 추가
-      //newMarkers.forEach(marker => marker.setMap(mapInstanceRef.current));
-      //markersRef.current = newMarkers;
     } else {
-      //alert("에러발생");
+      alert("에러발생");
     }
 
   }, [getMarkerData, showInfoWindow]);
@@ -236,8 +246,6 @@ const BasicMap = memo(({ setCategoryRegion, handleMarkerData }) => {
 
       IsLoadingShow();
       clustererRef.current.clear();
-      //markersRef.current.forEach(marker => marker.setMap(null));
-      //markersRef.current = [];
       getMarkers(mapInstanceRef.current).then(() => {
         IsLoadingClose();
       })
@@ -245,8 +253,6 @@ const BasicMap = memo(({ setCategoryRegion, handleMarkerData }) => {
         if (map.getLevel() < 5) {
           IsLoadingShow();
           clustererRef.current.clear();
-          //markersRef.current.forEach(marker => marker.setMap(null));
-          //markersRef.current = [];
           getMarkers(mapInstanceRef.current).then(() => {
             IsLoadingClose();
           })
@@ -269,4 +275,4 @@ const styles = {
   map: { width: "100%", height: "100%", position: "relative", zIndex: 0 },
 }
 
-export default BasicMap;
+export default KakaoMap;

@@ -1,18 +1,17 @@
-import React, {memo} from "react";
-import AddressSigungu from "./AddressSigungu.json";
-import AddressDong from "./AddressDong.json";
-const Side = memo(({selectedSido, setSelectedSido, setSelectedSigungu, setSelectedDong}) => {
+import React, { memo } from "react";
+import AddressSigungu from "./categoryJson/AddressSigungu.json";
+import AddressDong from "./categoryJson/AddressDong.json";
+const Side = memo(({ selectedSido, setSelectedSido, setSelectedSigungu, setSelectedDong }) => {
     return (
-        <>
         <select
             value={selectedSido}
-            onChange={(e) => 
-                {setSelectedSido(e.target.value)
-                 var Sigungu = AddressSigungu[e.target.value][0];
-                 setSelectedSigungu(Sigungu);
-                 var Dong = AddressDong[e.target.value][Sigungu][0];
-                 setSelectedDong(Dong);
-                }}
+            onChange={(e) => {
+                setSelectedSido(e.target.value)
+                var Sigungu = AddressSigungu[e.target.value][0];
+                setSelectedSigungu(Sigungu);
+                var Dong = AddressDong[e.target.value][Sigungu][0];
+                setSelectedDong(Dong);
+            }}
             style={styles.select}
         >
             <option value="서울특별시">서울특별시</option>
@@ -33,7 +32,6 @@ const Side = memo(({selectedSido, setSelectedSido, setSelectedSigungu, setSelect
             <option value="경상남도">경상남도</option>
             <option value="제주특별자치도">제주특별자치도</option>
         </select>
-        </>
     )
 })
 
@@ -43,7 +41,7 @@ const styles = {
         padding: '8px',
         borderRadius: '4px',
         border: '1px solid #ccc',
-      }
+    }
 }
 
 export default Side;

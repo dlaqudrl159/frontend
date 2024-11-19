@@ -1,18 +1,15 @@
 import React, { memo, useMemo } from "react";
-import AddressDong from "./AddressDong.json";
+import AddressDong from "./categoryJson/AddressDong.json";
 
 const Dong = memo(({ selectDong, setSelectedDong, selectedSido, selectedSigungu }) => {
-    
+
     const dongList = useMemo(() => {
-        
+
         return AddressDong[selectedSido][selectedSigungu];
 
     }, [selectedSido, selectedSigungu])
 
-console.log()
-
     return (
-
         <select
             value={selectDong}
             onChange={(e) => setSelectedDong(e.target.value)}

@@ -7,7 +7,6 @@ const Loading = memo(() => {
       {console.log("Loading 렌더링")}
       <div style={styles.modalOverlay}>
         <div style={styles.modalContent}>
-          <h2 style={styles.modalTitle}>로딩중</h2>
           <p style={styles.modalBody}>로딩중입니다.</p>
         </div>
       </div>
@@ -29,17 +28,13 @@ const styles = {
   },
   modalContent: {
     backgroundColor: 'white',
-    padding: '20px',
+    padding: '30px',
     borderRadius: '5px',
     boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
   },
-  modalTitle: {
-    marginTop: 0,
-    marginBottom: '10px',
-    fontSize: '1.5em',
-  },
   modalBody: {
     margin: 0,
+    fontSize: 25
   },
 };
 export default Loading;

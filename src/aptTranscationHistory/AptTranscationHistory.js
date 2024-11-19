@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState, memo, useMemo } from 'react';
 
-const SidePanel = memo(({ selectedMarkerData, setSelectedMarkerData }) => {
+const AptTranscationHistory = memo(({ selectedMarkerData, setSelectedMarkerData }) => {
     const modalRef = useRef();
-    console.log(selectedMarkerData)
+    
     const [selectedRoadIndex, setSelectedRoadIndex] = useState(0);  // 기본값 0으로 첫 번째 데이터 선택
 
     const [selectedYear, setSelectedYear] = useState(
@@ -64,9 +64,9 @@ const SidePanel = memo(({ selectedMarkerData, setSelectedMarkerData }) => {
         <div style={styles.overlay}>
             <div ref={modalRef} style={styles.modal}>
                 <div style={styles.header}>
-                    <h2>[아파트] {currentApt.aptLatLngDto.apartmentname}</h2>
-                    <p>{currentApt.aptLatLngDto.sigungu} {currentApt.aptLatLngDto.bungi}</p>
-                    <p>{currentApt.aptLatLngDto.roadname}</p>
+                    <h2>[아파트] {currentApt.aptCoordsDto.apartmentname}</h2>
+                    <p>{currentApt.aptCoordsDto.sigungu} {currentApt.aptCoordsDto.bungi}</p>
+                    <p>{currentApt.aptCoordsDto.roadname}</p>
                     <button onClick={() => { setSelectedMarkerData(null) }} style={styles.closeButton}>X</button>
                 </div>
 
@@ -78,7 +78,7 @@ const SidePanel = memo(({ selectedMarkerData, setSelectedMarkerData }) => {
                     >
                         {selectedMarkerData.map((data, index) => (
                             <option key={index} value={index}>
-                                {data.aptLatLngDto.roadname}
+                                {data.aptCoordsDto.roadname}
                             </option>
                         ))}
                     </select>
@@ -231,4 +231,4 @@ const styles = {
     },
 };
 
-export default SidePanel;
+export default AptTranscationHistory;
