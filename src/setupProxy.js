@@ -9,5 +9,19 @@ module.exports = function(app) {
       target: 'http://localhost:8050',
       changeOrigin: true,
     })
+  ),
+  app.use(
+    '/data',
+    createProxyMiddleware({
+      target: 'http://localhost:8050',
+      changeOrigin: true,
+    })
+  ),
+  app.use(
+    '/auth',
+    createProxyMiddleware({
+      target: 'http://localhost:8050',
+      changeOrigin: true,
+    })
   );
 };

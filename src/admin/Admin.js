@@ -1,47 +1,31 @@
-import axios from "axios";
 import React, { useState, memo } from "react";
+import Login from "./Login";
+import DashBoard from "./DashBoard";
 
 const Admin = memo(() => {
 
-    const [userId, setUserid] = useState('');
-    const [userPw, setpw] = useState('');
-
-    const OnClick = async (e) => {
-        e.preventDefault();
-
-        try {
-            const response = await axios.post('/api/admin/login', {
-               
-                    userId : userId,
-                    userPw : userPw
-                
-            }, {
-                headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-
-            if(!response.ok) {
-                alert("로그인에 실패했습니다");
-                return;
-            }
-        } catch (error) {
-
-        }
-    }
+    const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('token') === null ? false : true);
 
     return (
-        <>
-
-            <h1>관리자 페이지</h1>
-            <input value={userId} placeholder="아이디를 입력하세요" onChange={(e) => setUserid(e.target.value)}></input>
-            <input value={userPw} placeholder="비밀번호를 입력하세요" onChange={(e) => setpw(e.target.value)}></input>
-            <button onClick={OnClick}>제출</button>
-            
-
-        </>
+        <div style={styles.adminContainer}>
+            {isLoggedIn ?
+                (
+                    <DashBoard setIsLoggedIn={setIsLoggedIn} />
+                 )
+                :
+                (
+                    <Login setIsLoggedIn={setIsLoggedIn} />
+                )
+            }
+        </div>
     );
 
 })
+
+const styles = {
+    adminContainer: {
+        height: '100%'
+    }
+}
 
 export default Admin;

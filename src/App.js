@@ -1,7 +1,9 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Home from './home/Home';
-import Admin from './admin/Admin';
+import Login from './admin/Login';
+import PrivateRoute from './admin/PrivateRoute';
+import DashBoard from './admin/DashBoard';
 
 function App() {
 
@@ -10,7 +12,10 @@ function App() {
 
     <Routes>
     <Route path='/' element={<Home/>} />
-    <Route path='/admin' element={<Admin/>} />
+    <Route path='/login' element={<Login/>} />
+    <Route element={<PrivateRoute />}>
+    <Route path='/admin/dashboard' element={<DashBoard />}></Route>
+    </Route>
     </Routes>
 
     </>
