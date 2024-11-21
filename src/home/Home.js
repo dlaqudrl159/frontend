@@ -3,7 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import KakaoMap from '../kakaomap/KakaoMap';
 import Category from '../category/Category';
 import AptTranscationHistory from '../aptTranscationHistory/AptTranscationHistory';
-import Layout from '../layout/Layout';
+import Header from '../header/Header';
 
 const Home = memo(() => {
 
@@ -24,7 +24,7 @@ const Home = memo(() => {
     return (
       <>
         {console.log("Home 렌더링")}
-        <Layout />
+        <Header />
         <div className="Home" style={{ height: "95%" }}>
           <KakaoMap setCategoryRegion={setCategoryRegion} handleMarkerData={handleMarkerData} />
           {categoryRegionState && <Category categoryRegionState={categoryRegionState} />}

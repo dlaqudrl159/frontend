@@ -33,31 +33,18 @@ const Login = memo(() => {
 
     return (
         <>
-
             <div style={styles.loginContainer}>
-
                 <h2 style={styles.title}>로그인</h2>
                 <input value={userId} style={styles.input} type="text" placeholder="아이디를 입력하세요" onChange={(e) => setUserId(e.target.value)}></input>
                 <input value={userPassword} style={styles.input} type="password" placeholder="비밀번호를 입력하세요" onChange={(e) => setPassword(e.target.value)}></input>
                 <button style={styles.button} onClick={login}>로그인</button>
             </div>
-
-
-
-
-
         </>
     )
 
 });
 
 const styles = {
-    id: {
-
-    },
-    password: {
-
-    },
     loginContainer: {
         maxWidth: '400px',
         margin: '40px auto',
