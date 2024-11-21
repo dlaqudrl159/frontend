@@ -1,10 +1,17 @@
 import React, { memo, useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import AllAptData from './data/AllAptData';
+import AllCoordsData from './data/AllCoordsData';
+import AptData from "./data/AptData";
+import CoordsData from "./data/CoordsData";
+
+
 const DashBoard = memo(() => {
 
     const navigate = useNavigate();
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+
     const logout = () => {
         localStorage.removeItem('token');
         delete axios.defaults.headers.common['Authorization'];
@@ -12,7 +19,7 @@ const DashBoard = memo(() => {
     };
 
     useEffect(() => {
-        const fetchData = async () => {
+        const dashboardToken = async () => {
             const token = localStorage.getItem('token');
             try {
                 const response = await axios.get('/auth/admin/dashboard', {
@@ -31,7 +38,7 @@ const DashBoard = memo(() => {
                 navigate("/");
             }
         };
-        fetchData();
+        dashboardToken();
     }, [navigate, setIsLoggedIn]);
 
     return (
@@ -45,19 +52,20 @@ const DashBoard = memo(() => {
                 </div>
                 <div style={styles.content}>
                     <h3>전체 지역 데이터 입력</h3>
-                    <p>대시보드 콘텐츠를 이곳에 추가하세요.</p>
+                    <p><AllAptData /></p>
+                    
                 </div>
                 <div style={styles.content}>
                     <h3>특정 지역 데이터 입력</h3>
-                    <p>대시보드 콘텐츠를 이곳에 추가하세요.</p>
+                    <p><AptData /></p>
                 </div>
                 <div style={styles.content}>
                     <h3>전체 지역 좌표 입력</h3>
-                    <p>대시보드 콘텐츠를 이곳에 추가하세요.</p>
+                    <p><AllCoordsData /></p>
                 </div>
                 <div style={styles.content}>
                     <h3>특정 지역 좌표 입력</h3>
-                    <p>대시보드 콘텐츠를 이곳에 추가하세요.</p>
+                    <p><CoordsData /></p>
                 </div>
             </div>) : (<div></div>)}
         </>
