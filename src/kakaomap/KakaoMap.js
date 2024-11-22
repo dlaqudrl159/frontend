@@ -130,9 +130,7 @@ const KakaoMap = memo(({ setCategoryRegion, handleMarkerData }) => {
       const map = new kakao.maps.Map(mapRef.current, mapOption);
 
       mapInstanceRef.current = map;
-
       clustererRef.current = createClusterer(map);
-
       IsLoadingShow();
       clustererRef.current.clear();
       getMarkers(mapInstanceRef.current).then(() => {
@@ -149,7 +147,7 @@ const KakaoMap = memo(({ setCategoryRegion, handleMarkerData }) => {
       });
     }
 
-  }, [mapInstanceRef, clustererRef, createClusterer, getMarkers, IsLoadingShow, IsLoadingClose]);
+  }, [mapInstanceRef, clustererRef, createClusterer, getMarkers, IsLoadingShow, IsLoadingClose ]);
 
 
   return (
