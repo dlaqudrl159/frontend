@@ -50,7 +50,7 @@ export const useInfoWindow = () => {
         const infowindow = createInfoWindow(content);
         // 전역 함수로 등록
         window.selectApartment = function (apartmentname) {
-          getMarkerData(marker, apartmentname)();
+          getMarkerData(marker, apartmentname);
           infowindowRef.current.close();
         };
     

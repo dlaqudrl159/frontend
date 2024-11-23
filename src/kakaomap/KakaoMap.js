@@ -2,29 +2,105 @@ import React, { useEffect, useRef, memo, useCallback, useState } from "react";
 import axios from 'axios';
 import qs from "qs";
 import Loading from "./loading/Loading";
-import { useLoading } from "./useLoading";
-import { useMarkers } from "./useMarker";
-import { useGeocording } from "./useGeocording";
-import { useInfoWindow } from "./useInfoWindow";
-import { useClusterer } from "./useClusterer";
+import { useLoading } from "./hook/useLoading";
+import { useMarkers } from "./hook/useMarker";
+import { useGeocording } from "./hook/useGeocording";
+import { useInfoWindow } from "./hook/useInfoWindow";
+import { useClusterer } from "./hook/useClusterer";
+import { mapApi } from "./api/mapApi";
 
 const { kakao } = window;
-
-const geocoder = new kakao.maps.services.Geocoder();
 
 const mapLevel = 4;
 const mapcenterlat = 37.56435977921398
 const mapcenterlng = 126.97757768711558
 const KakaoMap = memo(({ setCategoryRegion, handleMarkerData }) => {
-  console.log("BasicMap 함수부분")
   const mapRef = useRef(null);
   const mapInstanceRef = useRef(null);
 
+  const oldAddressRef = useRef([]);
+  const markersByRegionRef = useRef({});
+
   const { IsLoadingState, IsLoadingShow, IsLoadingClose } = useLoading();
   const { createMarkersFromData } = useMarkers();
-  const { displayCenterInfo } = useGeocording();
+  const { getRegionCode } = useGeocording();
   const { showInfoWindow } = useInfoWindow();
-  const { clustererRef , createClusterer } = useClusterer();
+  const { clustererRef, createClusterer } = useClusterer();
+
+  const getMarkerData = useCallback(async (marker, apartmentname) => {
+    var markerData = marker.markerData;
+    try {
+      const response = await mapApi.getMarkerData(markerData, apartmentname);
+      handleMarkerData(response.data);
+    } catch (error) {
+      console.error("거래내역 조회 실패 : " + error);
+    }
+  }, [handleMarkerData])
+
+  const initMarkers = async (map) => {
+    const coords = makearrcoords(map);
+    const addressnameArr = [];
+    const regionResults = await Promise.all(
+      coords.map(async (coord, index) => {
+        const regionArr = await getRegionCode(coord)
+        return { regionArr, isCenter: index === 0 };
+      })
+    );
+
+    regionResults.forEach(({ regionArr, isCenter }) => {
+      addressnameArr.push(filterAddresses(regionArr));
+      if (isCenter) {  // 중앙 좌표인 경우
+        setCategoryRegion(regionArr.region_3depth_name);
+      }
+    });
+    const filteredData = addressnameArr.filter((address, index) =>
+      addressnameArr.indexOf(address) === index);
+
+    const oldData = [];
+    const newData = [];
+
+    //이전 시도 시군구 목록에서 드래그한지도의 새로운 중앙, 북서, 북동, 남서, 남동 좌표의 시도,시군구가 없으면 삭제할 데이터로 푸쉬
+    oldAddressRef.current.forEach((address) => {
+      if (!filteredData.includes(address)) {
+        oldData.push(address);
+      }
+    })
+    
+    //드래그한지도의 새로운 중앙, 북서, 북동, 남서, 남동 좌표의 시도,시군구가 이전 지도 시군구 목록에서 없으면 추가할 데이터로 푸쉬
+    filteredData.forEach((address) => {
+      if (!oldAddressRef.current.includes(address)) {
+        newData.push(address);
+      }
+    })
+
+    //삭제할 데이터로 푸쉬한 이전 시도,시군구 목록의 마커를 삭제
+    oldData.forEach(region => {
+      if (markersByRegionRef.current[region]) {
+        clustererRef.current.removeMarkers(markersByRegionRef.current[region]);
+        delete markersByRegionRef.current[region];
+      }
+    });
+
+    //드래그한지도의 새로운 중앙, 북서, 북동, 남서, 남동 좌표의 시도,시군구를 이전 시도시군구 목록으로 교체
+    oldAddressRef.current = filteredData;
+
+    //추가할 데이터로 푸쉬한 새로운 지역 좌표들(Coords) 받아오기
+    if (newData.length > 0) {
+      const response = await getMarkers(newData);
+
+      createMarkersFromData(response, showInfoWindow, getMarkerData, mapInstanceRef, markersByRegionRef, clustererRef)
+    }
+
+  }
+  const filterAddresses = (regionArr) => {
+    if (regionArr.region_1depth_name === '세종특별자치시')
+      return regionArr.region_1depth_name;
+    else if (regionArr.region_1depth_name === "-" && regionArr.region_2depth_name === "-" && regionArr.region_3depth_name === '-') {
+      return "";
+    } else {
+      return regionArr.region_1depth_name + " " + regionArr.region_2depth_name;
+    }
+  }
 
   const makearrcoords = useCallback((map) => {
     var mapBounds = map.getBounds();
@@ -43,83 +119,15 @@ const KakaoMap = memo(({ setCategoryRegion, handleMarkerData }) => {
     return arrcoords;
   }, [])
 
-  const getMarkerData = useCallback((marker, apartmentname) => {
-    return async function () {
-      var markerData = marker.markerData;
-      await axios.get('/api/getMarkerData', {
-        params: {
-          SIGUNGU: markerData.sigungu,
-          BUNGI: markerData.bungi,
-          APARTMENTNAME: apartmentname,
-          LAT: markerData.lat,
-          LNG: markerData.lng
-        }
-      }).then(response => {
-        handleMarkerData(response.data);
-      }).catch(error => {
-        console.log(error);
-      })
-    }
-  }, [handleMarkerData])
-
-  const makermaking = useCallback((response) => {
-    if (response.data) {
-      const newMarkers = createMarkersFromData(response.data , showInfoWindow , getMarkerData , mapInstanceRef.current);
-      clustererRef.current.addMarkers(newMarkers);
-    } else {
-      alert("에러발생");
-    }
-  }, [clustererRef, createMarkersFromData, getMarkerData, showInfoWindow]);
-
-  const get = useCallback(async (addressnameArr) => {
+  const getMarkers = useCallback(async (addressnameArr) => {
     try {
-      const response = await axios.get("/api/getMarkers", {
-        params: { addressnameArr: addressnameArr },
-        paramsSerializer: (params) => {
-          return qs.stringify(params, { arrayFormat: "comma" });
-        }
-      });
+      const response = await mapApi.getMarkers(addressnameArr);
       return response;
     } catch (error) {
+      console.error(error);
       return "ERROR";
     }
   }, []);
-
-  const getMarkers = useCallback((map) => {
-    return new Promise((resolve, reject) => {
-      var addressnameArr = [];
-      var count = 0;
-      const totalcount = 5;
-
-      makearrcoords(map).forEach(coords => {
-        geocoder.coord2RegionCode(coords.getLng(), coords.getLat(), function (result, status) {
-          var regionArr = displayCenterInfo(result, status);
-
-          addressnameArr.push(regionArr.addressname);
-          if (count === 0) {
-            setCategoryRegion(regionArr.region_3depth_name);
-          }
-          count++;
-          if (count === totalcount) {
-            get(addressnameArr)
-              .then(response => {
-                if (response !== "ERROR") {
-                  makermaking(response)
-                } else {
-                  console.error('마커 데이터 조회 실패');
-                }
-                resolve();
-              })
-              .catch(error => {
-                console.error('마커 데이터 처리 중 오류:', error);
-                resolve();
-              })
-          }
-        })
-      })
-    })
-
-  }, [makearrcoords, displayCenterInfo, setCategoryRegion, get, makermaking])
 
   useEffect(() => {
     if (!mapInstanceRef.current && mapRef.current) {
@@ -128,31 +136,28 @@ const KakaoMap = memo(({ setCategoryRegion, handleMarkerData }) => {
         level: mapLevel
       };
       const map = new kakao.maps.Map(mapRef.current, mapOption);
-
       mapInstanceRef.current = map;
       clustererRef.current = createClusterer(map);
+
       IsLoadingShow();
-      clustererRef.current.clear();
-      getMarkers(mapInstanceRef.current).then(() => {
+      initMarkers(mapInstanceRef.current).then(() => {
         IsLoadingClose();
       })
       kakao.maps.event.addListener(map, 'dragend', function () {
         if (map.getLevel() < 5) {
           IsLoadingShow();
-          clustererRef.current.clear();
-          getMarkers(mapInstanceRef.current).then(() => {
+          initMarkers(mapInstanceRef.current).then(() => {
             IsLoadingClose();
           })
         }
       });
     }
 
-  }, [mapInstanceRef, clustererRef, createClusterer, getMarkers, IsLoadingShow, IsLoadingClose ]);
+  }, [mapInstanceRef, clustererRef, createClusterer, initMarkers, IsLoadingShow, IsLoadingClose]);
 
 
   return (
     <>
-      {console.log("BasicMap 렌더")}
       {IsLoadingState && <Loading></Loading>}
       <div ref={mapRef} style={styles.map}></div>
     </>)

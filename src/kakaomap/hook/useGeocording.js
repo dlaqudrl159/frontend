@@ -2,6 +2,8 @@ import React, { useCallback } from "react";
 
 const { kakao } = window;
 
+const geocoder = new kakao.maps.services.Geocoder();
+
 export const useGeocording = () => {
 
     const displayCenterInfo = useCallback((result, status) => {
@@ -22,6 +24,19 @@ export const useGeocording = () => {
         }
       }, [])
 
-    return { displayCenterInfo }
+      const getRegionCode = useCallback((coords) => {
+        return new Promise((resolve) => {
+          geocoder.coord2RegionCode(
+            coords.getLng(),
+            coords.getLat(),
+            (result, status) => {
+              const regionArr = displayCenterInfo(result, status);
+              resolve(regionArr);
+            }
+          );
+        });
+      }, [displayCenterInfo]);
+
+    return { displayCenterInfo, getRegionCode }
 
 }

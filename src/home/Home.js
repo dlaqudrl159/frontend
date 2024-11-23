@@ -7,8 +7,6 @@ import Header from '../header/Header';
 
 const Home = memo(() => {
 
-    console.log("Home 함수부분")
-
     const [categoryRegionState, setCategoryRegionState] = useState(null);
   
     const [selectedMarkerData, setSelectedMarkerData] = useState(null);
@@ -23,7 +21,6 @@ const Home = memo(() => {
   
     return (
       <>
-        {console.log("Home 렌더링")}
         <Header />
         <div className="Home" style={{ height: "95%" }}>
           <KakaoMap setCategoryRegion={setCategoryRegion} handleMarkerData={handleMarkerData} />
