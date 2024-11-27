@@ -64,7 +64,6 @@ export const useMarkers = () => {
       acc[regionKey][coordKey].push(item);
       return acc;
     }, {});
-
     const newMarkers = Object.entries(groupedData).map(([regionKey, coordsGroup]) => {
 
       const markers = Object.entries(coordsGroup).map(([coordKey, items]) => {
@@ -73,7 +72,7 @@ export const useMarkers = () => {
         const title = items.length > 1 ? `${items[0].apartmentname} 외 ${items.length - 1}곳` : items[0].apartmentname;
         const sigungu = items[0].sigungu;
         const bungi = items[0].bungi;
-
+       
         const marker = createMarker(title, coords, icon, lat, lng, sigungu, bungi);
         markerEventListener(marker, () =>
           items.length > 1 ? showInfoWindow(marker, items, mapInstanceRef.current, getMarkerData)

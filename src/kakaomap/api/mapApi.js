@@ -1,13 +1,12 @@
 import axios from "axios"
 import qs from "qs";
-import { useCallback } from "react";
 
 export const mapApi = {
 
-   getMarkers : async (addressnameArr) => {
+   getMarkers : async (addresses) => {
     try {
       const response = await axios.get("/api/getMarkers", {
-        params: { addressnameArr: addressnameArr },
+        params: { addresses: addresses },
         paramsSerializer: (params) => {
           return qs.stringify(params, { arrayFormat: "comma" });
         }

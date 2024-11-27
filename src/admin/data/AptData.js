@@ -14,7 +14,7 @@ const AptData = memo(() => {
         try {
             const response = await axios.post('/data/autoaptdatainsert' , {
                 
-                korParentName : selectedSido
+               korSido : selectedSido
                 
             } , {
                 headers: {
