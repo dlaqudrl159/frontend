@@ -7,7 +7,6 @@ const AllAptData = memo(() => {
     const insertAllAptData = async (e) => {
 
         const token = localStorage.getItem('token');
-        console.log(token);
         try {
             const response = await axios.post('/data/allautoaptdatainsert', {}, {
                 headers: {

@@ -5,8 +5,6 @@ const CoordsData = memo(() => {
 
     const [selectedSido, setSelectedSido] = useState('서울특별시');
 
-    console.log(selectedSido);
-
     return (
         <>
 

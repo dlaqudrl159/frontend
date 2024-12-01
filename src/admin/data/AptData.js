@@ -6,15 +6,13 @@ const AptData = memo(() => {
 
     const [selectedSido, setSelectedSido] = useState('서울특별시');
 
-    console.log(selectedSido);
-
     const insertAptData = async () => {
 
         const token = localStorage.getItem('token');
         try {
             const response = await axios.post('/data/autoaptdatainsert' , {
                 
-                korParentName : selectedSido
+               korSido : selectedSido
                 
             } , {
                 headers: {

@@ -1,4 +1,4 @@
-import React, {memo, useState, useCallback } from 'react';
+import React, { memo, useState, useCallback } from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
 import KakaoMap from '../kakaomap/KakaoMap';
 import Category from '../category/Category';
@@ -7,37 +7,28 @@ import Header from '../header/Header';
 
 const Home = memo(() => {
 
-    console.log("Home 함수부분")
+  const [categoryRegionState, setCategoryRegionState] = useState(null);
 
-    const [categoryRegionState, setCategoryRegionState] = useState(null);
-  
-    const [selectedMarkerData, setSelectedMarkerData] = useState(null);
-    
-    const handleMarkerData = useCallback((data) => {
-      setSelectedMarkerData(data);
-    }, []);
-  
-    const setCategoryRegion = useCallback((region) => {
-      setCategoryRegionState(region);
-    }, []);
-  
-    return (
-      <>
-        {console.log("Home 렌더링")}
-        <Header />
-        <div className="Home" style={{ height: "95%" }}>
-          <KakaoMap setCategoryRegion={setCategoryRegion} handleMarkerData={handleMarkerData} />
-          {categoryRegionState && <Category categoryRegionState={categoryRegionState} />}
-          {selectedMarkerData && <AptTranscationHistory selectedMarkerData={selectedMarkerData} setSelectedMarkerData={setSelectedMarkerData} />}
-        </div>
-  
-  
-  
-  
-  
-  
-      </>
-    );
-  });
+  const [selectedMarkerData, setSelectedMarkerData] = useState(null);
+
+  const handleMarkerData = useCallback((data) => {
+    setSelectedMarkerData(data);
+  }, []);
+
+  const setCategoryRegion = useCallback((region) => {
+    setCategoryRegionState(region);
+  }, []);
+
+  return (
+    <>
+      <Header />
+      <div className="Home" style={{ height: "95%" }}>
+        <KakaoMap setCategoryRegion={setCategoryRegion} handleMarkerData={handleMarkerData} />
+        {categoryRegionState && <Category categoryRegionState={categoryRegionState} />}
+        {selectedMarkerData && <AptTranscationHistory selectedMarkerData={selectedMarkerData} setSelectedMarkerData={setSelectedMarkerData} />}
+      </div>
+    </>
+  );
+});
 
 export default Home;

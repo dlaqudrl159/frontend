@@ -1,10 +1,9 @@
 import React, { memo } from "react";
 
 const Loading = memo(() => {
-  console.log("Loading 함수부분")
+  
   return (
     <>
-      {console.log("Loading 렌더링")}
       <div style={styles.modalOverlay}>
         <div style={styles.modalContent}>
           <p style={styles.modalBody}>로딩중입니다.</p>

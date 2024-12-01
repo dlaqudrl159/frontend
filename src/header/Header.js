@@ -6,10 +6,9 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 
 const Header = memo((props) => {
-  console.log("layout 실행");
+  
   return (
     <>
-      {console.log("layout 렌더")}
       <header style={{ height: "5%" }}>
         <Navbar expand="lg" className="bg-body-tertiary">
           <Container style={{ marginLeft: "0px" }} >

@@ -1,6 +1,6 @@
-import React, { memo, useState, useCallback} from "react";
+import { useState, useCallback} from "react";
 
-const useLoading = () => {
+export const useLoading = () => {
 
     const [IsLoadingState, setIsLoadingState] = useState(true);
     const IsLoadingShow = useCallback(() => setIsLoadingState(true), [])
@@ -11,5 +11,3 @@ const useLoading = () => {
     )
 
 }
-
-export default useLoading;

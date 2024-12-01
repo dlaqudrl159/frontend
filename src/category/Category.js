@@ -11,7 +11,7 @@ const initSiguntu = '강남구';
 const initDong = '개포동';
 
 const Category = memo(({ categoryRegionState }) => {
-  console.log("Category함수부분")
+
   const [activeTab, setActiveTab] = useState(null);
 
   const [searchType, setSearchType] = useState('jibun'); // 'jibun' 또는 'road'
@@ -50,7 +50,6 @@ const Category = memo(({ categoryRegionState }) => {
     setInputRoadName('')
     setApartMentNmae('')
   }, [searchType])
-
 
 
   const getCategoryClickData = useCallback(async (ex1, ex2, ex3, ex4) => {
@@ -126,7 +125,7 @@ const Category = memo(({ categoryRegionState }) => {
 
   return (
     <div>
-      {console.log("Category랜더")}
+      
       <div style={styles.tabContainer}>
         {tabs.map((tab) => (
           <div

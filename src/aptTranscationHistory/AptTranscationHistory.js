@@ -19,8 +19,8 @@ const AptTranscationHistory = memo(({ selectedMarkerData, setSelectedMarkerData 
     
     const groupedByMonth = useMemo(() => {
 
-        if (currentApt.aptTransactionDtoList !== null) {
-            const filteredData = currentApt.aptTransactionDtoList
+        if (currentApt.aptTransactionDtos !== null) {
+            const filteredData = currentApt.aptTransactionDtos
                 .filter(item => item.year.toString() === selectedYear)
                 .sort((a, b) => {
                     // dealyearmonth 기준으로 내림차순 정렬 (예: 202412 -> 202401)
