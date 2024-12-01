@@ -165,6 +165,14 @@ const KakaoMap = memo(({ setCategoryRegion, handleMarkerData }) => {
           })
         }
       });
+      kakao.maps.event.addListener(map, 'zoom_changed', function () {
+        if (map.getLevel() === 4) {
+          IsLoadingShow();
+          initMarkers(mapInstanceRef.current).then(() => {
+            IsLoadingClose();
+          })
+        }
+      });
     }
 
   }, [mapInstanceRef, clustererRef, createClusterer, initMarkers, IsLoadingShow, IsLoadingClose]);
