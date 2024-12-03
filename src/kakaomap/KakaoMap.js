@@ -165,13 +165,20 @@ const KakaoMap = memo(({ setCategoryRegion, handleMarkerData }) => {
           })
         }
       });
+      let prevLevel = map.getLevel();
       kakao.maps.event.addListener(map, 'zoom_changed', function () {
-        if (map.getLevel() === 4) {
+        const currentLevel = map.getLevel();
+        if (prevLevel === 4 && currentLevel === 5) {
+          clustererRef.current.clear();
+          oldAddressRef.current = [];
+          markersByRegionRef.current = {};
+        } else if (prevLevel === 5 && currentLevel === 4) {
           IsLoadingShow();
           initMarkers(mapInstanceRef.current).then(() => {
             IsLoadingClose();
-          })
+          });
         }
+        prevLevel = currentLevel;
       });
     }
 

@@ -16,8 +16,8 @@ const Header = memo((props) => {
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
               <Nav className="me-auto">
-                <Link className="nav-link" to="/login">테스트입니다</Link>
-                <Link className="nav-link" to="/region-search">실거래가 검색</Link>  {/* 수정된 부분 */}
+                <Link className="nav-link" to="/login">로그인</Link>
+                <Link className="nav-link" to="/region-search">회원가입</Link>  {/* 수정된 부분 */}
                 <NavDropdown title="Dropdown" id="basic-nav-dropdown">
                   <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
                   <NavDropdown.Item href="#action/3.2">
