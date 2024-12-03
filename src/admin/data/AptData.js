@@ -6,7 +6,7 @@ const AptData = memo(() => {
 
     const [selectedSido, setSelectedSido] = useState('서울특별시');
 
-    const insertAptData = async () => {
+    const insertAptData = async (e) => {
 
         const token = localStorage.getItem('token');
         try {

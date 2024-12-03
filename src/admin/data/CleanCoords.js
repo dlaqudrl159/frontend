@@ -1,29 +1,35 @@
-import React , {memo} from "react";
+import React, {memo} from "react";
 import axios from "axios";
 
-const AllCoordsData = memo(() => {
+const CleanCoords = memo(() => {
 
-    const insertAllCoordsData = async(e) => {
+    const notExistTransactionCoordsDelete = async (e) => {
 
         const token = localStorage.getItem('token');
         try {
-            const response = await axios.post('/data/autoallCoordsdatainsert',{},{
+            const response = await axios.post('/data/notExistTransactionCoordsDelete' , {
+                
+               korSido : "대구광역시"
+                
+            } , {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 },
             })
+
             console.log(response);
+
         } catch (error) {
             console.log(error.response);
         }
-        
+
     }
 
     return (
         <>
         
-        <button style={styles.button} onClick={insertAllCoordsData}>시작</button>
-
+        <button style={styles.button} onClick={notExistTransactionCoordsDelete}>시작</button>
+        
         </>
     )
 
@@ -42,4 +48,4 @@ const styles = {
     },
 }
 
-export default AllCoordsData;
+export default CleanCoords;

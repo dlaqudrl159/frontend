@@ -52,7 +52,6 @@ export const useMarkers = () => {
   };
 
   const createMarkersFromData = useCallback((response, showInfoWindow, getMarkerData, mapInstanceRef, markersByRegionRef, clustererRef) => {
-    console.log(response);
     const groupedData = response.data.reduce((acc, item) => {
       const regionKey = getRegionKey(item.sigungu);
       const coordKey = `${item.lat},${item.lng}`;

@@ -5,6 +5,28 @@ const CoordsData = memo(() => {
 
     const [selectedSido, setSelectedSido] = useState('서울특별시');
 
+    const insertCoordsData = async (e) => {
+
+        const token = localStorage.getItem('token');
+        try {
+            const response = await axios.post('/data/autoCoordsdatainsert' , {
+                
+               korSido : selectedSido
+                
+            } , {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+            })
+
+            console.log(response);
+
+        } catch (error) {
+            console.log(error.response);
+        }
+
+    }
+
     return (
         <>
 
@@ -33,7 +55,7 @@ const CoordsData = memo(() => {
                 <option value="경상남도">경상남도</option>
                 <option value="제주특별자치도">제주특별자치도</option>
             </select>
-
+            <button style={styles.button} onClick={insertCoordsData}>시작</button>
         </>
     )
 
@@ -45,7 +67,16 @@ const styles = {
         padding: '8px',
         borderRadius: '4px',
         border: '1px solid #ccc',
-    }
+    },button: {
+        padding: '12px',
+        backgroundColor: '#ccc',
+        color: 'black',
+        border: '1px solid #ccc',
+        width: "30%",
+        borderRadius: '4px',
+        cursor: 'pointer',
+        fontSize: '16px',
+    },
 }
 
 export default CoordsData;
