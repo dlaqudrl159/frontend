@@ -12,7 +12,7 @@ const Header = memo((props) => {
       <header style={{ height: "5%" }}>
         <Navbar expand="lg" className="bg-body-tertiary">
           <Container style={{ marginLeft: "0px" }} >
-            <Navbar.Brand> <Link to="/">국토교통부 아파트 매매 실거래 상세 자료</Link></Navbar.Brand>
+            <Navbar.Brand> <Link to="/" className="text-decoration-none">국토교통부 아파트 매매 실거래 상세 자료</Link></Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
               <Nav className="me-auto">
