@@ -28,12 +28,14 @@ const KakaoMap = memo(({ setCategoryRegion, handleMarkerData }) => {
   const getMarkerData = useCallback(async (marker, apartmentname) => {
     var markerData = marker.markerData;
     try {
+      IsLoadingShow();
       const response = await mapApi.getMarkerData(markerData, apartmentname);
       handleMarkerData(response.data);
+      IsLoadingClose();
     } catch (error) {
       console.error("거래내역 조회 실패 : " + error);
     }
-  }, [handleMarkerData])
+  }, [handleMarkerData, IsLoadingShow, IsLoadingClose])
 
 
 
@@ -188,12 +190,17 @@ const KakaoMap = memo(({ setCategoryRegion, handleMarkerData }) => {
   return (
     <>
       {IsLoadingState && <Loading></Loading>}
-      <div ref={mapRef} style={styles.map}></div>
+      <div className="KakaoMap" ref={mapRef} style={styles.map}></div>
     </>)
 })
 
 const styles = {
-  map: { width: "100%", height: "100%", position: "relative", zIndex: 0 },
+  map: {
+    width: "100%",
+    height: "100%",
+    position: "absolute",
+    zIndex: 0 
+  },
 }
 
 export default KakaoMap;
