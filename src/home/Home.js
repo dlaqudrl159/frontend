@@ -4,6 +4,7 @@ import KakaoMap from '../kakaomap/KakaoMap';
 import Category from '../category/Category';
 import AptTranscationHistory from '../aptTranscationHistory/AptTranscationHistory';
 import Header from '../header/Header';
+import { height } from '@fortawesome/free-solid-svg-icons/fa0';
 
 const Home = memo(() => {
 
@@ -22,7 +23,7 @@ const Home = memo(() => {
   return (
     <>
       <Header />
-      <div className="Home" style={{ height: "95%" }}>
+      <div className="Home" style={styles.home}>
         <KakaoMap setCategoryRegion={setCategoryRegion} handleMarkerData={handleMarkerData} />
         {categoryRegionState && <Category categoryRegionState={categoryRegionState} />}
         {selectedMarkerData && <AptTranscationHistory selectedMarkerData={selectedMarkerData} setSelectedMarkerData={setSelectedMarkerData} />}
@@ -30,5 +31,13 @@ const Home = memo(() => {
     </>
   );
 });
+
+const styles = {
+  home : {
+    width : '100%',
+    height : '95%',
+    position : 'relative'
+  }
+}
 
 export default Home;
