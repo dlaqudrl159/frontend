@@ -1,9 +1,10 @@
 import React, { memo } from "react";
+import DropDown from "./DropDown";
 
 const Choice = memo(({ searchType, handleSelectState }) => {
 
   return (
-    <div style={{ ...styles.dropdown, ...styles.choiceDropdown }}>
+    <DropDown>
       <div style={styles.searchTypeContainer}>
         <div
           style={{
@@ -24,26 +25,12 @@ const Choice = memo(({ searchType, handleSelectState }) => {
           도로명으로 검색
         </div>
       </div>
-    </div>
+    </DropDown>
   )
 
 })
 
 const styles = {
-  dropdown: {
-    border: "1px solid black",
-    width: "500px",
-    position: "absolute",
-    zIndex: 3,
-    backgroundColor: "white",
-    top: "12%",  // tabContainer의 top(7%) + height(5%)
-    left: "20px",
-    padding: "10px",
-  },
-  choiceDropdown: {
-    height: "150px",  // 높이 약간 증가
-    backgroundColor: "#ffffff",
-  },
   searchTypeContainer: {
     display: 'flex',
     justifyContent: 'space-between',

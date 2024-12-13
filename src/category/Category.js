@@ -1,10 +1,13 @@
 import React, { useState, memo, useMemo, useCallback } from "react";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import Choice from "./Choice";
 import Region from "./Region";
 import ApartmentName from "./ApartmentName";
 import axios from "axios";
+import SearchIcon from "./SearchIcon";
+import Tab from "./Tab";
+import TabContainer from "./TabContainer";
+import { height, width } from "@fortawesome/free-solid-svg-icons/fa0";
+import DropDown from "./DropDown";
 
 const initSido = '서울특별시';
 const initSiguntu = '강남구';
@@ -124,65 +127,39 @@ const Category = memo(({ categoryRegionState }) => {
   };
 
   return (
-    <div>
-      
-      <div style={styles.tabContainer}>
+    <div className="Category" style={styles.category}>
+      <TabContainer>
         {tabs.map((tab) => (
-          <div
+          <Tab
             key={tab.id}
-            style={{
-              ...styles.tab,
-              ...(activeTab === tab.id ? styles.activeTab : {})
-            }}
-            onClick={() => handleTabClick(tab.id)}
-          >
-            {tab.label}
-          </div>
+            id={tab.id}
+            label={tab.label}
+            isActice={activeTab === tab.id}
+            onClick={handleTabClick}
+          />
         ))}
-        <div style={styles.searchIcon}>
-          <FontAwesomeIcon icon={faSearch} size="lg" />
-        </div>
-      </div>
+        <SearchIcon />
+      </TabContainer>
+      <DropDown additionalStyle={styles.sidePanel}></DropDown>
       {renderTabContent()}
     </div>
   );
 });
 
 const styles = {
-
-  tabContainer: {
-    width: "500px",
-    height: "5%",
-    backgroundColor: "white",
-    position: "absolute",
-    zIndex: 3,
-    top: "7%",
-    left: "20px",
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
+  category: {
+    width: '500px',
+    height: '98%',
+    //backgroundColor : 'white',
+    position: 'absolute',
+    left: '20px',
+    top: '2%',
+    pointerEvents: 'none'  // 마우스 이벤트를 무시
   },
-  tab: {
-    border: "1px solid black",
-    width: "30%",
-    height: "80%",
-    backgroundColor: "#f3f5ff",
-    textAlign: "center",
-    lineHeight: '35px',
-    color: "black",
-    cursor: "pointer",
-    marginLeft: "1%"
-  },
-  activeTab: {
-    backgroundColor: "lightgray",
-    fontWeight: "bold",
-  },
-  searchIcon: {
-    height: "80%",
-    textAlign: "center",
-    lineHeight: '35px',
-    marginRight: "5px",
-  },
+  sidePanel: {
+    position : 'absolute',
+    top: '200px'
+  }
 };
 
 export default Category;

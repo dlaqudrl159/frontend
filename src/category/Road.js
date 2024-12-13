@@ -1,11 +1,12 @@
 import React, { memo } from "react";
 import Sido from "./Sido";
 import Sigungu from "./Sigungu";
+import DropDown from "./DropDown";
 
 const Road = memo(({ selectedSido, setSelectedSido, selectedSigungu, setSelectedSigungu, setSelectedDong, inputRoadName, setInputRoadName, getRoadNameList }) => {
 
   return (
-    <div style={{ ...styles.dropdown, ...styles.regionDropdown }}>
+    <DropDown>
       <div style={styles.selectContainer}>
         <Sido selectedSido={selectedSido} setSelectedSido={setSelectedSido} setSelectedSigungu={setSelectedSigungu} setSelectedDong={setSelectedDong}></Sido>
         <Sigungu selectedSido={selectedSido} selectedSigungu={selectedSigungu} setSelectedSigungu={setSelectedSigungu} setSelectedDong={setSelectedDong}></Sigungu>
@@ -20,26 +21,12 @@ const Road = memo(({ selectedSido, setSelectedSido, selectedSigungu, setSelected
         }}
       />
       <button style={styles.button} onClick={getRoadNameList}>검색</button>
-    </div>
+    </DropDown>
   )
 
 });
 
 const styles = {
-  dropdown: {
-    border: "1px solid black",
-    width: "500px",
-    position: "absolute",
-    zIndex: 3,
-    backgroundColor: "white",
-    top: "12%",  // tabContainer의 top(7%) + height(5%)
-    left: "20px",
-    padding: "10px",
-  },
-  regionDropdown: {
-    height: "150px",
-    backgroundColor: "#ffffff",
-  },
   selectContainer: {
     display: 'flex',
     gap: '10px',
