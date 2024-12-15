@@ -3,18 +3,15 @@ import Choice from "./Choice";
 import Region from "./Region";
 import ApartmentName from "./ApartmentName";
 import axios from "axios";
-import Tab from "./tab/Tab";
-import TabContainer from "./tab/TabContainer";
-import RoadPanel from "./RoadPanel";
 import { useTab } from "./tab/useTab";
-import { Box } from "@mui/material";
+import { Box, Container } from "@mui/material";
 
 const initSido = '서울특별시';
 const initSiguntu = '강남구';
 const initDong = '개포동';
 
 const Category = memo(({ categoryRegionState }) => {
-
+  
   const [searchType, setSearchType] = useState('jibun'); // 'jibun' 또는 'road'
 
   const { activeTab, setActiveTab, tabs } = useTab(searchType);
@@ -25,7 +22,7 @@ const Category = memo(({ categoryRegionState }) => {
   const [inputRoadName, setInputRoadName] = useState('');
   const [apartmentname, setApartMentNmae] = useState('');
 
-  const [roadNames, setRoadNames] = useState(null);
+  const [roadNames , setRoadNames] = useState(null);
 
   const handleTabClick = (tabId) => {
     setRoadNames(null);
@@ -77,12 +74,12 @@ const Category = memo(({ categoryRegionState }) => {
       return
     }
     const response = await axios.post('/api/getRoadNames', {
-
-      korSido: selectedSido,
-      sigungu: selectedSigungu,
-      roadName: inputRoadName
-
-    }, {}).then(response => {
+      
+        korSido: selectedSido,
+        sigungu: selectedSigungu,
+        roadName: inputRoadName
+      
+    },{}).then(response => {
       console.log(response);
       setRoadNames(response.data);
     }).catch(error => {
@@ -115,38 +112,18 @@ const Category = memo(({ categoryRegionState }) => {
   };
 
   return (
-    <Box sx={{
-      width: {
-        xs: '320px',
-        md: 'calc(100%/3)'
-      },
-      height: '100%',
-      position: 'absolute',
-      left: '20px',
-      top: '2%',
-      pointerEvents: 'none'
-    }}>
-      <TabContainer>
-        {tabs.map((tab) => (
-          <Tab
-            key={tab.id}
-            id={tab.id}
-            label={(searchType === 'jibun' && tab.id === 'region') ? categoryRegionState : tab.label}
-            isActice={activeTab === tab.id}
-            onClick={handleTabClick}
-          />
-        ))}
-      </TabContainer>
-      {renderTabContent()}
-      {roadNames && <RoadPanel roadNames={roadNames} setRoadNames={setRoadNames}></RoadPanel>}
-    </Box>
+    <>
+    
+    <Container sx={{height:'50%',width:'30%', position: 'absolute' , backgroundColor: 'white', mt:'5%' }}></Container>
+
+
+    </>
   );
 });
 
 const styles = {
   category: {
-    minWidth: 'px',
-    maxWidth: '640px',
+    width: '500px',
     height: '100%',
     position: 'absolute',
     left: '20px',

@@ -3,8 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import KakaoMap from '../kakaomap/KakaoMap';
 import Category from '../category/Category';
 import AptTranscationHistory from '../aptTranscationHistory/AptTranscationHistory';
-import Header from '../header/Header';
-import { height } from '@fortawesome/free-solid-svg-icons/fa0';
+import { Box } from '@mui/material';
 
 const Home = memo(() => {
 
@@ -22,22 +21,17 @@ const Home = memo(() => {
 
   return (
     <>
-      <Header />
-      <div className="Home" style={styles.home}>
+      <Box sx={{
+        width: '100%',
+        height: '100%',
+        position: 'relative'
+      }}>
         <KakaoMap setCategoryRegion={setCategoryRegion} handleMarkerData={handleMarkerData} />
         {categoryRegionState && <Category categoryRegionState={categoryRegionState} />}
         {selectedMarkerData && <AptTranscationHistory selectedMarkerData={selectedMarkerData} setSelectedMarkerData={setSelectedMarkerData} />}
-      </div>
+      </Box>
     </>
   );
 });
-
-const styles = {
-  home : {
-    width : '100%',
-    height : '95%',
-    position : 'relative'
-  }
-}
 
 export default Home;

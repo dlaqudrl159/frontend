@@ -197,8 +197,7 @@ const KakaoMap = memo(({ setCategoryRegion, handleMarkerData }) => {
 const styles = {
   map: {
     width: "100%",
-    height: "100%",
-    position: "absolute",
+    height: "100vh",
     zIndex: 0 
   },
 }

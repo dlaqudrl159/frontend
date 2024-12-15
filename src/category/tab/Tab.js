@@ -28,7 +28,8 @@ const styles = {
         lineHeight: '35px',
         color: "black",
         cursor: "pointer",
-        marginLeft: "1%"
+        marginLeft: "1%",
+        marginRight: "1%"
       },
       activeTab: {
         backgroundColor: "lightgray",

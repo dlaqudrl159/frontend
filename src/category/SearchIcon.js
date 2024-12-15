@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+/*import React, { memo } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
@@ -21,4 +21,4 @@ const styles = {
     }
 }
 
-export default SearchIcon;
+export default SearchIcon;*/
