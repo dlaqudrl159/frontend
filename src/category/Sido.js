@@ -2,7 +2,7 @@ import React, { memo } from "react";
 import AddressSigungu from "./categoryJson/AddressSigungu.json";
 import AddressDong from "./categoryJson/AddressDong.json";
 
-const Side = memo(({ selectedSido, setSelectedSido, setSelectedSigungu, setSelectedDong }) => {
+const Sido = memo(({ selectedSido, setSelectedSido, setSelectedSigungu, setSelectedDong }) => {
     return (
         <select
             value={selectedSido}
@@ -45,4 +45,4 @@ const styles = {
     }
 }
 
-export default Side;
+export default Sido;

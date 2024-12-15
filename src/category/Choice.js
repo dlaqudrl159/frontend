@@ -1,10 +1,10 @@
 import React, { memo } from "react";
-import DropDown from "./DropDown";
+import TabDropDown from "./tab/TabDropDown";
 
 const Choice = memo(({ searchType, handleSelectState }) => {
 
   return (
-    <DropDown>
+    <TabDropDown>
       <div style={styles.searchTypeContainer}>
         <div
           style={{
@@ -25,7 +25,7 @@ const Choice = memo(({ searchType, handleSelectState }) => {
           도로명으로 검색
         </div>
       </div>
-    </DropDown>
+    </TabDropDown>
   )
 
 })

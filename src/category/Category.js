@@ -4,20 +4,20 @@ import Region from "./Region";
 import ApartmentName from "./ApartmentName";
 import axios from "axios";
 import SearchIcon from "./SearchIcon";
-import Tab from "./Tab";
-import TabContainer from "./TabContainer";
-import { height, width } from "@fortawesome/free-solid-svg-icons/fa0";
-import DropDown from "./DropDown";
+import Tab from "./tab/Tab";
+import TabContainer from "./tab/TabContainer";
+import RoadPanel from "./RoadPanel";
+import { useTab } from "./tab/useTab";
 
 const initSido = '서울특별시';
 const initSiguntu = '강남구';
 const initDong = '개포동';
 
 const Category = memo(({ categoryRegionState }) => {
-
-  const [activeTab, setActiveTab] = useState(null);
-
+  
   const [searchType, setSearchType] = useState('jibun'); // 'jibun' 또는 'road'
+
+  const { activeTab, setActiveTab, tabs } = useTab(searchType);
 
   const [selectedSido, setSelectedSido] = useState(initSido);
   const [selectedSigungu, setSelectedSigungu] = useState(initSiguntu);
@@ -25,23 +25,10 @@ const Category = memo(({ categoryRegionState }) => {
   const [inputRoadName, setInputRoadName] = useState('');
   const [apartmentname, setApartMentNmae] = useState('');
 
-  const tabs = useMemo(() => {
-    if (searchType === 'jibun') {
-      return [
-        { id: "choice", label: "주소 선택" },
-        { id: "region", label: categoryRegionState },
-        { id: "apartmentname", label: "단지명" },
-      ];
-    } else {
-      return [
-        { id: "choice", label: "주소 선택" },
-        { id: "region", label: "도로명" },
-        { id: "apartmentname", label: "단지명" },
-      ];
-    }
-  }, [searchType, categoryRegionState]);
+  const [roadNames , setRoadNames] = useState(null);
 
   const handleTabClick = (tabId) => {
+    setRoadNames(null);
     setActiveTab(activeTab === tabId ? null : tabId);
   };
 
@@ -83,22 +70,23 @@ const Category = memo(({ categoryRegionState }) => {
     }
   }, [searchType, selectedSido, selectedSigungu, selectDong, inputRoadName, apartmentname, getCategoryClickData])
 
-  const getRoadNameList = useCallback(async () => {
+  const getRoadNames = useCallback(async () => {
     console.log(inputRoadName)
     if (inputRoadName === '') {
       alert('도로명을 입력해주세요');
       return
     }
-    const response = await axios.get('/api/getRoadNameList', {
-      params: {
-        ex1: selectedSido,
-        ex2: selectedSigungu,
-        ex3: inputRoadName
-      }
-    }).then(response => {
+    const response = await axios.post('/api/getRoadNames', {
+      
+        korSido: selectedSido,
+        sigungu: selectedSigungu,
+        roadName: inputRoadName
+      
+    },{}).then(response => {
       console.log(response);
+      setRoadNames(response.data);
     }).catch(error => {
-
+      console.error(error);
     })
   }, [inputRoadName, selectedSido, selectedSigungu])
 
@@ -115,7 +103,7 @@ const Category = memo(({ categoryRegionState }) => {
             setSelectedSigungu={setSelectedSigungu} selectedSigungu={selectedSigungu}
             selectDong={selectDong} setSelectedDong={setSelectedDong}
             inputRoadName={inputRoadName} setInputRoadName={setInputRoadName}
-            getRoadNameList={getRoadNameList} />
+            getRoadNames={getRoadNames} />
         )
       case "apartmentname":
         return (
@@ -133,15 +121,15 @@ const Category = memo(({ categoryRegionState }) => {
           <Tab
             key={tab.id}
             id={tab.id}
-            label={tab.label}
+            label={(searchType === 'jibun' && tab.id === 'region') ? categoryRegionState : tab.label}
             isActice={activeTab === tab.id}
             onClick={handleTabClick}
           />
         ))}
         <SearchIcon />
       </TabContainer>
-      <DropDown additionalStyle={styles.sidePanel}></DropDown>
       {renderTabContent()}
+      {roadNames && <RoadPanel roadNames={roadNames} setRoadNames={setRoadNames}></RoadPanel>}
     </div>
   );
 });
@@ -149,17 +137,12 @@ const Category = memo(({ categoryRegionState }) => {
 const styles = {
   category: {
     width: '500px',
-    height: '98%',
-    //backgroundColor : 'white',
+    height: '100%',
     position: 'absolute',
     left: '20px',
     top: '2%',
     pointerEvents: 'none'  // 마우스 이벤트를 무시
   },
-  sidePanel: {
-    position : 'absolute',
-    top: '200px'
-  }
 };
 
 export default Category;

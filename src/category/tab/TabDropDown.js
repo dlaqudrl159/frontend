@@ -1,6 +1,6 @@
 import React, { memo } from "react";
 
-const DropDown = memo(({ children, additionalStyle = {} }) => {
+const TabDropDown = memo(({ children, additionalStyle = {} }) => {
 
     return (
         <div style={{ ...styles.dropdown, ...additionalStyle }}>
@@ -14,7 +14,7 @@ const styles = {
     dropdown: {
         border: "1px solid black",
         width: "100%",
-        height: "150px",  // 높이 약간 증가
+        height: "20%",  // 높이 약간 증가
         backgroundColor: "white",
         padding: "10px",
         //border : 'none',
@@ -22,4 +22,4 @@ const styles = {
     },
 }
 
-export default DropDown;
+export default TabDropDown;

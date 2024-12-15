@@ -2,12 +2,12 @@ import React, { memo } from "react";
 import Sido from "./Sido";
 import Sigungu from "./Sigungu";
 import Dong from "./Dong";
-import DropDown from "./DropDown";
+import TabDropDown from "./tab/TabDropDown";
 
 const Jibun = memo(({ selectedSido, setSelectedSido, selectedSigungu, setSelectedSigungu, selectDong, setSelectedDong }) => {
 
   return (
-    <DropDown>
+    <TabDropDown>
       <div style={styles.selectContainer}>
         <Sido selectedSido={selectedSido} setSelectedSido={setSelectedSido} setSelectedSigungu={setSelectedSigungu} setSelectedDong={setSelectedDong}></Sido>
         <Sigungu selectedSido={selectedSido} selectedSigungu={selectedSigungu} setSelectedSigungu={setSelectedSigungu} setSelectedDong={setSelectedDong}></Sigungu>
@@ -15,7 +15,7 @@ const Jibun = memo(({ selectedSido, setSelectedSido, selectedSigungu, setSelecte
       <div style={styles.dongList}>
         <Dong selectDong={selectDong} setSelectedDong={setSelectedDong} selectedSido={selectedSido} selectedSigungu={selectedSigungu}></Dong>
       </div>
-    </DropDown>
+    </TabDropDown>
   )
 
 })

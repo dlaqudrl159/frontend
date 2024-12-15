@@ -1,12 +1,12 @@
 import React, { memo } from "react";
 import Sido from "./Sido";
 import Sigungu from "./Sigungu";
-import DropDown from "./DropDown";
+import TabDropDown from "./tab/TabDropDown";
 
-const Road = memo(({ selectedSido, setSelectedSido, selectedSigungu, setSelectedSigungu, setSelectedDong, inputRoadName, setInputRoadName, getRoadNameList }) => {
+const Road = memo(({ selectedSido, setSelectedSido, selectedSigungu, setSelectedSigungu, setSelectedDong, inputRoadName, setInputRoadName, getRoadNames }) => {
 
   return (
-    <DropDown>
+    <TabDropDown>
       <div style={styles.selectContainer}>
         <Sido selectedSido={selectedSido} setSelectedSido={setSelectedSido} setSelectedSigungu={setSelectedSigungu} setSelectedDong={setSelectedDong}></Sido>
         <Sigungu selectedSido={selectedSido} selectedSigungu={selectedSigungu} setSelectedSigungu={setSelectedSigungu} setSelectedDong={setSelectedDong}></Sigungu>
@@ -20,8 +20,8 @@ const Road = memo(({ selectedSido, setSelectedSido, selectedSigungu, setSelected
           setInputRoadName(e.target.value);
         }}
       />
-      <button style={styles.button} onClick={getRoadNameList}>검색</button>
-    </DropDown>
+      <button style={styles.button} onClick={getRoadNames}>검색</button>
+    </TabDropDown>
   )
 
 });

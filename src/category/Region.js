@@ -6,7 +6,7 @@ const Region = memo(({ searchType,
     selectedSido, setSelectedSido,
     selectedSigungu, setSelectedSigungu,
     selectDong, setSelectedDong,
-    inputRoadName, setInputRoadName, getRoadNameList }) => {
+    inputRoadName, setInputRoadName, getRoadNames }) => {
 
     const renderRegion = () => {
 
@@ -19,7 +19,7 @@ const Region = memo(({ searchType,
                 selectedSigungu={selectedSigungu} setSelectedSigungu={setSelectedSigungu}
                 setSelectedDong={setSelectedDong}
                 inputRoadName={inputRoadName} setInputRoadName={setInputRoadName}
-                getRoadNameList={getRoadNameList} />;
+                getRoadNames={getRoadNames} />;
 
     }
 

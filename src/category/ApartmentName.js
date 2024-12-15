@@ -1,10 +1,10 @@
 import React, { memo } from 'react';
-import DropDown from "./DropDown";
+import TabDropDown from "./tab/TabDropDown";
 
 const ApartmentName = memo(({ apartmentname, setApartMentNmae, handleCategoryClick }) => {
 
     return (
-        <DropDown>
+        <TabDropDown>
             <h3 style={styles.apartmentSearch}>단지명 검색</h3>
             <input
                 value={apartmentname}
@@ -16,7 +16,7 @@ const ApartmentName = memo(({ apartmentname, setApartMentNmae, handleCategoryCli
                 }}
             />
             <button style={styles.button} onClick={handleCategoryClick}>검색</button>
-        </DropDown>
+        </TabDropDown>
     )
 
 })
