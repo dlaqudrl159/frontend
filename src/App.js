@@ -5,6 +5,8 @@ import Login from './admin/Login';
 import PrivateRoute from './admin/PrivateRoute';
 import DashBoard from './admin/DashBoard';
 import MainLayout from './layout/MainLayout';
+import { ThemeProvider } from '@mui/material/styles';
+import { theme } from "./theme/theme";
 
 function App() {
 
@@ -13,9 +15,11 @@ function App() {
 
       <Routes>
         <Route path='/' element={
-          <MainLayout>
-            <Home />
-          </MainLayout>
+          <ThemeProvider theme={theme}>
+            <MainLayout>
+              <Home />
+            </MainLayout>
+          </ThemeProvider>
         } />
         <Route path='/login' element={<Login />} />
         <Route element={<PrivateRoute />}>

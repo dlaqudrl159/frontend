@@ -4,10 +4,10 @@ import Region from "./Region";
 import ApartmentName from "./ApartmentName";
 import axios from "axios";
 import Tab from "./tab/Tab";
-import TabContainer from "./tab/TabContainer";
-import RoadPanel from "./RoadPanel";
+import SearchPanel from "./SearchPanel";
 import { useTab } from "./tab/useTab";
-import { Box } from "@mui/material";
+import { CategoryContainer, TabContainer, TabMenu, TabContent } from "../styles/Category.Styles";
+
 
 const initSido = '서울특별시';
 const initSiguntu = '강남구';
@@ -25,10 +25,10 @@ const Category = memo(({ categoryRegionState }) => {
   const [inputRoadName, setInputRoadName] = useState('');
   const [apartmentname, setApartMentNmae] = useState('');
 
-  const [roadNames, setRoadNames] = useState(null);
+  const [searchData, setSearchData] = useState(null);
 
   const handleTabClick = (tabId) => {
-    setRoadNames(null);
+    setSearchData(null);
     setActiveTab(activeTab === tabId ? null : tabId);
   };
 
@@ -84,7 +84,7 @@ const Category = memo(({ categoryRegionState }) => {
 
     }, {}).then(response => {
       console.log(response);
-      setRoadNames(response.data);
+      setSearchData(response.data);
     }).catch(error => {
       console.error(error);
     })
@@ -115,44 +115,27 @@ const Category = memo(({ categoryRegionState }) => {
   };
 
   return (
-    <Box sx={{
-      width: {
-        xs: '320px',
-        md: 'calc(100%/3)'
-      },
-      height: '100%',
-      position: 'absolute',
-      left: '20px',
-      top: '2%',
-      pointerEvents: 'none'
-    }}>
+    <CategoryContainer>
       <TabContainer>
-        {tabs.map((tab) => (
+        <TabMenu>
+          {tabs.map((tab) => (
           <Tab
             key={tab.id}
             id={tab.id}
             label={(searchType === 'jibun' && tab.id === 'region') ? categoryRegionState : tab.label}
-            isActice={activeTab === tab.id}
+            isActive={activeTab === tab.id}
             onClick={handleTabClick}
           />
         ))}
+        </TabMenu>
+        <TabContent>
+        {renderTabContent()}
+        </TabContent>
       </TabContainer>
-      {renderTabContent()}
-      {roadNames && <RoadPanel roadNames={roadNames} setRoadNames={setRoadNames}></RoadPanel>}
-    </Box>
+      
+      {searchData && <SearchPanel searchData={searchData} setSearchData={setSearchData}></SearchPanel>}
+    </CategoryContainer>
   );
 });
-
-const styles = {
-  category: {
-    minWidth: 'px',
-    maxWidth: '640px',
-    height: '100%',
-    position: 'absolute',
-    left: '20px',
-    top: '2%',
-    pointerEvents: 'none'  // 마우스 이벤트를 무시
-  },
-};
 
 export default Category;

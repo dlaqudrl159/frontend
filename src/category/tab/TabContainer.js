@@ -1,25 +1,14 @@
 import React, {memo} from "react";
 
-const TabContainer = memo(({ children }) => {
+
+const TabContainer = memo(({ isActice = {} }) => {
 
     return (
-        <div style={styles.tabContainer}>
+        <Box sx={{ width: '100%', height: isActice ? '25%' : 'auto', display: 'flex', flexDirection: 'column',  pointerEvents: 'auto'}}>
             {children}
-        </div>
+        </Box>
     );
 
 });
-
-const styles = {
-    tabContainer: {
-        width: "100%",
-        height: "5%",
-        backgroundColor: "white",
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        pointerEvents: 'auto'
-      },
-}
 
 export default TabContainer;

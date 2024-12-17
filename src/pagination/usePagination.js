@@ -2,8 +2,8 @@ import React, {memo, useState} from "react";
 
 export const usePagination = (data) => {
 
-    const amount = data.length;
-    const [curPage, setCurPage] = useState(1);
+    const amount = data.length; // 총 갯수
+    const [curPage, setCurPage] = useState(1); // 현재 페이지
     const perPage = 10;
     const perLine = 5;
 

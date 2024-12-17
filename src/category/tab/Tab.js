@@ -1,40 +1,19 @@
-import React, {memo} from "react";
+import React, { memo } from "react";
+import { TabButton } from "../../styles/Category.Styles";
 
-const Tab = memo(({id, label, isActice, onClick}) => {
+const Tab = memo(({ id, label, isActive, onClick }) => {
 
-    return (
-        <>
-        <div
-            style={{
-              ...styles.tab,
-              ...(isActice ? styles.activeTab : {})
-            }}
-            onClick={() => onClick(id)}
-          >
-            {label}
-          </div>
-        </>
-    )
+  return (
+    <>
+      <TabButton
+        isactive={isActive === true}
+        onClick={() => onClick(id)}
+      >
+        {label}
+      </TabButton>
+    </>
+  )
 
 })
-
-const styles = {
-    tab: {
-        border: "1px solid black",
-        width: "30%",
-        height: "80%",
-        backgroundColor: "#f3f5ff",
-        textAlign: "center",
-        lineHeight: '35px',
-        color: "black",
-        cursor: "pointer",
-        marginLeft: "1%",
-        marginRight: "1%"
-      },
-      activeTab: {
-        backgroundColor: "lightgray",
-        fontWeight: "bold",
-      },
-}
 
 export default Tab;

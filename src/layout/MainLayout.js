@@ -1,6 +1,6 @@
-import { Box, Container } from "@mui/material";
-import { spacing } from '@mui/system';
+import { Box } from "@mui/material";
 import React, {memo} from "react";
+
 
 const MainLayout = memo(({ children }) => {
 
