@@ -1,16 +1,16 @@
 import React, { memo } from "react";
-import { TabButton } from "../../styles/Category.Styles";
+import { TabBox } from "../../styles/Category.Styles";
 
 const Tab = memo(({ id, label, isActive, onClick }) => {
 
   return (
     <>
-      <TabButton
+      <TabBox
         isactive={isActive === true}
         onClick={() => onClick(id)}
       >
         {label}
-      </TabButton>
+      </TabBox>
     </>
   )
 

@@ -1,24 +1,14 @@
 import React, { memo } from "react";
+import { TabDropDownBox } from "../../styles/Category.Styles";
 
-const TabDropDown = memo(({ children, additionalStyle = {} }) => {
+const TabDropDown = memo(({ children}) => {
 
     return (
-        <div className="TabDropDown" style={{ ...styles.dropdown, ...additionalStyle }}>
+        <TabDropDownBox>
             {children}
-        </div>
+        </TabDropDownBox>
     );
 
 });
-
-const styles = {
-    dropdown: {
-        width: "100%",
-        height: "100%",  // 높이 약간 증가
-        backgroundColor: "white",
-        padding: "5px",
-        //border : 'none',
-        pointerEvents: 'auto' //마우스 이벤트 작동
-    },
-}
 
 export default TabDropDown;

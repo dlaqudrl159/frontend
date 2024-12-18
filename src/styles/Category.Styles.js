@@ -39,7 +39,7 @@ export const TabMenu = styled(Box)(() => ({
     pointerEvents: 'auto'
 }))
 
-export const TabButton = styled(Box, {
+export const TabBox = styled(Box, {
     shouldForwardProp: (prop) => prop !== 'isactive'
 })(({ isactive }) => ({
     width: "30%",
@@ -59,6 +59,14 @@ export const TabContent = styled(Box)(() => ({
     width: '100%',
     height: '80%',
     pointerEvents: 'auto',
+}))
+
+export const TabDropDownBox = styled(Box)(() => ({
+    width: "100%",
+    height: "100%",
+    backgroundColor: "white",
+    padding: "5px",
+    pointerEvents: 'auto' //마우스 이벤트 작동
 }))
 
 export const SearchPanelContainer = styled(Box)(({ theme }) => ({
@@ -99,7 +107,7 @@ export const SearchPanelHeaderCloseButton = styled(Button)(() => ({
     border: 'none',
     fontSize: '20px',
     cursor: 'pointer',
-    color: 'black'  
+    color: 'black'
 }))
 
 export const SearchPanelContent = styled(Box)(() => ({
