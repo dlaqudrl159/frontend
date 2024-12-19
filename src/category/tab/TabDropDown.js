@@ -4,7 +4,7 @@ import { TabDropDownBox } from "../../styles/Category.Styles";
 const TabDropDown = memo(({ children}) => {
 
     return (
-        <TabDropDownBox>
+        <TabDropDownBox className="tabDropDownBox">
             {children}
         </TabDropDownBox>
     );
