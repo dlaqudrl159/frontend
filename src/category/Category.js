@@ -42,31 +42,31 @@ const Category = memo(({ categoryRegionState }) => {
   }, [searchType])
 
 
-  const getCategoryClickData = useCallback(async (ex1, ex2, ex3, ex4) => {
-    const response = await axios.get('/api/getCategoryClickData', {
-      params: {
-        eex1: ex1,
-        eex2: ex2,
-        eex3: ex3,
-        eex4: ex4
-      }
-    }).then(response => {
+  const getCategoryClickData = useCallback(async (searchType, korSido, sigungu, dongORroadName, apartmentname) => {
+    const response = await axios.post('/api/getCategoryClickData', {
+        searchType: searchType,
+        korSido: korSido,
+        sigungu: sigungu,
+        dongORroadName: dongORroadName,
+        apartmentname: apartmentname
+        
+    },{}).then(response => {
       console.log(response);
     }).catch(error => {
-
+      console.error(error);
     })
 
   }, [])
 
   const handleCategoryClick = useCallback(() => {
     if (searchType === 'jibun') {
-      getCategoryClickData(selectedSido, selectedSigungu, selectDong, apartmentname)
+      getCategoryClickData(searchType, selectedSido, selectedSigungu, selectDong, apartmentname)
     } else {
       if (inputRoadName === '') {
         alert('도로명을 입력해주십시요');
         return;
       }
-      getCategoryClickData(selectedSido, selectedSigungu, inputRoadName, apartmentname)
+      getCategoryClickData(searchType, selectedSido, selectedSigungu, inputRoadName, apartmentname)
     }
   }, [searchType, selectedSido, selectedSigungu, selectDong, inputRoadName, apartmentname, getCategoryClickData])
 
@@ -133,7 +133,7 @@ const Category = memo(({ categoryRegionState }) => {
         </TabContent>
       </TabContainer>
       
-      {searchData && <SearchPanel searchData={searchData} setSearchData={setSearchData}></SearchPanel>}
+      {searchData && <SearchPanel searchData={searchData} setSearchData={setSearchData} setInputRoadName={setInputRoadName}></SearchPanel>}
     </CategoryContainer>
   );
 });

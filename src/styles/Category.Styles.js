@@ -34,8 +34,8 @@ export const TabMenu = styled(Box)(() => ({
     height: '20%',
     display: 'flex',
     justifyContent: "space-between",
-    backgroundColor: "white",
     alignItems: "center",
+    backgroundColor: "white",
     pointerEvents: 'auto'
 }))
 
@@ -132,4 +132,19 @@ export const SearchPanelFooter = styled(Box)(() => ({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: 'white',
+}))
+
+export const ChoiceContainer = styled(Box)(() => ({
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+}))
+
+export const ChoiceButton = styled(Button)(() => ({
+    width: '100%',
+    border: '1px solid black',
+    margin:'5px'
+}))
+
+export const ChoiceButtonContent = styled(Typography)(() => ({
 }))
