@@ -12,7 +12,7 @@ import {
 } from "../styles/Category.Styles";
 import Pagination from "../pagination/Pagination";
 
-const SearchPanel = memo(({ searchData, setSearchData }) => {
+const SearchPanel = memo(({ searchData, setSearchData, setInputRoadName }) => {
 
   const sSearchData = searchData.aptCoordsDto || [];
 
@@ -33,7 +33,7 @@ const SearchPanel = memo(({ searchData, setSearchData }) => {
       <SearchPanelContent>
         {currentItems.map((item, index) => (
           <SearchPanelResultContainer key={index}>
-            <SearchPanelResult variant="body1">{item.roadname}</SearchPanelResult>
+            <SearchPanelResult variant="body1" onClick={() => {setInputRoadName(item.roadname)}}>{item.roadname}</SearchPanelResult>
           </SearchPanelResultContainer>
         ))}
       </SearchPanelContent>
