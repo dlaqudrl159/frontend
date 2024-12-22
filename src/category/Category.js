@@ -13,7 +13,7 @@ const initSido = '서울특별시';
 const initSiguntu = '강남구';
 const initDong = '개포동';
 
-const Category = memo(({ categoryRegionState }) => {
+const Category = memo(({ categoryRegionState, setSelectedMarkerData }) => {
 
   const [searchType, setSearchType] = useState('jibun'); // 'jibun' 또는 'road'
 
@@ -52,6 +52,7 @@ const Category = memo(({ categoryRegionState }) => {
         
     },{}).then(response => {
       console.log(response);
+      setSearchData(response.data);
     }).catch(error => {
       console.error(error);
     })
@@ -133,7 +134,7 @@ const Category = memo(({ categoryRegionState }) => {
         </TabContent>
       </TabContainer>
       
-      {searchData && <SearchPanel searchData={searchData} setSearchData={setSearchData} setInputRoadName={setInputRoadName}></SearchPanel>}
+      {searchData && <SearchPanel searchData={searchData} setSearchData={setSearchData} setInputRoadName={setInputRoadName} searchType={searchType} activeTab={activeTab} setSelectedMarkerData={setSelectedMarkerData}></SearchPanel>}
     </CategoryContainer>
   );
 });

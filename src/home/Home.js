@@ -27,7 +27,7 @@ const Home = memo(() => {
         position: 'relative'
       }}>
         <KakaoMap setCategoryRegion={setCategoryRegion} handleMarkerData={handleMarkerData} />
-        {categoryRegionState && <Category categoryRegionState={categoryRegionState} />}
+        {categoryRegionState && <Category categoryRegionState={categoryRegionState} setSelectedMarkerData={setSelectedMarkerData} />}
         {selectedMarkerData && <AptTranscationHistory selectedMarkerData={selectedMarkerData} setSelectedMarkerData={setSelectedMarkerData} />}
       </Box>
     </>
