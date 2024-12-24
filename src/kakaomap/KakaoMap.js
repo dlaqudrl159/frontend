@@ -6,6 +6,9 @@ import { useGeocording } from "./hook/useGeocording";
 import { useInfoWindow } from "./hook/useInfoWindow";
 import { useClusterer } from "./hook/useClusterer";
 import { mapApi } from "./api/mapApi";
+import { Box } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { setMap } from "../redux/reducer/action";
 
 const { kakao } = window;
 
@@ -13,9 +16,12 @@ const mapLevel = 4;
 const mapcenterlat = 37.56435977921398
 const mapcenterlng = 126.97757768711558
 const KakaoMap = memo(({ setCategoryRegion, handleMarkerData }) => {
+  console.log('kakaoMap 랜더')
   const mapRef = useRef(null);
   const mapInstanceRef = useRef(null);
-
+  const map2 = useSelector((state => state.map));
+  console.log(map2);
+  const dispatch = useDispatch();
   const oldAddressRef = useRef([]);
   const markersByRegionRef = useRef({});
 
@@ -152,6 +158,7 @@ const KakaoMap = memo(({ setCategoryRegion, handleMarkerData }) => {
         level: mapLevel
       };
       const map = new kakao.maps.Map(mapRef.current, mapOption);
+      dispatch(setMap(map));
       mapInstanceRef.current = map;
       clustererRef.current = createClusterer(map);
 
@@ -190,7 +197,7 @@ const KakaoMap = memo(({ setCategoryRegion, handleMarkerData }) => {
   return (
     <>
       {IsLoadingState && <Loading></Loading>}
-      <div className="KakaoMap" ref={mapRef} style={styles.map}></div>
+      <Box id="map" className="KakaoMap" ref={mapRef} style={styles.map}></Box>
     </>)
 })
 
