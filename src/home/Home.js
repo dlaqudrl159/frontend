@@ -1,5 +1,4 @@
 import React, { memo, useState, useCallback } from 'react';
-import "bootstrap/dist/css/bootstrap.min.css";
 import KakaoMap from '../kakaomap/KakaoMap';
 import Category from '../category/Category';
 import AptTranscationHistory from '../aptTranscationHistory/AptTranscationHistory';
