@@ -61,7 +61,7 @@ const AptTranscationHistory = memo(({ selectedMarkerData, setSelectedMarkerData 
 
 
     return (
-        <div style={styles.overlay}>
+        <div className='~~~~~~~~~~~~' style={styles.overlay}>
             <div ref={modalRef} style={styles.modal}>
                 <div style={styles.header}>
                     <h2>[아파트] {currentApt.aptCoordsDto.apartmentname}</h2>
