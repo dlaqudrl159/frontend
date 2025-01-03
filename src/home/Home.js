@@ -6,7 +6,7 @@ const Home = memo(() => {
 
   return (
     <>
-      <HomeContainer>
+      <HomeContainer className='HomeContainer'>
         <KakaoMap/>
       </HomeContainer>
     </>
