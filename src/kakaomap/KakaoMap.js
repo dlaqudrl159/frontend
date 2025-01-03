@@ -6,19 +6,18 @@ import { useGeocording } from "./hook/useGeocording";
 import { useInfoWindow } from "./hook/useInfoWindow";
 import { useClusterer } from "./hook/useClusterer";
 import { mapApi } from "./api/mapApi";
+import { useMap } from "./hook/useMap";
 
 const { kakao } = window;
 
-const mapLevel = 4;
-const mapcenterlat = 37.56435977921398
-const mapcenterlng = 126.97757768711558
 const KakaoMap = memo(({ setCategoryRegion, handleMarkerData }) => {
   const mapRef = useRef(null);
   const mapInstanceRef = useRef(null);
 
   const oldAddressRef = useRef([]);
   const markersByRegionRef = useRef({});
-
+  
+  const { initializeMap, addDragEventMap, addZoomChangeEventMap, dragEventMap, ZoomChangeEventMap } = useMap();
   const { IsLoadingState, IsLoadingShow, IsLoadingClose } = useLoading();
   const { createMarkersFromData } = useMarkers();
   const { getRegionCode } = useGeocording();
@@ -147,11 +146,7 @@ const KakaoMap = memo(({ setCategoryRegion, handleMarkerData }) => {
 
   useEffect(() => {
     if (!mapInstanceRef.current && mapRef.current) {
-      const mapOption = {
-        center: new kakao.maps.LatLng(mapcenterlat, mapcenterlng),
-        level: mapLevel
-      };
-      const map = new kakao.maps.Map(mapRef.current, mapOption);
+      const map = initializeMap(mapRef.current);
       mapInstanceRef.current = map;
       clustererRef.current = createClusterer(map);
 
@@ -159,32 +154,12 @@ const KakaoMap = memo(({ setCategoryRegion, handleMarkerData }) => {
       initMarkers(mapInstanceRef.current).then(() => {
         IsLoadingClose();
       })
-      kakao.maps.event.addListener(map, 'dragend', function () {
-        if (map.getLevel() < 5) {
-          IsLoadingShow();
-          initMarkers(mapInstanceRef.current).then(() => {
-            IsLoadingClose();
-          })
-        }
-      });
-      let prevLevel = map.getLevel();
-      kakao.maps.event.addListener(map, 'zoom_changed', function () {
-        const currentLevel = map.getLevel();
-        if (prevLevel === 4 && currentLevel === 5) {
-          clustererRef.current.clear();
-          oldAddressRef.current = [];
-          markersByRegionRef.current = {};
-        } else if (prevLevel === 5 && currentLevel === 4) {
-          IsLoadingShow();
-          initMarkers(mapInstanceRef.current).then(() => {
-            IsLoadingClose();
-          });
-        }
-        prevLevel = currentLevel;
-      });
+      addDragEventMap(mapInstanceRef.current, () => {dragEventMap(mapInstanceRef.current, initMarkers, IsLoadingShow, IsLoadingClose)});
+      addZoomChangeEventMap(mapInstanceRef.current, () => {ZoomChangeEventMap(mapInstanceRef.current, clustererRef, oldAddressRef, markersByRegionRef, initMarkers, IsLoadingShow, IsLoadingClose)});
+      
     }
 
-  }, [mapInstanceRef, clustererRef, createClusterer, initMarkers, IsLoadingShow, IsLoadingClose]);
+  }, [mapInstanceRef, clustererRef, createClusterer, initMarkers, IsLoadingShow, IsLoadingClose, initializeMap]);
 
 
   return (
