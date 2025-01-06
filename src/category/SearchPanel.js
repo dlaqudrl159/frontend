@@ -19,13 +19,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { useMarkers } from "../kakaomap/hook/useMarker";
 import { setMapCenter } from "../redux/reducer/action";
 
-const SearchPanel = memo(({ searchData, setSearchData, setInputRoadName, searchType, activeTab, setSelectedMarkerData }) => {
+const SearchPanel = memo(({ searchData, setSearchData, setInputRoadName, searchType, activeTab, setSelectedMarkerData, mapInstanceRef }) => {
 
-  const map2 = useSelector((state => state.map));
   const { createCoords } = useMarkers();
-  const dispatch = useDispatch();
   const sSearchData = searchData.aptCoordsDto || [];
-
+  console.log(mapInstanceRef.current);
   const { curPage, setCurPage, amount, totalPage, startNum, endNum, beginPageNum, finishPageNum } = usePagination(sSearchData);
 
   const currentItems = sSearchData.slice(startNum - 1, endNum);
@@ -41,7 +39,7 @@ const SearchPanel = memo(({ searchData, setSearchData, setInputRoadName, searchT
     const response = await mapApi.getMarkerData(item, item.apartmentname);
     setSelectedMarkerData(response.data);
     const coords = createCoords(response.data[0].aptCoordsDto.lat, response.data[0].aptCoordsDto.lng);
-    dispatch(setMapCenter(coords));
+    mapInstanceRef.current.setCenter(coords);
     IsLoadingClose();
   }, [setSelectedMarkerData, IsLoadingShow, IsLoadingClose])
 

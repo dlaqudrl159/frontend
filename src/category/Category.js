@@ -13,7 +13,7 @@ const initSido = '서울특별시';
 const initSiguntu = '강남구';
 const initDong = '개포동';
 
-const Category = memo(({ categoryRegionState, setSelectedMarkerData }) => {
+const Category = memo(( props ) => {
 
   const [searchType, setSearchType] = useState('jibun'); // 'jibun' 또는 'road'
 
@@ -123,7 +123,7 @@ const Category = memo(({ categoryRegionState, setSelectedMarkerData }) => {
           <Tab
             key={tab.id}
             id={tab.id}
-            label={(searchType === 'jibun' && tab.id === 'region') ? categoryRegionState : tab.label}
+            label={(searchType === 'jibun' && tab.id === 'region') ? props.categoryRegionState : tab.label}
             isActive={activeTab === tab.id}
             onClick={handleTabClick}
           />
@@ -134,7 +134,7 @@ const Category = memo(({ categoryRegionState, setSelectedMarkerData }) => {
         </TabContent>
       </TabContainer>
       
-      {searchData && <SearchPanel searchData={searchData} setSearchData={setSearchData} setInputRoadName={setInputRoadName} searchType={searchType} activeTab={activeTab} setSelectedMarkerData={setSelectedMarkerData}></SearchPanel>}
+      {searchData && <SearchPanel searchData={searchData} setSearchData={setSearchData} setInputRoadName={setInputRoadName} searchType={searchType} activeTab={activeTab} setSelectedMarkerData={props.setSelectedMarkerData} mapInstanceRef={props.mapInstanceRef}></SearchPanel>}
     </CategoryContainer>
   );
 });

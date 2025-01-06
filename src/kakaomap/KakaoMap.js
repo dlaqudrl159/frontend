@@ -19,6 +19,7 @@ const KakaoMap = memo(({ }) => {
   const mapInstanceRef = useRef(null);
   const oldAddressRef = useRef([]);
   const markersByRegionRef = useRef({});
+
   const [categoryRegionState, setCategoryRegionState] = useState(null);
   const [selectedMarkerData, setSelectedMarkerData] = useState(null);
 
@@ -173,7 +174,7 @@ const KakaoMap = memo(({ }) => {
       {IsLoadingState && <Loading></Loading>}
 
       <KakaoMapContainer className="KakaoMap" ref={mapRef}></KakaoMapContainer>
-      {categoryRegionState && <Category categoryRegionState={categoryRegionState} setSelectedMarkerData={setSelectedMarkerData} />}
+      {categoryRegionState && <Category categoryRegionState={categoryRegionState} setSelectedMarkerData={setSelectedMarkerData} mapInstanceRef={mapInstanceRef} />}
       {selectedMarkerData && <AptTranscationHistory selectedMarkerData={selectedMarkerData} setSelectedMarkerData={setSelectedMarkerData} />}
     </>)
 })
