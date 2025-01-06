@@ -1,6 +1,5 @@
 import React, { memo } from "react";
 import TabDropDown from "./tab/TabDropDown";
-import { Box } from "@mui/material";
 import { ChoiceContainer, ChoiceButton, ChoiceButtonContent } from "../styles/Category.Styles";
 
 const Choice = memo(({ searchType, handleSelectState }) => {

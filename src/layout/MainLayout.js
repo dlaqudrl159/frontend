@@ -1,4 +1,3 @@
-import { Box } from "@mui/material";
 import React, { memo } from "react";
 import { MainLayoutContainer } from "../styles/Layout.Styles";
 

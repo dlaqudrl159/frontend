@@ -1,4 +1,4 @@
-import React, { useState, memo, useMemo, useCallback } from "react";
+import React, { useState, memo, useCallback } from "react";
 import Choice from "./Choice";
 import Region from "./Region";
 import ApartmentName from "./ApartmentName";
@@ -13,7 +13,7 @@ const initSido = '서울특별시';
 const initSiguntu = '강남구';
 const initDong = '개포동';
 
-const Category = memo(( props ) => {
+const Category = memo((props) => {
 
   const [searchType, setSearchType] = useState('jibun'); // 'jibun' 또는 'road'
 
@@ -44,13 +44,13 @@ const Category = memo(( props ) => {
 
   const getCategoryClickData = useCallback(async (searchType, korSido, sigungu, dongORroadName, apartmentname) => {
     const response = await axios.post('/api/getCategoryClickData', {
-        searchType: searchType,
-        korSido: korSido,
-        sigungu: sigungu,
-        dongORroadName: dongORroadName,
-        apartmentname: apartmentname
-        
-    },{}).then(response => {
+      searchType: searchType,
+      korSido: korSido,
+      sigungu: sigungu,
+      dongORroadName: dongORroadName,
+      apartmentname: apartmentname
+
+    }, {}).then(response => {
       console.log(response);
       setSearchData(response.data);
     }).catch(error => {
@@ -120,21 +120,21 @@ const Category = memo(( props ) => {
       <TabContainer>
         <TabMenu>
           {tabs.map((tab) => (
-          <Tab
-            key={tab.id}
-            id={tab.id}
-            label={(searchType === 'jibun' && tab.id === 'region') ? props.categoryRegionState : tab.label}
-            isActive={activeTab === tab.id}
-            onClick={handleTabClick}
-          />
-        ))}
+            <Tab
+              key={tab.id}
+              id={tab.id}
+              label={(searchType === 'jibun' && tab.id === 'region') ? props.categoryRegionState : tab.label}
+              isActive={activeTab === tab.id}
+              onClick={handleTabClick}
+            />
+          ))}
         </TabMenu>
         <TabContent>
-        {renderTabContent()}
+          {renderTabContent()}
         </TabContent>
       </TabContainer>
-      
-      {searchData && <SearchPanel searchData={searchData} setSearchData={setSearchData} setInputRoadName={setInputRoadName} searchType={searchType} activeTab={activeTab} setSelectedMarkerData={props.setSelectedMarkerData} mapInstanceRef={props.mapInstanceRef}></SearchPanel>}
+
+      {searchData && <SearchPanel searchData={searchData} setSearchData={setSearchData} setInputRoadName={setInputRoadName} searchType={searchType} activeTab={activeTab} setSelectedMarkerData={props.setSelectedMarkerData} mapInstanceRef={props.mapInstanceRef} initMarkers={props.initMarkers}></SearchPanel>}
     </CategoryContainer>
   );
 });

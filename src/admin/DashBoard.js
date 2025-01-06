@@ -5,7 +5,6 @@ import AllAptData from './data/AllAptData';
 import AllCoordsData from './data/AllCoordsData';
 import AptData from "./data/AptData";
 import CoordsData from "./data/CoordsData";
-import CleanCoords from "./data/CleanCoords";
 
 const DashBoard = memo(() => {
 

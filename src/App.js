@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import Home from './home/Home';
 import Login from './admin/Login';
 import PrivateRoute from './admin/PrivateRoute';

@@ -14,12 +14,9 @@ import Pagination from "../pagination/Pagination";
 import RoadNameResult from "./RoadNameResult";
 import ApartmentNameResult from "./ApartmentNameResult";
 import { mapApi } from "../kakaomap/api/mapApi";
-import { useLoading } from "../kakaomap/hook/useLoading";
-import { useDispatch, useSelector } from "react-redux";
 import { useMarkers } from "../kakaomap/hook/useMarker";
-import { setMapCenter } from "../redux/reducer/action";
 
-const SearchPanel = memo(({ searchData, setSearchData, setInputRoadName, searchType, activeTab, setSelectedMarkerData, mapInstanceRef }) => {
+const SearchPanel = memo(({ searchData, setSearchData, setInputRoadName, searchType, activeTab, setSelectedMarkerData, mapInstanceRef, initMarkers }) => {
 
   const { createCoords } = useMarkers();
   const sSearchData = searchData.aptCoordsDto || [];
@@ -28,20 +25,17 @@ const SearchPanel = memo(({ searchData, setSearchData, setInputRoadName, searchT
 
   const currentItems = sSearchData.slice(startNum - 1, endNum);
 
-  const { IsLoadingState, IsLoadingShow, IsLoadingClose } = useLoading();
-
   const handleRoadName = useCallback((roadname) => {
     setInputRoadName(roadname);
   }, [setInputRoadName])
 
   const handleApartmentName = useCallback(async (item) => {
-    IsLoadingShow()
     const response = await mapApi.getMarkerData(item, item.apartmentname);
     setSelectedMarkerData(response.data);
     const coords = createCoords(response.data[0].aptCoordsDto.lat, response.data[0].aptCoordsDto.lng);
     mapInstanceRef.current.setCenter(coords);
-    IsLoadingClose();
-  }, [setSelectedMarkerData, IsLoadingShow, IsLoadingClose])
+    initMarkers(mapInstanceRef.current)
+  }, [setSelectedMarkerData, createCoords, mapInstanceRef, initMarkers])
 
   return (
     <SearchPanelContainer>

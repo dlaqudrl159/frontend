@@ -1,4 +1,4 @@
-import React, {memo, useState} from "react";
+import { useState } from "react";
 
 export const usePagination = (data) => {
 

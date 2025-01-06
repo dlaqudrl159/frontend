@@ -14,11 +14,13 @@ import { KakaoMapContainer } from "../styles/KakaoMap.Styles";
 
 const { kakao } = window;
 
-const KakaoMap = memo(({ }) => {
+const KakaoMap = memo(() => {
   const mapRef = useRef(null);
   const mapInstanceRef = useRef(null);
   const oldAddressRef = useRef([]);
   const markersByRegionRef = useRef({});
+  const clustererRef = useRef(null);
+  const infowindowRef = useRef(null);
 
   const [categoryRegionState, setCategoryRegionState] = useState(null);
   const [selectedMarkerData, setSelectedMarkerData] = useState(null);
@@ -28,7 +30,7 @@ const KakaoMap = memo(({ }) => {
   const { createMarkersFromData } = useMarkers();
   const { getRegionCode } = useGeocording();
   const { showInfoWindow } = useInfoWindow();
-  const { clustererRef, createClusterer } = useClusterer();
+  const { createClusterer } = useClusterer();
 
   const getMarkerData = useCallback(async (marker, apartmentname) => {
     var markerData = marker.markerData;
@@ -145,7 +147,7 @@ const KakaoMap = memo(({ }) => {
       if ("ERROR" === response) {
         return;
       }
-      createMarkersFromData(response, showInfoWindow, getMarkerData, mapInstanceRef, markersByRegionRef, clustererRef)
+      createMarkersFromData(response, showInfoWindow, getMarkerData, mapInstanceRef, markersByRegionRef, clustererRef, infowindowRef)
     }
 
   }, [clustererRef, createMarkersFromData, getMarkerData, getMarkers, getRegionCode, makearrcoords, setCategoryRegionState, showInfoWindow])
@@ -174,7 +176,7 @@ const KakaoMap = memo(({ }) => {
       {IsLoadingState && <Loading></Loading>}
 
       <KakaoMapContainer className="KakaoMap" ref={mapRef}></KakaoMapContainer>
-      {categoryRegionState && <Category categoryRegionState={categoryRegionState} setSelectedMarkerData={setSelectedMarkerData} mapInstanceRef={mapInstanceRef} />}
+      {categoryRegionState && <Category categoryRegionState={categoryRegionState} setSelectedMarkerData={setSelectedMarkerData} mapInstanceRef={mapInstanceRef} initMarkers={initMarkers} />}
       {selectedMarkerData && <AptTranscationHistory selectedMarkerData={selectedMarkerData} setSelectedMarkerData={setSelectedMarkerData} />}
     </>)
 })

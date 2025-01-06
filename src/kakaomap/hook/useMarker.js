@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react";
+import { useCallback, useMemo } from "react";
 
 const { kakao } = window;
 
@@ -51,7 +51,7 @@ export const useMarkers = () => {
     return parts.slice(0, 2).join(' '); // "서울특별시 중구"
   };
 
-  const createMarkersFromData = useCallback((response, showInfoWindow, getMarkerData, mapInstanceRef, markersByRegionRef, clustererRef) => {
+  const createMarkersFromData = useCallback((response, showInfoWindow, getMarkerData, mapInstanceRef, markersByRegionRef, clustererRef, infowindowRef) => {
     const groupedData = response.data.reduce((acc, item) => {
       const regionKey = getRegionKey(item.sigungu);
       const coordKey = `${item.lat},${item.lng}`;
@@ -75,7 +75,7 @@ export const useMarkers = () => {
        
         const marker = createMarker(title, coords, icon, lat, lng, sigungu, bungi);
         markerEventListener(marker, () =>
-          items.length > 1 ? showInfoWindow(marker, items, mapInstanceRef.current, getMarkerData)
+          items.length > 1 ? showInfoWindow(infowindowRef, marker, items, mapInstanceRef.current, getMarkerData)
             :
             getMarkerData(marker, marker.getTitle()));
 
