@@ -116,7 +116,7 @@ const Category = memo(({ categoryRegionState, setSelectedMarkerData }) => {
   };
 
   return (
-    <CategoryContainer>
+    <CategoryContainer className="::::::::">
       <TabContainer>
         <TabMenu>
           {tabs.map((tab) => (

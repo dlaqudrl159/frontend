@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, memo, useCallback } from "react";
+import React, { useEffect, useRef, memo, useCallback, useState } from "react";
 import Loading from "./loading/Loading";
 import { useLoading } from "./hook/useLoading";
 import { useMarkers } from "./hook/useMarker";
@@ -6,25 +6,23 @@ import { useGeocording } from "./hook/useGeocording";
 import { useInfoWindow } from "./hook/useInfoWindow";
 import { useClusterer } from "./hook/useClusterer";
 import { mapApi } from "./api/mapApi";
-import { Box } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
-import { setMap } from "../redux/reducer/action";
+
+import { useMap } from "./hook/useMap";
+import Category from "../category/Category";
+import AptTranscationHistory from "../aptTranscationHistory/AptTranscationHistory";
+import { KakaoMapContainer } from "../styles/KakaoMap.Styles";
 
 const { kakao } = window;
 
-const mapLevel = 4;
-const mapcenterlat = 37.56435977921398
-const mapcenterlng = 126.97757768711558
-const KakaoMap = memo(({ setCategoryRegion, handleMarkerData }) => {
-  console.log('kakaoMap 랜더')
+const KakaoMap = memo(({ }) => {
   const mapRef = useRef(null);
   const mapInstanceRef = useRef(null);
-  const map2 = useSelector((state => state.map));
-  console.log(map2);
-  const dispatch = useDispatch();
   const oldAddressRef = useRef([]);
   const markersByRegionRef = useRef({});
+  const [categoryRegionState, setCategoryRegionState] = useState(null);
+  const [selectedMarkerData, setSelectedMarkerData] = useState(null);
 
+  const { initializeMap, addDragEventMap, addZoomChangeEventMap, dragEventMap, ZoomChangeEventMap } = useMap();
   const { IsLoadingState, IsLoadingShow, IsLoadingClose } = useLoading();
   const { createMarkersFromData } = useMarkers();
   const { getRegionCode } = useGeocording();
@@ -36,20 +34,20 @@ const KakaoMap = memo(({ setCategoryRegion, handleMarkerData }) => {
     try {
       IsLoadingShow();
       const response = await mapApi.getMarkerData(markerData, apartmentname);
-      handleMarkerData(response.data);
+      setSelectedMarkerData(response.data);
       IsLoadingClose();
     } catch (error) {
       console.error("거래내역 조회 실패 : " + error);
     }
-  }, [handleMarkerData, IsLoadingShow, IsLoadingClose])
+  }, [setSelectedMarkerData, IsLoadingShow, IsLoadingClose])
 
 
 
   const filterAddresses = (regionArr) => {
-    
+
     if (regionArr.region_1depth_name === "-" && regionArr.region_2depth_name === "-" && regionArr.region_3depth_name === '-') {
       return "";
-    }if (regionArr.region_1depth_name === '세종특별자치시')
+    } if (regionArr.region_1depth_name === '세종특별자치시')
       return regionArr.region_1depth_name;
     else {
       const address = regionArr.addressname;
@@ -96,14 +94,14 @@ const KakaoMap = memo(({ setCategoryRegion, handleMarkerData }) => {
     );
 
     regionResults.forEach(({ regionArr, isCenter }) => {
-     // console.log(regionArr);
+      // console.log(regionArr);
       const filterAddress = filterAddresses(regionArr);
       //console.log("filterAddress = " + filterAddress);
-      if(filterAddress !== " ") {
+      if (filterAddress !== " ") {
         addresses.push(filterAddress);
       }
       if (isCenter) {  // 중앙 좌표인 경우
-        setCategoryRegion(regionArr.region_3depth_name);
+        setCategoryRegionState(regionArr.region_3depth_name);
       }
     });
     //console.log("addresses = " + addresses);
@@ -143,22 +141,18 @@ const KakaoMap = memo(({ setCategoryRegion, handleMarkerData }) => {
     //추가할 데이터로 푸쉬한 새로운 지역 좌표들(Coords) 받아오기
     if (newData.length > 0) {
       const response = await getMarkers(newData);
-      if("ERROR" === response) {
+      if ("ERROR" === response) {
         return;
       }
       createMarkersFromData(response, showInfoWindow, getMarkerData, mapInstanceRef, markersByRegionRef, clustererRef)
     }
 
-  }, [clustererRef, createMarkersFromData, getMarkerData, getMarkers, getRegionCode, makearrcoords, setCategoryRegion, showInfoWindow])
+  }, [clustererRef, createMarkersFromData, getMarkerData, getMarkers, getRegionCode, makearrcoords, setCategoryRegionState, showInfoWindow])
 
   useEffect(() => {
     if (!mapInstanceRef.current && mapRef.current) {
-      const mapOption = {
-        center: new kakao.maps.LatLng(mapcenterlat, mapcenterlng),
-        level: mapLevel
-      };
-      const map = new kakao.maps.Map(mapRef.current, mapOption);
-      dispatch(setMap(map));
+
+      const map = initializeMap(mapRef.current);
       mapInstanceRef.current = map;
       clustererRef.current = createClusterer(map);
 
@@ -166,47 +160,22 @@ const KakaoMap = memo(({ setCategoryRegion, handleMarkerData }) => {
       initMarkers(mapInstanceRef.current).then(() => {
         IsLoadingClose();
       })
-      kakao.maps.event.addListener(map, 'dragend', function () {
-        if (map.getLevel() < 5) {
-          IsLoadingShow();
-          initMarkers(mapInstanceRef.current).then(() => {
-            IsLoadingClose();
-          })
-        }
-      });
-      let prevLevel = map.getLevel();
-      kakao.maps.event.addListener(map, 'zoom_changed', function () {
-        const currentLevel = map.getLevel();
-        if (prevLevel === 4 && currentLevel === 5) {
-          clustererRef.current.clear();
-          oldAddressRef.current = [];
-          markersByRegionRef.current = {};
-        } else if (prevLevel === 5 && currentLevel === 4) {
-          IsLoadingShow();
-          initMarkers(mapInstanceRef.current).then(() => {
-            IsLoadingClose();
-          });
-        }
-        prevLevel = currentLevel;
-      });
+      addDragEventMap(mapInstanceRef.current, () => { dragEventMap(mapInstanceRef.current, initMarkers, IsLoadingShow, IsLoadingClose) });
+      addZoomChangeEventMap(mapInstanceRef.current, () => { ZoomChangeEventMap(mapInstanceRef.current, clustererRef, oldAddressRef, markersByRegionRef, initMarkers, IsLoadingShow, IsLoadingClose) });
+
     }
 
-  }, [mapInstanceRef, clustererRef, createClusterer, initMarkers, IsLoadingShow, IsLoadingClose]);
+  }, [mapInstanceRef, clustererRef, createClusterer, initMarkers, IsLoadingShow, IsLoadingClose, initializeMap, ZoomChangeEventMap, addDragEventMap, addZoomChangeEventMap, dragEventMap]);
 
 
   return (
     <>
       {IsLoadingState && <Loading></Loading>}
-      <Box id="map" className="KakaoMap" ref={mapRef} style={styles.map}></Box>
+
+      <KakaoMapContainer className="KakaoMap" ref={mapRef}></KakaoMapContainer>
+      {categoryRegionState && <Category categoryRegionState={categoryRegionState} setSelectedMarkerData={setSelectedMarkerData} />}
+      {selectedMarkerData && <AptTranscationHistory selectedMarkerData={selectedMarkerData} setSelectedMarkerData={setSelectedMarkerData} />}
     </>)
 })
-
-const styles = {
-  map: {
-    width: "100%",
-    height: "100vh",
-    zIndex: 0 
-  },
-}
 
 export default KakaoMap;
