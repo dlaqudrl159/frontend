@@ -16,18 +16,13 @@ import ApartmentNameResult from "./ApartmentNameResult";
 import { mapApi } from "../kakaomap/api/mapApi";
 import { useMarkers } from "../kakaomap/hook/useMarker";
 
-const SearchPanel = memo(({ searchData, setSearchData, setInputRoadName, searchType, activeTab, setSelectedMarkerData, mapInstanceRef, initMarkers }) => {
+const SearchPanel = memo(({ searchData = {aptCoordsDto: []}, setSearchData, setInputRoadName, searchType, activeTab, setSelectedMarkerData, mapInstanceRef, initMarkers }) => {
 
   const { createCoords } = useMarkers();
-  const sSearchData = searchData.aptCoordsDto || [];
-  console.log(mapInstanceRef.current);
+  const sSearchData = searchData.aptCoordsDto;
   const { curPage, setCurPage, amount, totalPage, startNum, endNum, beginPageNum, finishPageNum } = usePagination(sSearchData);
 
   const currentItems = sSearchData.slice(startNum - 1, endNum);
-
-  const handleRoadName = useCallback((roadname) => {
-    setInputRoadName(roadname);
-  }, [setInputRoadName])
 
   const handleApartmentName = useCallback(async (item) => {
     const response = await mapApi.getMarkerData(item, item.apartmentname);
@@ -50,7 +45,7 @@ const SearchPanel = memo(({ searchData, setSearchData, setInputRoadName, searchT
       <SearchPanelContent>
         {currentItems.map((item, index) => (
           <SearchPanelResultContainer className="searchpanelresultcontainer" key={index}>
-            {(searchType === 'road' && activeTab === 'region') ? <RoadNameResult item={item} onClick={handleRoadName} ></RoadNameResult>
+            {(searchType === 'road' && activeTab === 'region') ? <RoadNameResult item={item} onClick={setInputRoadName} ></RoadNameResult>
               : activeTab === 'apartmentname' ? <ApartmentNameResult item={item} onClick={handleApartmentName}></ApartmentNameResult>
                 : []}
           </SearchPanelResultContainer>
