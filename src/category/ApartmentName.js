@@ -15,7 +15,7 @@ const ApartmentName = memo(({ apartmentname, setApartMentNmae, handleCategoryCli
                     setApartMentNmae(e.target.value);
                 }}
             />
-            <button style={styles.button} onClick={handleCategoryClick}>검색</button>
+            <button style={styles.button} onClick={() => handleCategoryClick()}>검색</button>
         </TabDropDown>
     )
 

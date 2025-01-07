@@ -8,8 +8,16 @@ const Road = memo(({ selectedSido, setSelectedSido, selectedSigungu, setSelected
   return (
     <TabDropDown>
       <div style={styles.selectContainer}>
-        <Sido selectedSido={selectedSido} setSelectedSido={setSelectedSido} setSelectedSigungu={setSelectedSigungu} setSelectedDong={setSelectedDong}></Sido>
-        <Sigungu selectedSido={selectedSido} selectedSigungu={selectedSigungu} setSelectedSigungu={setSelectedSigungu} setSelectedDong={setSelectedDong}></Sigungu>
+        <Sido
+          selectedSido={selectedSido}
+          setSelectedSido={setSelectedSido}
+          setSelectedSigungu={setSelectedSigungu}
+          setSelectedDong={setSelectedDong} />
+        <Sigungu
+          selectedSido={selectedSido}
+          selectedSigungu={selectedSigungu}
+          setSelectedSigungu={setSelectedSigungu}
+          setSelectedDong={setSelectedDong} />
       </div>
       <input
         value={inputRoadName}

@@ -9,11 +9,23 @@ const Jibun = memo(({ selectedSido, setSelectedSido, selectedSigungu, setSelecte
   return (
     <TabDropDown>
       <div style={styles.selectContainer}>
-        <Sido selectedSido={selectedSido} setSelectedSido={setSelectedSido} setSelectedSigungu={setSelectedSigungu} setSelectedDong={setSelectedDong}></Sido>
-        <Sigungu selectedSido={selectedSido} selectedSigungu={selectedSigungu} setSelectedSigungu={setSelectedSigungu} setSelectedDong={setSelectedDong}></Sigungu>
+        <Sido
+          selectedSido={selectedSido}
+          setSelectedSido={setSelectedSido}
+          setSelectedSigungu={setSelectedSigungu}
+          setSelectedDong={setSelectedDong} />
+        <Sigungu
+          selectedSido={selectedSido}
+          selectedSigungu={selectedSigungu}
+          setSelectedSigungu={setSelectedSigungu}
+          setSelectedDong={setSelectedDong} />
       </div>
       <div style={styles.dongList}>
-        <Dong selectDong={selectDong} setSelectedDong={setSelectedDong} selectedSido={selectedSido} selectedSigungu={selectedSigungu}></Dong>
+        <Dong
+          selectDong={selectDong}
+          setSelectedDong={setSelectedDong}
+          selectedSido={selectedSido}
+          selectedSigungu={selectedSigungu} />
       </div>
     </TabDropDown>
   )

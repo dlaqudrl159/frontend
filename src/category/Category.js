@@ -27,10 +27,10 @@ const Category = memo((props) => {
 
   const [searchData, setSearchData] = useState(null);
 
-  const handleTabClick = (tabId) => {
+  const handleTabClick = useCallback((tabId) => {
     setSearchData(null);
     setActiveTab(activeTab === tabId ? null : tabId);
-  };
+  },[setSearchData, setActiveTab]);
 
   const handleSelectState = useCallback(() => {
     setSearchType(searchType === 'road' ? 'jibun' : 'road');
@@ -44,6 +44,7 @@ const Category = memo((props) => {
 
   const getCategoryClickData = useCallback(async (searchType, korSido, sigungu, dongORroadName, apartmentname) => {
     const response = await axios.post('/api/getCategoryClickData', {
+
       searchType: searchType,
       korSido: korSido,
       sigungu: sigungu,
@@ -51,7 +52,6 @@ const Category = memo((props) => {
       apartmentname: apartmentname
 
     }, {}).then(response => {
-      console.log(response);
       setSearchData(response.data);
     }).catch(error => {
       console.error(error);
@@ -84,7 +84,6 @@ const Category = memo((props) => {
       roadName: inputRoadName
 
     }, {}).then(response => {
-      console.log(response);
       setSearchData(response.data);
     }).catch(error => {
       console.error(error);
@@ -95,20 +94,30 @@ const Category = memo((props) => {
     switch (activeTab) {
       case "choice":
         return (
-          <Choice searchType={searchType} handleSelectState={handleSelectState} />
+          <Choice
+            searchType={searchType}
+            handleSelectState={handleSelectState} />
         );
       case "region":
         return (
-          <Region searchType={searchType}
-            selectedSido={selectedSido} setSelectedSido={setSelectedSido}
-            setSelectedSigungu={setSelectedSigungu} selectedSigungu={selectedSigungu}
-            selectDong={selectDong} setSelectedDong={setSelectedDong}
-            inputRoadName={inputRoadName} setInputRoadName={setInputRoadName}
+          <Region
+            searchType={searchType}
+            selectedSido={selectedSido}
+            setSelectedSido={setSelectedSido}
+            setSelectedSigungu={setSelectedSigungu}
+            selectedSigungu={selectedSigungu}
+            selectDong={selectDong}
+            setSelectedDong={setSelectedDong}
+            inputRoadName={inputRoadName}
+            setInputRoadName={setInputRoadName}
             getRoadNames={getRoadNames} />
         )
       case "apartmentname":
         return (
-          <ApartmentName apartmentname={apartmentname} setApartMentNmae={setApartMentNmae} handleCategoryClick={handleCategoryClick} />
+          <ApartmentName
+            apartmentname={apartmentname}
+            setApartMentNmae={setApartMentNmae}
+            handleCategoryClick={handleCategoryClick} />
         );
       default:
         return null;
@@ -116,7 +125,7 @@ const Category = memo((props) => {
   };
 
   return (
-    <CategoryContainer className="::::::::">
+    <CategoryContainer className="CategoryContainer">
       <TabContainer>
         <TabMenu>
           {tabs.map((tab) => (
@@ -133,8 +142,16 @@ const Category = memo((props) => {
           {renderTabContent()}
         </TabContent>
       </TabContainer>
-
-      {searchData && <SearchPanel searchData={searchData} setSearchData={setSearchData} setInputRoadName={setInputRoadName} searchType={searchType} activeTab={activeTab} setSelectedMarkerData={props.setSelectedMarkerData} mapInstanceRef={props.mapInstanceRef} initMarkers={props.initMarkers}></SearchPanel>}
+      {searchData &&
+        <SearchPanel
+          searchData={searchData}
+          setSearchData={setSearchData}
+          setInputRoadName={setInputRoadName}
+          searchType={searchType}
+          activeTab={activeTab}
+          setSelectedMarkerData={props.setSelectedMarkerData}
+          mapInstanceRef={props.mapInstanceRef}
+          initMarkers={props.initMarkers} />}
     </CategoryContainer>
   );
 });

@@ -173,11 +173,23 @@ const KakaoMap = memo(() => {
 
   return (
     <>
-      {IsLoadingState && <Loading></Loading>}
-
-      <KakaoMapContainer className="KakaoMap" ref={mapRef}></KakaoMapContainer>
-      {categoryRegionState && <Category categoryRegionState={categoryRegionState} setSelectedMarkerData={setSelectedMarkerData} mapInstanceRef={mapInstanceRef} initMarkers={initMarkers} />}
-      {selectedMarkerData && <AptTranscationHistory selectedMarkerData={selectedMarkerData} setSelectedMarkerData={setSelectedMarkerData} />}
+      {IsLoadingState &&
+        <Loading />}
+      <KakaoMapContainer
+        className="KakaoMap"
+        ref={mapRef} />
+      {categoryRegionState &&
+        <Category
+          categoryRegionState={categoryRegionState}
+          setSelectedMarkerData={setSelectedMarkerData}
+          mapInstanceRef={mapInstanceRef}
+          initMarkers={initMarkers}
+        />}
+      {selectedMarkerData &&
+        <AptTranscationHistory
+          selectedMarkerData={selectedMarkerData}
+          setSelectedMarkerData={setSelectedMarkerData}
+        />}
     </>)
 })
 

@@ -11,14 +11,22 @@ const Region = memo(({ searchType,
     const renderRegion = () => {
 
         return searchType === 'jibun' ?
-            <Jibun selectedSido={selectedSido} setSelectedSido={setSelectedSido}
-                selectedSigungu={selectedSigungu} setSelectedSigungu={setSelectedSigungu}
-                selectDong={selectDong} setSelectedDong={setSelectedDong} />
+            <Jibun
+                selectedSido={selectedSido}
+                setSelectedSido={setSelectedSido}
+                selectedSigungu={selectedSigungu}
+                setSelectedSigungu={setSelectedSigungu}
+                selectDong={selectDong}
+                setSelectedDong={setSelectedDong} />
             :
-            <Road selectedSido={selectedSido} setSelectedSido={setSelectedSido}
-                selectedSigungu={selectedSigungu} setSelectedSigungu={setSelectedSigungu}
+            <Road
+                selectedSido={selectedSido}
+                setSelectedSido={setSelectedSido}
+                selectedSigungu={selectedSigungu}
+                setSelectedSigungu={setSelectedSigungu}
                 setSelectedDong={setSelectedDong}
-                inputRoadName={inputRoadName} setInputRoadName={setInputRoadName}
+                inputRoadName={inputRoadName}
+                setInputRoadName={setInputRoadName}
                 getRoadNames={getRoadNames} />;
 
     }
