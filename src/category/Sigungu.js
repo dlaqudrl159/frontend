@@ -1,36 +1,33 @@
 import React, { memo, useMemo } from "react";
 import AddressSigungu from "./categoryJson/AddressSigungu.json";
 import AddressDong from "./categoryJson/AddressDong.json";
-const Sigungu = memo(({ selectedSido, selectedSigungu, setSelectedSigungu, setSelectedDong}) => {
+import { RegionFormControl, RegionMenuItem, RegionSelect, SigunguContainer, SigunguFormControl, SigunguMenuItem, SigunguSelect } from "../styles/Category.Styles";
+
+const Sigungu = memo(({ selectedSido, selectedSigungu, setSelectedSigungu, setSelectedDong }) => {
 
   const sigunguList = useMemo(() => {
     return selectedSido ? AddressSigungu[selectedSido] || [] : [];
   }, [selectedSido]);
 
   return (
-    <select
-      value={selectedSigungu}
-      onChange={(e) => 
-        {setSelectedSigungu(e.target.value)
-          var Dong = AddressDong[selectedSido][e.target.value][0];
-          setSelectedDong(Dong);
-        }}
-      style={styles.select}
-    >
-      {sigunguList.map(sigungu => (
-        <option key={sigungu} value={sigungu}>{sigungu}</option>
-      ))}
-    </select>
+    <SigunguContainer>
+      <RegionFormControl size="small">
+        <RegionSelect
+          value={selectedSigungu}
+          onChange={(e) => {
+            setSelectedSigungu(e.target.value)
+            var Dong = AddressDong[selectedSido][e.target.value][0];
+            setSelectedDong(Dong);
+          }}
+        >
+          {sigunguList.map(sigungu => (
+            <RegionMenuItem key={sigungu} value={sigungu}>{sigungu}</RegionMenuItem>
+          ))}
+        </RegionSelect>
+      </RegionFormControl>
+    </SigunguContainer>
   )
 
 })
 
-const styles = {
-  select: {
-    flex: 1,
-    padding: '8px',
-    borderRadius: '4px',
-    border: '1px solid #ccc',
-  }
-}
 export default Sigungu;

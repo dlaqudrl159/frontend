@@ -1,5 +1,5 @@
 import { styled } from '@mui/material/styles';
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, FormControl, MenuItem, Select, Typography } from "@mui/material";
 
 export const CategoryContainer = styled(Box)(({ theme }) => ({
     position: 'absolute',
@@ -65,7 +65,6 @@ export const TabDropDownBox = styled(Box)(() => ({
     width: "100%",
     height: "100%",
     backgroundColor: "white",
-    padding: "5px",
     pointerEvents: 'auto' //마우스 이벤트 작동
 }))
 
@@ -143,8 +142,43 @@ export const ChoiceContainer = styled(Box)(() => ({
 export const ChoiceButton = styled(Button)(() => ({
     width: '100%',
     border: '1px solid black',
-    margin:'5px'
+    margin: '5px'
 }))
 
 export const ChoiceButtonContent = styled(Typography)(() => ({
+}))
+
+export const JibunContainer = styled(Box)(() => ({
+    display: 'flex',
+    flexWrap: 'wrap',
+    gap: '5px',
+    width: '100%',
+    justifyContent: 'center',
+}))
+
+export const SidoContainer = styled(Box)(() => ({
+    width: '48%'
+}))
+
+export const SigunguContainer = styled(Box)(() => ({
+    width: '48%'
+}))
+
+export const DongContainer = styled(Box)(() => ({
+    width: '98%'
+}))
+
+export const RegionFormControl = styled(FormControl)(() => ({
+    width: '100%',
+    height: '35px',
+    marginTop: '3px',
+    marginBottom: "3px"
+}))
+
+export const RegionSelect = styled(Select)(() => ({
+    height: "35px"
+}))
+
+export const RegionMenuItem = styled(MenuItem)(() => ({
+    height: "30px",
 }))

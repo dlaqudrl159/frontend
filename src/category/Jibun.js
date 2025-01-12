@@ -3,12 +3,13 @@ import Sido from "./Sido";
 import Sigungu from "./Sigungu";
 import Dong from "./Dong";
 import TabDropDown from "./tab/TabDropDown";
+import { JibunContainer } from "../styles/Category.Styles";
 
 const Jibun = memo(({ selectedSido, setSelectedSido, selectedSigungu, setSelectedSigungu, selectDong, setSelectedDong }) => {
 
   return (
     <TabDropDown>
-      <div style={styles.selectContainer}>
+      <JibunContainer className="jibunContainer">
         <Sido
           selectedSido={selectedSido}
           setSelectedSido={setSelectedSido}
@@ -19,31 +20,15 @@ const Jibun = memo(({ selectedSido, setSelectedSido, selectedSigungu, setSelecte
           selectedSigungu={selectedSigungu}
           setSelectedSigungu={setSelectedSigungu}
           setSelectedDong={setSelectedDong} />
-      </div>
-      <div style={styles.dongList}>
         <Dong
           selectDong={selectDong}
           setSelectedDong={setSelectedDong}
           selectedSido={selectedSido}
           selectedSigungu={selectedSigungu} />
-      </div>
+      </JibunContainer>
     </TabDropDown>
   )
 
 })
-
-const styles = {
-  selectContainer: {
-    display: 'flex',
-    gap: '10px',
-    marginBottom: '15px',
-  },
-  dongList: {
-    maxHeight: '200px',
-    overflow: 'auto',
-    border: '1px solid #dee2e6',
-    borderRadius: '4px',
-  },
-}
 
 export default Jibun;
