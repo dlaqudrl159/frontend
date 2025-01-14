@@ -14,7 +14,6 @@ const initSiguntu = '강남구';
 const initDong = '개포동';
 
 const Category = memo((props) => {
-
   const [searchType, setSearchType] = useState('jibun'); // 'jibun' 또는 'road'
 
   const { activeTab, setActiveTab, tabs } = useTab(searchType);
@@ -30,7 +29,7 @@ const Category = memo((props) => {
   const handleTabClick = useCallback((tabId) => {
     setSearchData(null);
     setActiveTab(activeTab === tabId ? null : tabId);
-  },[setSearchData, setActiveTab]);
+  },[activeTab, setSearchData, setActiveTab]);
 
   const handleSelectState = useCallback(() => {
     setSearchType(searchType === 'road' ? 'jibun' : 'road');

@@ -25,7 +25,7 @@ const styles = {
     apartmentSearch: {
         width: '100%',
         height: '30%',
-        fontSize: '30px'
+        fontSize: '30px',
     },
     apartmentinput: {
         width: '80%',

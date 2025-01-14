@@ -1,5 +1,5 @@
 import { styled } from '@mui/material/styles';
-import { Box, Button, FormControl, MenuItem, Select, Typography } from "@mui/material";
+import { Box, Button, FormControl, Input, MenuItem, Select, Typography } from "@mui/material";
 
 export const CategoryContainer = styled(Box)(({ theme }) => ({
     position: 'absolute',
@@ -156,6 +156,14 @@ export const JibunContainer = styled(Box)(() => ({
     justifyContent: 'center',
 }))
 
+export const RoadContainer = styled(Box)(() => ({
+    display: 'flex',
+    flexWrap: 'wrap',
+    gap: '5px',
+    width: '100%',
+    justifyContent: 'center',
+}))
+
 export const SidoContainer = styled(Box)(() => ({
     width: '48%'
 }))
@@ -165,7 +173,7 @@ export const SigunguContainer = styled(Box)(() => ({
 }))
 
 export const DongContainer = styled(Box)(() => ({
-    width: '98%'
+    width: '97%'
 }))
 
 export const RegionFormControl = styled(FormControl)(() => ({
@@ -181,4 +189,22 @@ export const RegionSelect = styled(Select)(() => ({
 
 export const RegionMenuItem = styled(MenuItem)(() => ({
     height: "30px",
+}))
+
+export const RoadNameInsertInput = styled(Input)(() => ({
+    width: '80%',
+    height: '35px',
+    border: '1px solid #ccc',
+    marginTop: '3px',
+    marginBottom: "3px",
+}))
+
+export const RoadNameClickButton = styled(Button)(() => ({
+    width: "16%",
+    height: '35px',
+    border: '1px solid #ccc',
+    marginTop: '3px',
+    marginBottom: "3px",
+    color: 'black'
+    
 }))

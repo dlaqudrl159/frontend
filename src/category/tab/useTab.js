@@ -1,9 +1,9 @@
 import { useState, useMemo } from "react";
 
 export const useTab = (searchType) => {
-
+  
   const [activeTab, setActiveTab] = useState(null);
-
+  
   const tabs = useMemo(() => {
     if (searchType === 'jibun') {
       return [
