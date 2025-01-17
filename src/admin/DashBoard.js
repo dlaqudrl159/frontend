@@ -6,7 +6,6 @@ import AllCoordsData from './data/AllCoordsData';
 import AptData from "./data/AptData";
 import CoordsData from "./data/CoordsData";
 
-
 const DashBoard = memo(() => {
 
     const navigate = useNavigate();
@@ -67,6 +66,10 @@ const DashBoard = memo(() => {
                     <h3>특정 지역 좌표 입력</h3>
                     <p><CoordsData /></p>
                 </div>
+                {/* <div style={styles.content}>
+                    <h3>좌표 정리</h3>
+                    <p><CleanCoords /></p>
+                </div> */}
             </div>) : (<div></div>)}
         </>
     )

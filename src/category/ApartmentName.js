@@ -1,10 +1,11 @@
 import React, { memo } from 'react';
+import TabDropDown from "./tab/TabDropDown";
 
 const ApartmentName = memo(({ apartmentname, setApartMentNmae, handleCategoryClick }) => {
 
     return (
-        <div style={{ ...styles.dropdown, ...styles.apartmentDropdown }}>
-            <h3>단지명 검색</h3>
+        <TabDropDown>
+            <h3 style={styles.apartmentSearch}>단지명 검색</h3>
             <input
                 value={apartmentname}
                 type="text"
@@ -14,27 +15,17 @@ const ApartmentName = memo(({ apartmentname, setApartMentNmae, handleCategoryCli
                     setApartMentNmae(e.target.value);
                 }}
             />
-            <button style={styles.button} onClick={handleCategoryClick}>검색</button>
-        </div>
+            <button style={styles.button} onClick={() => handleCategoryClick()}>검색</button>
+        </TabDropDown>
     )
 
 })
 
 const styles = {
-
-    dropdown: {
-        border: "1px solid black",
-        width: "500px",
-        position: "absolute",
-        zIndex: 3,
-        backgroundColor: "white",
-        top: "12%",  // tabContainer의 top(7%) + height(5%)
-        left: "20px",
-        padding: "10px",
-    },
-    apartmentDropdown: {
-        height: "150px",
-        backgroundColor: "#ffffff",
+    apartmentSearch: {
+        width: '100%',
+        height: '30%',
+        fontSize: '30px',
     },
     apartmentinput: {
         width: '80%',

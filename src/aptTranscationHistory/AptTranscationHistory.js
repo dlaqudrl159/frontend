@@ -4,7 +4,7 @@ const AptTranscationHistory = memo(({ selectedMarkerData, setSelectedMarkerData 
     const modalRef = useRef();
     
     const [selectedRoadIndex, setSelectedRoadIndex] = useState(0);  // 기본값 0으로 첫 번째 데이터 선택
-
+    console.log(selectedMarkerData)
     const [selectedYear, setSelectedYear] = useState(
         selectedMarkerData[0].years[0].toString()
     );
@@ -61,7 +61,7 @@ const AptTranscationHistory = memo(({ selectedMarkerData, setSelectedMarkerData 
 
 
     return (
-        <div style={styles.overlay}>
+        <div className='~~~~~~~~~~~~' style={styles.overlay}>
             <div ref={modalRef} style={styles.modal}>
                 <div style={styles.header}>
                     <h2>[아파트] {currentApt.aptCoordsDto.apartmentname}</h2>

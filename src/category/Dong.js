@@ -1,5 +1,6 @@
 import React, { memo, useMemo } from "react";
 import AddressDong from "./categoryJson/AddressDong.json";
+import { DongContainer, DongFormControl, DongMenuItem, DongSelect, RegionFormControl, RegionMenuItem, RegionSelect } from "../styles/Category.Styles";
 
 const Dong = memo(({ selectDong, setSelectedDong, selectedSido, selectedSigungu }) => {
 
@@ -10,26 +11,19 @@ const Dong = memo(({ selectDong, setSelectedDong, selectedSido, selectedSigungu 
     }, [selectedSido, selectedSigungu])
 
     return (
-        <select
-            value={selectDong}
-            onChange={(e) => setSelectedDong(e.target.value)}
-            style={styles.select}
-        >
-            {dongList.map(dong => (
-                <option key={dong} value={dong}>{dong}</option>
-            ))}
-        </select>
+        <DongContainer>
+            <RegionFormControl size="small">
+                <RegionSelect
+                    value={selectDong}
+                    onChange={(e) => setSelectedDong(e.target.value)}
+                >
+                    {dongList.map(dong => (
+                        <RegionMenuItem key={dong} value={dong}>{dong}</RegionMenuItem>
+                    ))}
+                </RegionSelect>
+            </RegionFormControl>
+        </DongContainer>
     )
 })
-
-const styles = {
-    select: {
-        width: "100%",
-        flex: 1,
-        padding: '8px',
-        borderRadius: '4px',
-        border: '1px solid #ccc',
-    },
-}
 
 export default Dong;

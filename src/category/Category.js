@@ -1,20 +1,22 @@
-import React, { useState, memo, useMemo, useCallback } from "react";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import React, { useState, memo, useCallback } from "react";
 import Choice from "./Choice";
 import Region from "./Region";
 import ApartmentName from "./ApartmentName";
 import axios from "axios";
+import Tab from "./tab/Tab";
+import SearchPanel from "./SearchPanel";
+import { useTab } from "./tab/useTab";
+import { CategoryContainer, TabContainer, TabMenu, TabContent } from "../styles/Category.Styles";
+
 
 const initSido = '서울특별시';
 const initSiguntu = '강남구';
 const initDong = '개포동';
 
-const Category = memo(({ categoryRegionState }) => {
-
-  const [activeTab, setActiveTab] = useState(null);
-
+const Category = memo((props) => {
   const [searchType, setSearchType] = useState('jibun'); // 'jibun' 또는 'road'
+
+  const { activeTab, setActiveTab, tabs } = useTab(searchType);
 
   const [selectedSido, setSelectedSido] = useState(initSido);
   const [selectedSigungu, setSelectedSigungu] = useState(initSiguntu);
@@ -22,25 +24,12 @@ const Category = memo(({ categoryRegionState }) => {
   const [inputRoadName, setInputRoadName] = useState('');
   const [apartmentname, setApartMentNmae] = useState('');
 
-  const tabs = useMemo(() => {
-    if (searchType === 'jibun') {
-      return [
-        { id: "choice", label: "주소 선택" },
-        { id: "region", label: categoryRegionState },
-        { id: "apartmentname", label: "단지명" },
-      ];
-    } else {
-      return [
-        { id: "choice", label: "주소 선택" },
-        { id: "region", label: "도로명" },
-        { id: "apartmentname", label: "단지명" },
-      ];
-    }
-  }, [searchType, categoryRegionState]);
+  const [searchData, setSearchData] = useState(null);
 
-  const handleTabClick = (tabId) => {
+  const handleTabClick = useCallback((tabId) => {
+    setSearchData(null);
     setActiveTab(activeTab === tabId ? null : tabId);
-  };
+  },[activeTab, setSearchData, setActiveTab]);
 
   const handleSelectState = useCallback(() => {
     setSearchType(searchType === 'road' ? 'jibun' : 'road');
@@ -52,50 +41,51 @@ const Category = memo(({ categoryRegionState }) => {
   }, [searchType])
 
 
-  const getCategoryClickData = useCallback(async (ex1, ex2, ex3, ex4) => {
-    const response = await axios.get('/api/getCategoryClickData', {
-      params: {
-        eex1: ex1,
-        eex2: ex2,
-        eex3: ex3,
-        eex4: ex4
-      }
-    }).then(response => {
-      console.log(response);
-    }).catch(error => {
+  const getCategoryClickData = useCallback(async (searchType, korSido, sigungu, dongORroadName, apartmentname) => {
+    const response = await axios.post('/api/getCategoryClickData', {
 
+      searchType: searchType,
+      korSido: korSido,
+      sigungu: sigungu,
+      dongORroadName: dongORroadName,
+      apartmentname: apartmentname
+
+    }, {}).then(response => {
+      setSearchData(response.data);
+    }).catch(error => {
+      console.error(error);
     })
 
   }, [])
 
   const handleCategoryClick = useCallback(() => {
     if (searchType === 'jibun') {
-      getCategoryClickData(selectedSido, selectedSigungu, selectDong, apartmentname)
+      getCategoryClickData(searchType, selectedSido, selectedSigungu, selectDong, apartmentname)
     } else {
       if (inputRoadName === '') {
         alert('도로명을 입력해주십시요');
         return;
       }
-      getCategoryClickData(selectedSido, selectedSigungu, inputRoadName, apartmentname)
+      getCategoryClickData(searchType, selectedSido, selectedSigungu, inputRoadName, apartmentname)
     }
   }, [searchType, selectedSido, selectedSigungu, selectDong, inputRoadName, apartmentname, getCategoryClickData])
 
-  const getRoadNameList = useCallback(async () => {
+  const getRoadNames = useCallback(async () => {
     console.log(inputRoadName)
     if (inputRoadName === '') {
       alert('도로명을 입력해주세요');
       return
     }
-    const response = await axios.get('/api/getRoadNameList', {
-      params: {
-        ex1: selectedSido,
-        ex2: selectedSigungu,
-        ex3: inputRoadName
-      }
-    }).then(response => {
-      console.log(response);
-    }).catch(error => {
+    const response = await axios.post('/api/getRoadNames', {
 
+      korSido: selectedSido,
+      sigungu: selectedSigungu,
+      roadName: inputRoadName
+
+    }, {}).then(response => {
+      setSearchData(response.data);
+    }).catch(error => {
+      console.error(error);
     })
   }, [inputRoadName, selectedSido, selectedSigungu])
 
@@ -103,20 +93,30 @@ const Category = memo(({ categoryRegionState }) => {
     switch (activeTab) {
       case "choice":
         return (
-          <Choice searchType={searchType} handleSelectState={handleSelectState} />
+          <Choice
+            searchType={searchType}
+            handleSelectState={handleSelectState} />
         );
       case "region":
         return (
-          <Region searchType={searchType}
-            selectedSido={selectedSido} setSelectedSido={setSelectedSido}
-            setSelectedSigungu={setSelectedSigungu} selectedSigungu={selectedSigungu}
-            selectDong={selectDong} setSelectedDong={setSelectedDong}
-            inputRoadName={inputRoadName} setInputRoadName={setInputRoadName}
-            getRoadNameList={getRoadNameList} />
+          <Region
+            searchType={searchType}
+            selectedSido={selectedSido}
+            setSelectedSido={setSelectedSido}
+            setSelectedSigungu={setSelectedSigungu}
+            selectedSigungu={selectedSigungu}
+            selectDong={selectDong}
+            setSelectedDong={setSelectedDong}
+            inputRoadName={inputRoadName}
+            setInputRoadName={setInputRoadName}
+            getRoadNames={getRoadNames} />
         )
       case "apartmentname":
         return (
-          <ApartmentName apartmentname={apartmentname} setApartMentNmae={setApartMentNmae} handleCategoryClick={handleCategoryClick} />
+          <ApartmentName
+            apartmentname={apartmentname}
+            setApartMentNmae={setApartMentNmae}
+            handleCategoryClick={handleCategoryClick} />
         );
       default:
         return null;
@@ -124,65 +124,35 @@ const Category = memo(({ categoryRegionState }) => {
   };
 
   return (
-    <div>
-      
-      <div style={styles.tabContainer}>
-        {tabs.map((tab) => (
-          <div
-            key={tab.id}
-            style={{
-              ...styles.tab,
-              ...(activeTab === tab.id ? styles.activeTab : {})
-            }}
-            onClick={() => handleTabClick(tab.id)}
-          >
-            {tab.label}
-          </div>
-        ))}
-        <div style={styles.searchIcon}>
-          <FontAwesomeIcon icon={faSearch} size="lg" />
-        </div>
-      </div>
-      {renderTabContent()}
-    </div>
+    <CategoryContainer className="CategoryContainer">
+      <TabContainer>
+        <TabMenu>
+          {tabs.map((tab) => (
+            <Tab
+              key={tab.id}
+              id={tab.id}
+              label={(searchType === 'jibun' && tab.id === 'region') ? props.categoryRegionState : tab.label}
+              isActive={activeTab === tab.id}
+              onClick={handleTabClick}
+            />
+          ))}
+        </TabMenu>
+        <TabContent>
+          {renderTabContent()}
+        </TabContent>
+      </TabContainer>
+      {searchData &&
+        <SearchPanel
+          searchData={searchData}
+          setSearchData={setSearchData}
+          setInputRoadName={setInputRoadName}
+          searchType={searchType}
+          activeTab={activeTab}
+          setSelectedMarkerData={props.setSelectedMarkerData}
+          mapInstanceRef={props.mapInstanceRef}
+          initMarkers={props.initMarkers} />}
+    </CategoryContainer>
   );
 });
-
-const styles = {
-
-  tabContainer: {
-    width: "500px",
-    height: "5%",
-    backgroundColor: "white",
-    position: "absolute",
-    zIndex: 3,
-    top: "7%",
-    left: "20px",
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  tab: {
-    border: "1px solid black",
-    width: "30%",
-    height: "80%",
-    backgroundColor: "#f3f5ff",
-    textAlign: "center",
-    lineHeight: '35px',
-    color: "black",
-    cursor: "pointer",
-    marginLeft: "1%"
-  },
-  activeTab: {
-    backgroundColor: "lightgray",
-    fontWeight: "bold",
-  },
-  searchIcon: {
-    height: "80%",
-    textAlign: "center",
-    lineHeight: '35px',
-    marginRight: "5px",
-  },
-};
 
 export default Category;
