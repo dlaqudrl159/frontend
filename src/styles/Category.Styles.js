@@ -199,12 +199,18 @@ export const RoadNameInsertInput = styled(Input)(() => ({
     marginBottom: "3px",
 }))
 
-export const RoadNameClickButton = styled(Button)(() => ({
+export const RoadNameClickButton = styled(Button)(({ theme }) => ({
     width: "16%",
+    minWidth:'0px',
     height: '35px',
     border: '1px solid #ccc',
     marginTop: '3px',
     marginBottom: "3px",
-    color: 'black'
-    
+    color: 'black',
+    [theme.breakpoints.up('xs')]: {
+        fontSize: '12px',
+    },
+    [theme.breakpoints.up('sm')]: {
+        fontSize: '16px',
+    },
 }))
