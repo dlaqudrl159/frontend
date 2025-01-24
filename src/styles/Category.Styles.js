@@ -92,13 +92,13 @@ export const SearchPanelHeader = styled(Box)(() => ({
     display: 'flex',
     justifyContent: "space-between",
     alignItems: 'center',
+    borderBottom : '1px solid black'
 }))
 
 export const SearchPanelHeaderTitle = styled(Typography)(() => ({
     fontWeight: 500,
     color: '#333',
     padding: '0 10px',
-
 }))
 
 export const SearchPanelHeaderCloseButton = styled(Button)(() => ({
@@ -112,7 +112,7 @@ export const SearchPanelHeaderCloseButton = styled(Button)(() => ({
 export const SearchPanelContent = styled(Box)(() => ({
     height: '75%',
     overflowY: 'auto',
-    fontSize: '18px'
+    fontSize: '18px',
 }))
 
 export const SearchPanelResultContainer = styled(Box)(() => ({
@@ -201,7 +201,46 @@ export const RoadNameInsertInput = styled(Input)(() => ({
 
 export const RoadNameClickButton = styled(Button)(({ theme }) => ({
     width: "16%",
-    minWidth:'0px',
+    minWidth: '0px',
+    height: '35px',
+    border: '1px solid #ccc',
+    marginTop: '3px',
+    marginBottom: "3px",
+    color: 'black',
+    [theme.breakpoints.up('xs')]: {
+        fontSize: '12px',
+    },
+    [theme.breakpoints.up('sm')]: {
+        fontSize: '16px',
+    },
+}))
+
+export const ApartmentNameContainer = styled(Box)(() => ({
+    display : 'flex',
+    flexWrap: 'wrap',
+    gap: '5px',
+    width: '100%',
+    justifyContent: 'center',
+}))
+
+export const ApartmentNameHeaderTitle = styled(Box)(() => ({
+    width: '100%',
+    height: '30%',
+    fontSize: '30px',
+    margin: '0px'
+}))
+
+export const ApartmentNameInput = styled(Input)(() => ({
+    width: '80%',
+    height: '35px',
+    border: '1px solid #ccc',
+    marginTop: '3px',
+    marginBottom: "3px",
+}))
+
+export const ApartmentNameButton = styled(Button)(({ theme }) => ({
+    width: "16%",
+    minWidth: '0px',
     height: '35px',
     border: '1px solid #ccc',
     marginTop: '3px',
