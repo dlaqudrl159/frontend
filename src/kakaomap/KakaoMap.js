@@ -176,7 +176,7 @@ const KakaoMap = memo(() => {
       {IsLoadingState &&
         <Loading />}
       <KakaoMapContainer
-        className="KakaoMap"
+        className="kakaoMapContainer"
         ref={mapRef} />
       {categoryRegionState &&
         <Category
