@@ -1,4 +1,5 @@
 import React, { memo } from "react";
+import { PaginationContainer, PaginagionButton } from "../styles/Pagination.Styles";
 
 const Pagination = memo(({ curPage, setCurPage, amount, totalPage, startNum, endNum, beginPageNum, finishPageNum }) => {
 
@@ -17,73 +18,34 @@ const Pagination = memo(({ curPage, setCurPage, amount, totalPage, startNum, end
     }
 
     return (
-        <div style={styles.pagination}>
+        <PaginationContainer className="paginationcontainer">
 
-            <button
+            <PaginagionButton
                 onClick={handlePrev}
-                style={{
-                    ...styles.pageButton,
-                    ...(curPage === 1 ? styles.disabledButton : {})
-                }}
+                isdisabled={curPage === 1}
             >
                 이전
-            </button>
+            </PaginagionButton>
 
 
             {pageNumbers.map(num => (
-                <button
+                <PaginagionButton
                     key={num}
                     onClick={() => setCurPage(num)}
-                    style={{
-                        ...styles.pageButton,
-                        ...(curPage === num ? styles.activePageButton : {})
-                    }}
+                    isactive={curPage === num}
                 >
                     {num}
-                </button>
+                </PaginagionButton>
             ))}
 
-            <button
+            <PaginagionButton
                 onClick={handleNext}
-                style={{
-                    ...styles.pageButton,
-                    ...(curPage === totalPage ? styles.disabledButton : {})
-                }}
+                isdisabled={curPage === totalPage}
             >
                 다음
-            </button>
-        </div>
+            </PaginagionButton>
+        </PaginationContainer>
     );
 })
-
-const styles = {
-    pagination: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: '15px 0',
-        gap: '5px'
-    },
-    pageButton: {
-        padding: '5px 10px',
-        borderWidth: '1px',
-        borderStyle: 'solid',
-        borderColor: '#ddd',
-        borderRadius: '4px',
-        backgroundColor: 'white',
-        cursor: 'pointer'
-    },
-    activePageButton: {
-        backgroundColor: '#007bff',
-        borderColor: '#007bff',
-        color: 'white'
-    },
-    disabledButton: {
-        backgroundColor: '#f5f5f5',
-        borderColor: '#ddd',
-        color: '#999',
-        cursor: 'not-allowed'
-    }
-};
 
 export default Pagination;
