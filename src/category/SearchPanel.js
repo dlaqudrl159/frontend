@@ -29,11 +29,12 @@ const SearchPanel = memo(({ searchData = {aptCoordsDto: []}, setSearchData, setI
     setSelectedMarkerData(response.data);
     const coords = createCoords(response.data[0].aptCoordsDto.lat, response.data[0].aptCoordsDto.lng);
     mapInstanceRef.current.setCenter(coords);
+    mapInstanceRef.current.setLevel(2);
     initMarkers(mapInstanceRef.current)
   }, [setSelectedMarkerData, createCoords, mapInstanceRef, initMarkers])
 
   return (
-    <SearchPanelContainer>
+    <SearchPanelContainer className="searchpanelcontainer">
       <SearchPanelHeader>
         <SearchPanelHeaderTitle
           variant="h6"
@@ -42,7 +43,7 @@ const SearchPanel = memo(({ searchData = {aptCoordsDto: []}, setSearchData, setI
         </SearchPanelHeaderTitle>
         <SearchPanelHeaderCloseButton onClick={() => { setSearchData(null) }}>X</SearchPanelHeaderCloseButton>
       </SearchPanelHeader>
-      <SearchPanelContent>
+      <SearchPanelContent className="searchpanelcontent">
         {currentItems.map((item, index) => (
           <SearchPanelResultContainer className="searchpanelresultcontainer" key={index}>
             {(searchType === 'road' && activeTab === 'region') ? <RoadNameResult item={item} onClick={setInputRoadName} ></RoadNameResult>
