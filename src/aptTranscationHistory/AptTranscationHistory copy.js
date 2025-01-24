@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState, memo, useMemo } from 'react';
-import { AptTranscationHistoryContainer, AptTranscationHistoryContent, AptTranscationHistoryHeader, AptTranscationHistoryHeaderh2, AptTranscationHistoryOverlay } from '../styles/AptTranscationHistory.Styles';
 
 const AptTranscationHistory = memo(({ selectedMarkerData, setSelectedMarkerData }) => {
     const modalRef = useRef();
@@ -52,27 +51,26 @@ const AptTranscationHistory = memo(({ selectedMarkerData, setSelectedMarkerData 
                 setSelectedMarkerData(null);
             }
         };
-        document.body.style.overflow = 'hidden';
+
         document.addEventListener('mousedown', handleClickOutside);
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
-            document.body.style.overflow = 'unset';
         };
     }, [setSelectedMarkerData]);
 
 
 
     return (
-        <AptTranscationHistoryOverlay className='aptTranscationHistoryOverlay'>
-            <AptTranscationHistoryContainer className='aptTranscationHistoryContainer' ref={modalRef}>
-                <AptTranscationHistoryHeader className='aptTranscationHistoryHeader'>
-                    <AptTranscationHistoryHeaderh2 variant='h4' component="h2">[아파트] {currentApt.aptCoordsDto.apartmentname}</AptTranscationHistoryHeaderh2>
+        <div className='aptTranscationHistoryContainer' style={styles.overlay}>
+            <div ref={modalRef} style={styles.modal}>
+                <div style={styles.header}>
+                    <h2>[아파트] {currentApt.aptCoordsDto.apartmentname}</h2>
                     <p>{currentApt.aptCoordsDto.sigungu} {currentApt.aptCoordsDto.bungi}</p>
                     <p>{currentApt.aptCoordsDto.roadname}</p>
                     <button onClick={() => { setSelectedMarkerData(null) }} style={styles.closeButton}>X</button>
-                </AptTranscationHistoryHeader>
+                </div>
 
-                <AptTranscationHistoryContent className='aptTranscationHistoryContent'>
+                <div style={styles.content}>
                     <select
                         value={selectedRoadIndex}
                         onChange={handleRoadChange}
@@ -131,9 +129,9 @@ const AptTranscationHistory = memo(({ selectedMarkerData, setSelectedMarkerData 
                             </table>
                         </div>
                     ))}
-                </AptTranscationHistoryContent>
-            </AptTranscationHistoryContainer>
-        </AptTranscationHistoryOverlay>
+                </div>
+            </div>
+        </div>
     );
 });
 
