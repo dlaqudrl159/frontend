@@ -1,9 +1,9 @@
-import { Box, Typography } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 export const AptTranscationHistoryOverlay = styled(Box)(() => ({
     position: 'fixed',
-    height : '100%',
+    height: '100%',
     top: 0,
     left: 0,
     right: 0,
@@ -33,16 +33,36 @@ export const AptTranscationHistoryHeader = styled(Box)(() => ({
     borderBottom: '1px solid #ddd',
     borderRadius: '8px 8px 0 0',
     zIndex: 1,  // 내용 위에 보이도록
+    overflow: 'auto'
 }))
 
-export const AptTranscationHistoryHeaderh2 = styled(Typography)(({ theme }) => ({
-    
+export const AptTranscationHistoryHeaderTitle = styled(Typography)(({ theme }) => ({
+    minWidth: '400px',
     [theme.breakpoints.up('xs')]: {
         fontSize: '12px',
     },
     [theme.breakpoints.up('sm')]: {
         fontSize: '24px',
     },
+}))
+
+export const AptTranscationHistoryHeaderJibun = styled(Typography)(() => ({
+    minWidth: '300px'
+}))
+
+export const AptTranscationHistoryHeaderRoadName = styled(Typography)(() => ({
+    minWidth: '300px'
+}))
+
+export const AptTranscationHistoryHeaderCloseButton = styled(Button)(() => ({
+    position: 'absolute',
+    right: '20px',
+    top: '20px',
+    background: 'none',
+    border: 'none',
+    fontSize: '24px',
+    cursor: 'pointer',
+    padding: '5px',
 }))
 
 export const AptTranscationHistoryContent = styled(Box)(() => ({
