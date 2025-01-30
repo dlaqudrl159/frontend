@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState, memo, useMemo } from 'react';
 import { AptTranscationHistoryContainer, AptTranscationHistoryContent, AptTranscationHistoryHeader, AptTranscationHistoryHeaderCloseButton, AptTranscationHistoryHeaderJibun, AptTranscationHistoryHeaderRoadName, AptTranscationHistoryHeaderTitle, AptTranscationHistoryOverlay } from '../styles/AptTranscationHistory.Styles';
+import { Box } from '@mui/material';
 
 const AptTranscationHistory = memo(({ selectedMarkerData, setSelectedMarkerData }) => {
     const modalRef = useRef();
@@ -65,11 +66,14 @@ const AptTranscationHistory = memo(({ selectedMarkerData, setSelectedMarkerData 
     return (
         <AptTranscationHistoryOverlay className='aptTranscationHistoryOverlay'>
             <AptTranscationHistoryContainer className='aptTranscationHistoryContainer' ref={modalRef}>
+            <AptTranscationHistoryHeaderCloseButton onClick={() => { setSelectedMarkerData(null) }}>X</AptTranscationHistoryHeaderCloseButton>
                 <AptTranscationHistoryHeader className='aptTranscationHistoryHeader'>
-                    <AptTranscationHistoryHeaderTitle variant='h4'>[아파트] {currentApt.aptCoordsDto.apartmentname}</AptTranscationHistoryHeaderTitle>
-                    <AptTranscationHistoryHeaderJibun variant='h6'>{currentApt.aptCoordsDto.sigungu} {currentApt.aptCoordsDto.bungi}</AptTranscationHistoryHeaderJibun>
-                    <AptTranscationHistoryHeaderRoadName variant='h6'>{currentApt.aptCoordsDto.roadname}</AptTranscationHistoryHeaderRoadName>
-                    <AptTranscationHistoryHeaderCloseButton onClick={() => { setSelectedMarkerData(null) }}>X</AptTranscationHistoryHeaderCloseButton>
+                    
+                    {/* <Box sx={{overflow : 'auto', width : '100%'}}> */}
+                        <AptTranscationHistoryHeaderTitle variant='h4'>[아파트] {currentApt.aptCoordsDto.apartmentname}</AptTranscationHistoryHeaderTitle>
+                        <AptTranscationHistoryHeaderJibun variant='h6'>{currentApt.aptCoordsDto.sigungu} {currentApt.aptCoordsDto.bungi}</AptTranscationHistoryHeaderJibun>
+                        <AptTranscationHistoryHeaderRoadName variant='h6'>{currentApt.aptCoordsDto.roadname}</AptTranscationHistoryHeaderRoadName>
+                    
 
                     <select
                         value={selectedRoadIndex}
@@ -92,6 +96,7 @@ const AptTranscationHistory = memo(({ selectedMarkerData, setSelectedMarkerData 
                             <option key={year} value={year}>{year}년</option>
                         ))}
                     </select>
+                    {/* </Box> */}
                 </AptTranscationHistoryHeader>
 
                 <AptTranscationHistoryContent className='aptTranscationHistoryContent'>

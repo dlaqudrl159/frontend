@@ -9,7 +9,7 @@ import { mapApi } from "./api/mapApi";
 
 import { useMap } from "./hook/useMap";
 import Category from "../category/Category";
-import AptTranscationHistory from "../aptTranscationHistory/AptTranscationHistory";
+import AptTranscationHistory from "../aptTranscationHistory/AptTranscationHistory2";
 import { KakaoMapContainer } from "../styles/KakaoMap.Styles";
 
 const { kakao } = window;

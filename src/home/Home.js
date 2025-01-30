@@ -1,12 +1,13 @@
 import React, { memo } from 'react';
 import KakaoMap from '../kakaomap/KakaoMap';
 import { HomeContainer } from '../styles/Home.Styles';
+import { Box } from '@mui/material';
 
 const Home = memo(() => {
   
   return (
     <HomeContainer className='HomeContainer'>
-      <KakaoMap />
+      <Box>dfdfdf</Box>
     </HomeContainer>
   );
 });

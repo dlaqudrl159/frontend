@@ -7,7 +7,7 @@ import { mapApi } from "../api/mapApi";
 export const useMap = () => {
 
     const { kakao } = window;
-    const mapLevel = 4;
+    const mapLevel = 3;
     const mapCenterLat = 37.56435977921398
     const mapCenterLng = 126.97757768711558
 

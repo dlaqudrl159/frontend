@@ -92,7 +92,7 @@ export const SearchPanelHeader = styled(Box)(() => ({
     display: 'flex',
     justifyContent: "space-between",
     alignItems: 'center',
-    borderBottom : '1px solid black'
+    borderBottom : '2px solid black'
 }))
 
 export const SearchPanelHeaderTitle = styled(Typography)(() => ({
@@ -116,7 +116,7 @@ export const SearchPanelContent = styled(Box)(() => ({
 }))
 
 export const SearchPanelResultContainer = styled(Box)(() => ({
-    height: '10%',
+    height: '40px',
     display: 'flex',
     alignItems: 'center'
 }))

@@ -16,7 +16,7 @@ import ApartmentNameResult from "./ApartmentNameResult";
 import { mapApi } from "../kakaomap/api/mapApi";
 import { useMarkers } from "../kakaomap/hook/useMarker";
 
-const SearchPanel = memo(({ searchData = {aptCoordsDto: []}, setSearchData, setInputRoadName, searchType, activeTab, setSelectedMarkerData, mapInstanceRef, initMarkers }) => {
+const SearchPanel = memo(({ searchData = { aptCoordsDto: [] }, setSearchData, setInputRoadName, searchType, activeTab, setSelectedMarkerData, mapInstanceRef, initMarkers }) => {
 
   const { createCoords } = useMarkers();
   const sSearchData = searchData.aptCoordsDto;
@@ -46,8 +46,10 @@ const SearchPanel = memo(({ searchData = {aptCoordsDto: []}, setSearchData, setI
       <SearchPanelContent className="searchpanelcontent">
         {currentItems.map((item, index) => (
           <SearchPanelResultContainer className="searchpanelresultcontainer" key={index}>
-            {(searchType === 'road' && activeTab === 'region') ? <RoadNameResult item={item} onClick={setInputRoadName} ></RoadNameResult>
-              : activeTab === 'apartmentname' ? <ApartmentNameResult item={item} onClick={handleApartmentName}></ApartmentNameResult>
+            {(searchType === 'road' && activeTab === 'region') ?
+              <RoadNameResult item={item} onClick={setInputRoadName} />
+              : activeTab === 'apartmentname' ?
+                <ApartmentNameResult item={item} onClick={handleApartmentName} />
                 : []}
           </SearchPanelResultContainer>
         ))}
