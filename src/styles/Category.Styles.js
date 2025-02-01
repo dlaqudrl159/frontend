@@ -19,6 +19,7 @@ export const CategoryContainer = styled(Box)(({ theme }) => ({
     [theme.breakpoints.up('lg')]: {
         width: '500px',
     },
+    zIndex : '1'
 }));
 
 export const TabContainer = styled(Box)(() => ({

@@ -25,7 +25,7 @@ function App() {
           </ThemeProvider>
         }></Route>
 
-        <Route path='/map' element={
+        <Route path='/apartment' element={
           <ThemeProvider theme={theme}>
             <MainLayout>
               <KakaoMap />
@@ -34,11 +34,18 @@ function App() {
         } />
 
         <Route path='/login' element={
-          <Login />
+          <ThemeProvider theme={theme}>
+            <MainLayout>
+              <Login />
+            </MainLayout>
+          </ThemeProvider>
         } />
 
         <Route element={<PrivateRoute />}>
-          <Route path='/admin/dashboard' element={<DashBoard />}></Route>
+          <Route path='/admin/dashboard' element={
+            <DashBoard />
+          }>
+          </Route>
         </Route>
       </Routes>
 

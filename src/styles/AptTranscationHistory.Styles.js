@@ -1,8 +1,8 @@
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Button, MenuItem, Select, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 export const AptTranscationHistoryOverlay = styled(Box)(() => ({
-    position: 'fixed',
+    position: 'absolute',
     height: '100%',
     top: 0,
     left: 0,
@@ -19,9 +19,8 @@ export const AptTranscationHistoryContainer = styled(Box)(() => ({
     backgroundColor: 'white',
     borderRadius: '8px',
     width: '80%',
-    minWidth : '300px',
+    minWidth: `80%`,
     height: '80%',
-    position: 'relative',
     display: 'flex',
     flexDirection: 'column',  // 세로 방향으로 요소 배치
 }))
@@ -29,20 +28,20 @@ export const AptTranscationHistoryContainer = styled(Box)(() => ({
 export const AptTranscationHistoryHeader = styled(Box)(() => ({
     //position: 'sticky',
     //top: 0,
-    height : '30%',
-    display : 'flex',
-    flexWrap : 'wrap',
+    height: '30%',
+    display: 'flex',
+    flexWrap: 'wrap',
     padding: '20px 30px',
     backgroundColor: 'white',  // 스크롤 시 내용이 비치지 않도록
     borderBottom: '1px solid #ddd',
     borderRadius: '8px 8px 0 0',
     zIndex: 1,  // 내용 위에 보이도록
-    overflow : 'auto'
+    overflow: 'auto'
 }))
 
 export const AptTranscationHistoryHeaderTitle = styled(Typography)(({ theme }) => ({
-    width : '100%',
-    whiteSpace : 'nowrap',
+    width: '100%',
+    whiteSpace: 'nowrap',
     /*[theme.breakpoints.up('xs')]: {
         fontSize: '12px',
     },
@@ -52,29 +51,72 @@ export const AptTranscationHistoryHeaderTitle = styled(Typography)(({ theme }) =
 }))
 
 export const AptTranscationHistoryHeaderJibun = styled(Typography)(() => ({
-    width :'100%',
-    whiteSpace : 'nowrap',
+    width: '100%',
+    whiteSpace: 'nowrap',
 }))
 
 export const AptTranscationHistoryHeaderRoadName = styled(Typography)(() => ({
-    width : '100%',
-    whiteSpace : 'nowrap',
+    width: '100%',
+    whiteSpace: 'nowrap',
 }))
 
 export const AptTranscationHistoryHeaderCloseButton = styled(Button)(() => ({
-    width : '100%',
+    width: '100%',
     background: 'none',
-    display : 'inline-block',
+    display: 'inline-block',
     border: 'none',
     fontSize: '24px',
     cursor: 'pointer',
     padding: '5px',
-    textAlign : 'right'
+    textAlign: 'right'
 }))
 
 export const AptTranscationHistoryContent = styled(Box)(() => ({
-    height : '70%',
+    height: '70%',
     padding: '20px 30px',
-    overflow: 'auto',  // 내용이 넘칠 경우 스크롤
+    overflow: 'auto',
     flex: 1,  // 남은 공간 모두 차지
+}))
+
+export const AptTranscationHistoryRoadSelect = styled(Select)(() => ({
+    width: '100%',
+    height: '40px',
+    padding: '10px',
+    marginBottom: '20px',
+    borderRadius: '4px',
+    border: '1px solid #ddd',
+    backgroundColor: '#f8f9fa',
+    fontSize: '15px',
+}))
+
+export const AptTranscationHistoryRoadMenuItem = styled(MenuItem)(() => ({
+    height: '10%'
+}))
+
+export const AptTranscationHistoryYearSelect = styled(Select)(() => ({
+    width: '100%',
+    height: '40px',
+    padding: '10px',
+    marginBottom: '20px',
+    borderRadius: '4px',
+    border: '1px solid #ddd',
+    backgroundColor: '#f8f9fa',
+    fontSize: '15px',
+}))
+
+export const AptTranscationHistoryYearMenuItem = styled(MenuItem)(() => ({
+    height: '10%'
+}))
+
+export const AptTranscationHistoryContentMonthGroup = styled(Box)(() => ({
+    marginBottom: '30px',
+    padding: '0 20px',
+}))
+
+export const AptTranscationHistoryContentMonthTitle = styled(Typography)(() => ({
+    padding: '15px 0',
+    borderBottom: '2px solid #007bff',
+    marginBottom: '15px',
+    color: '#007bff',
+    fontSize: '18px',
 }))

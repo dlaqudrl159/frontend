@@ -9,7 +9,7 @@ import { mapApi } from "./api/mapApi";
 
 import { useMap } from "./hook/useMap";
 import Category from "../category/Category";
-import AptTranscationHistory from "../aptTranscationHistory/AptTranscationHistory2";
+import AptTranscationHistory from "../aptTranscationHistory/AptTranscationHistory";
 import { KakaoMapContainer } from "../styles/KakaoMap.Styles";
 
 const { kakao } = window;
@@ -57,7 +57,7 @@ const KakaoMap = memo(() => {
       const parts = address.split(' ');
       return parts.slice(0, 2).join(' ');
     }
-  },[])
+  }, [])
 
   const makearrcoords = useCallback((map) => {
     var mapBounds = map.getBounds();
@@ -177,14 +177,15 @@ const KakaoMap = memo(() => {
         <Loading />}
       <KakaoMapContainer
         className="kakaoMapContainer"
-        ref={mapRef} />
-      {categoryRegionState &&
-        <Category
-          categoryRegionState={categoryRegionState}
-          setSelectedMarkerData={setSelectedMarkerData}
-          mapInstanceRef={mapInstanceRef}
-          initMarkers={initMarkers}
-        />}
+        ref={mapRef}>
+        {categoryRegionState &&
+          <Category
+            categoryRegionState={categoryRegionState}
+            setSelectedMarkerData={setSelectedMarkerData}
+            mapInstanceRef={mapInstanceRef}
+            initMarkers={initMarkers}
+          />}
+      </KakaoMapContainer>
       {selectedMarkerData &&
         <AptTranscationHistory
           selectedMarkerData={selectedMarkerData}
