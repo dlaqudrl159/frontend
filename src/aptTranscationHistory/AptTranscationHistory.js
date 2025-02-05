@@ -103,7 +103,7 @@ const AptTranscationHistory = memo(({ selectedMarkerData, setSelectedMarkerData 
                         <AptTranscationHistoryContentMonthGroup key={month}>
                             <AptTranscationHistoryContentMonthTitle variant='h3'>{month}월</AptTranscationHistoryContentMonthTitle>
                             <TableContainer>
-                                <Table sx={{ minWidth: "900px" }}>
+                                <Table sx={{ minWidth: "900px",  }}>
                                     <TableHead>
                                         <TableRow>
                                             <TableCell>거래일</TableCell>

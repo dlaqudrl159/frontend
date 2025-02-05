@@ -2,6 +2,7 @@ import React, { memo } from 'react';
 import KakaoMap from '../kakaomap/KakaoMap';
 import { HomeContainer } from '../styles/Home.Styles';
 import { Box, Typography } from '@mui/material';
+import ReadMe from './ReadMe';
 
 const Home = memo(() => {
 
@@ -24,6 +25,9 @@ const Home = memo(() => {
         <Typography variant='h3'>
           서비스를 이용하시려면 위의 메뉴창에 아파트 메뉴를 클릭하시면 이용가능합니다.
         </Typography>
+      </Box>
+      <Box>
+        <ReadMe></ReadMe>
       </Box>
     </HomeContainer>
   );

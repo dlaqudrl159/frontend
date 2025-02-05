@@ -36,7 +36,20 @@ export const AptTranscationHistoryHeader = styled(Box)(() => ({
     borderBottom: '1px solid #ddd',
     borderRadius: '8px 8px 0 0',
     zIndex: 1,  // 내용 위에 보이도록
-    overflow: 'auto'
+    overflow: 'auto',
+    '&::-webkit-scrollbar': {
+        width: '6px',
+    },
+    '&::-webkit-scrollbar-track': {
+        background: '#f1f1f1',
+    },
+    '&::-webkit-scrollbar-thumb': {
+        background: '#ccc',
+        borderRadius: '3px',
+    },
+    '&::-webkit-scrollbar-thumb:hover': {
+        background: '#999',
+    },
 }))
 
 export const AptTranscationHistoryHeaderTitle = styled(Typography)(({ theme }) => ({
@@ -76,10 +89,24 @@ export const AptTranscationHistoryContent = styled(Box)(() => ({
     padding: '20px 30px',
     overflow: 'auto',
     flex: 1,  // 남은 공간 모두 차지
+    '&::-webkit-scrollbar': {
+        width: '6px',
+    },
+    '&::-webkit-scrollbar-track': {
+        background: '#f1f1f1',
+    },
+    '&::-webkit-scrollbar-thumb': {
+        background: '#ccc',
+        borderRadius: '3px',
+    },
+    '&::-webkit-scrollbar-thumb:hover': {
+        background: '#999',
+    },
 }))
 
 export const AptTranscationHistoryRoadSelect = styled(Select)(() => ({
     width: '100%',
+    minWidth : "300px",
     height: '40px',
     padding: '10px',
     marginBottom: '20px',
@@ -95,6 +122,7 @@ export const AptTranscationHistoryRoadMenuItem = styled(MenuItem)(() => ({
 
 export const AptTranscationHistoryYearSelect = styled(Select)(() => ({
     width: '100%',
+    minWidth : '300px',
     height: '40px',
     padding: '10px',
     marginBottom: '20px',
@@ -111,6 +139,7 @@ export const AptTranscationHistoryYearMenuItem = styled(MenuItem)(() => ({
 export const AptTranscationHistoryContentMonthGroup = styled(Box)(() => ({
     marginBottom: '30px',
     padding: '0 20px',
+    
 }))
 
 export const AptTranscationHistoryContentMonthTitle = styled(Typography)(() => ({

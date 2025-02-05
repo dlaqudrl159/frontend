@@ -7,7 +7,7 @@ export const PaginationContainer = styled(Box)(() => ({
     alignItems: 'center',
     width : '100%',
     gap: '5px',
-    margin:'1px'
+    margin:'3px'
 }))
 
 export const PaginagionButton = styled(Button, {shouldForwardProp: (prop) => prop !== 'isactive' && prop !== 'isdisabled'})(({theme, isactive, isdisabled}) => ({

@@ -2,8 +2,8 @@ import { styled } from '@mui/material/styles';
 import { Box, Button, FormControl, Input, MenuItem, Select, Typography } from "@mui/material";
 
 export const CategoryContainer = styled(Box)(({ theme }) => ({
-    position: 'absolute',
     height: 'auto',
+    position: 'absolute',
     left: '20px',
     top: '2%',
     pointerEvents: 'none',
@@ -19,7 +19,7 @@ export const CategoryContainer = styled(Box)(({ theme }) => ({
     [theme.breakpoints.up('lg')]: {
         width: '500px',
     },
-    zIndex : '1'
+    zIndex : 1
 }));
 
 export const TabContainer = styled(Box)(() => ({
@@ -74,6 +74,7 @@ export const SearchPanelContainer = styled(Box)(({ theme }) => ({
     height: 'auto',
     backgroundColor: 'white',
     pointerEvents: 'auto', //마우스 이벤트 작동
+    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
     [theme.breakpoints.up('xs')]: {
         height: '280px',
     },
@@ -93,37 +94,82 @@ export const SearchPanelHeader = styled(Box)(() => ({
     display: 'flex',
     justifyContent: "space-between",
     alignItems: 'center',
-    borderBottom : '2px solid black'
+    borderBottom: '1px solid #eaeaea',
+    padding: '0 16px',
+    backgroundColor: '#fafafa',
+    borderTopLeftRadius: '12px',
+    borderTopRightRadius: '12px',
 }))
 
 export const SearchPanelHeaderTitle = styled(Typography)(() => ({
-    fontWeight: 500,
-    color: '#333',
+    fontWeight: 600,
+    color: '#2c3e50',
+    fontSize: '1.1rem',
     padding: '0 10px',
+    letterSpacing: '0.3px',
 }))
 
 export const SearchPanelHeaderCloseButton = styled(Button)(() => ({
+    width: '32px',
+    minWidth: 'unset',
+    height: '32px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
     background: 'none',
     border: 'none',
     fontSize: '20px',
     cursor: 'pointer',
-    color: 'black'
+    color: '#666',
+    padding: '8px',
+    borderRadius: '50%',
+    transition: 'all 0.2s ease',
+    '&:hover': {
+        backgroundColor: '#f5f5f5',
+        color: '#333',
+    },
 }))
 
 export const SearchPanelContent = styled(Box)(() => ({
     height: '75%',
     overflowY: 'auto',
     fontSize: '18px',
+    padding: '8px 0',
+    '&::-webkit-scrollbar': {
+        width: '6px',
+    },
+    '&::-webkit-scrollbar-track': {
+        background: '#f1f1f1',
+    },
+    '&::-webkit-scrollbar-thumb': {
+        background: '#ccc',
+        borderRadius: '3px',
+    },
+    '&::-webkit-scrollbar-thumb:hover': {
+        background: '#999',
+    },
 }))
 
 export const SearchPanelResultContainer = styled(Box)(() => ({
     height: '40px',
     display: 'flex',
-    alignItems: 'center'
+    alignItems: 'center',
+    padding: '0 16px',
+    transition: 'background-color 0.2s ease',
+    cursor: 'pointer',
+    '&:hover': {
+        backgroundColor: '#f8f9fa',
+    },
+    borderBottom: '1px solid #f0f0f0',
 }))
 
 export const SearchPanelResult = styled(Typography)(() => ({
-    marginLeft: '3%'
+    marginLeft: '3%',
+    color: '#4a4a4a',
+    fontSize: '0.95rem',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
 }))
 
 export const SearchPanelFooter = styled(Box)(() => ({
@@ -132,6 +178,9 @@ export const SearchPanelFooter = styled(Box)(() => ({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: 'white',
+    borderTop: '1px solid #eaeaea',
+    borderBottomLeftRadius: '12px',
+    borderBottomRightRadius: '12px',
 }))
 
 export const ChoiceContainer = styled(Box)(() => ({
@@ -150,19 +199,19 @@ export const ChoiceButtonContent = styled(Typography)(() => ({
 }))
 
 export const JibunContainer = styled(Box)(() => ({
+    width: '100%',
     display: 'flex',
+    justifyContent: 'center',
     flexWrap: 'wrap',
     gap: '5px',
-    width: '100%',
-    justifyContent: 'center',
 }))
 
 export const RoadContainer = styled(Box)(() => ({
+    width: '100%',
     display: 'flex',
+    justifyContent: 'center',
     flexWrap: 'wrap',
     gap: '5px',
-    width: '100%',
-    justifyContent: 'center',
 }))
 
 export const SidoContainer = styled(Box)(() => ({
@@ -217,11 +266,11 @@ export const RoadNameClickButton = styled(Button)(({ theme }) => ({
 }))
 
 export const ApartmentNameContainer = styled(Box)(() => ({
+    width: '100%',
     display : 'flex',
+    justifyContent: 'center',
     flexWrap: 'wrap',
     gap: '5px',
-    width: '100%',
-    justifyContent: 'center',
 }))
 
 export const ApartmentNameHeaderTitle = styled(Box)(() => ({
