@@ -16,7 +16,7 @@ const Pagination = memo(({ curPage, setCurPage, amount, totalPage, startNum, end
         if (curPage === totalPage) return;
         setCurPage(curPage + 1);
     }
-
+    console.log(totalPage);
     return (
         <PaginationContainer className="paginationcontainer">
 
