@@ -71,7 +71,6 @@ const Category = memo((props) => {
   }, [searchType, selectedSido, selectedSigungu, selectDong, inputRoadName, apartmentname, getCategoryClickData])
 
   const getRoadNames = useCallback(async () => {
-    console.log(inputRoadName)
     if (inputRoadName === '') {
       alert('도로명을 입력해주세요');
       return

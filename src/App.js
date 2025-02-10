@@ -7,6 +7,7 @@ import DashBoard from './admin/DashBoard';
 import MainLayout from './layout/MainLayout';
 import { ThemeProvider } from '@mui/material/styles';
 import { theme } from "./theme/theme";
+import KakaoMap from './kakaomap/KakaoMap';
 
 
 function App() {
@@ -15,16 +16,36 @@ function App() {
     <>
 
       <Routes>
+
         <Route path='/' element={
           <ThemeProvider theme={theme}>
             <MainLayout>
               <Home />
             </MainLayout>
           </ThemeProvider>
+        }></Route>
+
+        <Route path='/apartment' element={
+          <ThemeProvider theme={theme}>
+            <MainLayout>
+              <KakaoMap />
+            </MainLayout>
+          </ThemeProvider>
         } />
-        <Route path='/login' element={<Login />} />
+
+        <Route path='/login' element={
+          <ThemeProvider theme={theme}>
+            <MainLayout>
+              <Login />
+            </MainLayout>
+          </ThemeProvider>
+        } />
+
         <Route element={<PrivateRoute />}>
-          <Route path='/admin/dashboard' element={<DashBoard />}></Route>
+          <Route path='/admin/dashboard' element={
+            <DashBoard />
+          }>
+          </Route>
         </Route>
       </Routes>
 
