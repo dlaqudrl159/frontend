@@ -1,6 +1,5 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom'
-import Home from './home/Home';
 import Login from './admin/Login';
 import PrivateRoute from './admin/PrivateRoute';
 import DashBoard from './admin/DashBoard';
@@ -20,18 +19,10 @@ function App() {
         <Route path='/' element={
           <ThemeProvider theme={theme}>
             <MainLayout>
-              <Home />
-            </MainLayout>
-          </ThemeProvider>
-        }></Route>
-
-        <Route path='/apartment' element={
-          <ThemeProvider theme={theme}>
-            <MainLayout>
               <KakaoMap />
             </MainLayout>
           </ThemeProvider>
-        } />
+        }></Route>
 
         <Route path='/login' element={
           <ThemeProvider theme={theme}>

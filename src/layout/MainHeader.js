@@ -5,9 +5,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-import { Divider, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
+import { Divider, Drawer, List, ListItem, ListItemButton, ListItemText } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 const MainHeader = memo(() => {
@@ -21,7 +19,7 @@ const MainHeader = memo(() => {
     const handleMenuUrl = (url) => {
         switch (url) {
             case '아파트': {
-                navigator("/apartment")
+                navigator("/")
                 return;
             }
             default: {
