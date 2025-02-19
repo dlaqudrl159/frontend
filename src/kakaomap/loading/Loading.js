@@ -1,11 +1,11 @@
 import React, { memo } from "react";
-import { LoadingContainer, LoadingContent, LoadingP } from "../../styles/Loading.Styles";
+import { LoadingContainer, LoadingContent, LoadingP } from "../../styles/loading.Styles";
 
 const Loading = memo(() => {
   
   return (
       <LoadingContainer className = "loadingContainer">
-        <LoadingContent >
+        <LoadingContent>
           <LoadingP>로딩중</LoadingP>
         </LoadingContent>
       </LoadingContainer>
