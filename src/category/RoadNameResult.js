@@ -1,10 +1,16 @@
-import React, {memo} from "react";
+import React, { memo } from "react";
 import { SearchPanelResult } from "../styles/Category.Styles";
 
-const RoadNameResult = memo(({ item, onClick}) => {
-    
+const RoadNameResult = memo(({ item, onClick }) => {
+
     return (
-        <SearchPanelResult className="roadnameresult" variant="body1" onClick={() => onClick(item.roadname)}>{item.roadname}</SearchPanelResult>
+        <SearchPanelResult
+            className="roadnameresult"
+            variant="body1"
+            onClick={() => onClick(item.roadname)}
+        >
+            {item.roadname}
+        </SearchPanelResult>
     )
 
 })

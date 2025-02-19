@@ -7,7 +7,7 @@ export const usePagination = (data) => {
     const perPage = 10;
     const perLine = 5;
 
-    const totalPage = Math.ceil(amount / perPage);
+    const totalPage = Math.max(1, Math.ceil(amount / perPage));
     const startNum = (curPage - 1) * perPage + 1;
     const endNum = Math.min(curPage * perPage, amount);
     const beginPageNum = Math.floor((curPage - 1) / perLine) * perLine + 1;

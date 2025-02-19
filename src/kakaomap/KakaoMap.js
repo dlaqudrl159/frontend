@@ -46,7 +46,7 @@ const KakaoMap = memo(() => {
 
 
 
-  const filterAddresses = (regionArr) => {
+  const filterAddresses = useCallback((regionArr) => {
 
     if (regionArr.region_1depth_name === "-" && regionArr.region_2depth_name === "-" && regionArr.region_3depth_name === '-') {
       return "";
@@ -57,7 +57,7 @@ const KakaoMap = memo(() => {
       const parts = address.split(' ');
       return parts.slice(0, 2).join(' ');
     }
-  }
+  }, [])
 
   const makearrcoords = useCallback((map) => {
     var mapBounds = map.getBounds();
@@ -150,7 +150,7 @@ const KakaoMap = memo(() => {
       createMarkersFromData(response, showInfoWindow, getMarkerData, mapInstanceRef, markersByRegionRef, clustererRef, infowindowRef)
     }
 
-  }, [clustererRef, createMarkersFromData, getMarkerData, getMarkers, getRegionCode, makearrcoords, setCategoryRegionState, showInfoWindow])
+  }, [clustererRef, createMarkersFromData, getMarkerData, getMarkers, getRegionCode, makearrcoords, setCategoryRegionState, showInfoWindow, filterAddresses])
 
   useEffect(() => {
     if (!mapInstanceRef.current && mapRef.current) {
@@ -176,15 +176,16 @@ const KakaoMap = memo(() => {
       {IsLoadingState &&
         <Loading />}
       <KakaoMapContainer
-        className="KakaoMap"
-        ref={mapRef} />
-      {categoryRegionState &&
-        <Category
-          categoryRegionState={categoryRegionState}
-          setSelectedMarkerData={setSelectedMarkerData}
-          mapInstanceRef={mapInstanceRef}
-          initMarkers={initMarkers}
-        />}
+        className="kakaoMapContainer"
+        ref={mapRef}>
+        {categoryRegionState &&
+          <Category
+            categoryRegionState={categoryRegionState}
+            setSelectedMarkerData={setSelectedMarkerData}
+            mapInstanceRef={mapInstanceRef}
+            initMarkers={initMarkers}
+          />}
+      </KakaoMapContainer>
       {selectedMarkerData &&
         <AptTranscationHistory
           selectedMarkerData={selectedMarkerData}

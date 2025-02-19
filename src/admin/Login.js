@@ -1,13 +1,14 @@
-import React, { memo, useState } from "react";
+import React, { memo, useCallback, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
+import { LoginButton, LoginContainer, LoginInput, LoginTitle } from "../styles/Login.Styles";
 
 const Login = memo(() => {
 
     const [userId, setUserId] = useState('');
     const [userPassword, setPassword] = useState('');
     const navigator = useNavigate();
-    const login = async (e) => {
+    const login = useCallback(async (e) => {
         e.preventDefault();
         try {
             const response = await axios.post('/auth/admin/login', {
@@ -29,54 +30,19 @@ const Login = memo(() => {
         } catch (error) {
             alert('로그인 실패!!');
         }
-    }
+    })
 
     return (
         <>
-            <div style={styles.loginContainer}>
-                <h2 style={styles.title}>로그인</h2>
-                <input value={userId} style={styles.input} type="text" placeholder="아이디를 입력하세요" onChange={(e) => setUserId(e.target.value)}></input>
-                <input value={userPassword} style={styles.input} type="password" placeholder="비밀번호를 입력하세요" onChange={(e) => setPassword(e.target.value)}></input>
-                <button style={styles.button} onClick={login}>로그인</button>
-            </div>
+            <LoginContainer>
+                <LoginTitle component="h2">로그인</LoginTitle>
+                <LoginInput value={userId} type="text" placeholder="아이디를 입력하세요" onChange={(e) => setUserId(e.target.value)}></LoginInput>
+                <LoginInput value={userPassword} type="password" placeholder="비밀번호를 입력하세요" onChange={(e) => setPassword(e.target.value)}></LoginInput>
+                <LoginButton onClick={login}>로그인</LoginButton>
+            </LoginContainer>
         </>
     )
 
 });
-
-const styles = {
-    loginContainer: {
-        maxWidth: '400px',
-        margin: '40px auto',
-        padding: '20px',
-        borderRadius: '8px',
-        boxShadow: '0 0 10px rgba(0,0,0,0.1)',
-        backgroundColor: '#fff'
-    },
-    title: {
-        margin: '0 0 20px 0',
-        color: '#333',
-        textAlign: 'center'
-    },
-    input: {
-        padding: '10px',
-        borderRadius: '4px',
-        border: '1px solid #ddd',
-        fontSize: '16px',
-        width: '100%',
-        margin: '5px'
-    },
-    button: {
-        padding: '12px',
-        backgroundColor: '#ccc',
-        color: 'black',
-        border: '1px solid #ccc',
-        width: "30%",
-        borderRadius: '4px',
-        cursor: 'pointer',
-        fontSize: '16px',
-        marginLeft: '70%'
-    },
-}
 
 export default Login
