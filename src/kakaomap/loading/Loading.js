@@ -1,5 +1,5 @@
 import React, { memo } from "react";
-import { LoadingContainer, LoadingContent, LoadingP } from "../../styles/loading.Styles";
+import { LoadingContainer, LoadingContent, LoadingP } from "../../styles/Loading.Styles";
 
 const Loading = memo(() => {
   
